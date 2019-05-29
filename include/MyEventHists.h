@@ -1,4 +1,4 @@
- 
+
 #pragma once
 #include "UHH2/core/include/Hists.h"
 #include "UHH2/core/include/Event.h"
@@ -25,9 +25,9 @@ public:
 
 protected:
     TH1F  *ST;
-
+    TH1F  *HTLep;
     //uhh2::Event::Handle<double> h_ht;
     uhh2::Event::Handle<double> h_st;
-    //uhh2::Event::Handle<double> h_htlep;
+    uhh2::Event::Handle<double> h_htlep;
     //uhh2::Event::Handle<FlavorParticle> h_primlep;
 };

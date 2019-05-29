@@ -27,8 +27,7 @@ public:
 private:
     boost::optional<JetId> jetid;
     uhh2::Event::Handle<double> h_st;
-    boost::optional<ElectronId> electronid;  
+    uhh2::Event::Handle<double> h_htlep;
+    boost::optional<ElectronId> electronid;
     boost::optional<MuonId> muonid;
 };
-
-
