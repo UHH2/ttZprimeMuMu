@@ -5,6 +5,7 @@
 #include "UHH2/common/include/MuonHists.h"
 #include "UHH2/common/include/JetHists.h"
 #include "UHH2/ttZPrime/include/MyEventHists.h"
+#include "UHH2/ttZPrime/include/ttZPrimeMuPreselectionHists.h"
 
 
 
@@ -17,7 +18,7 @@ AndHists::AndHists(Context &ctx, const string & dirname):
   nevt = book<TH1F>("NEvt", "", 1,0,1);
 
   // Add common hists to vector
- 
+
   hists_vector.push_back(new LuminosityHists(ctx, dirname + "_Lumi"));
   hists_vector.push_back(new EventHists(ctx, dirname + "_Event"));
   hists_vector.push_back(new MuonHists(ctx, dirname + "_Muon"));
@@ -25,7 +26,7 @@ AndHists::AndHists(Context &ctx, const string & dirname):
   hists_vector.push_back(new JetHists(ctx, dirname + "_Jet"));
   hists_vector.push_back(new TopJetHists(ctx, dirname + "_Topjets"));
   hists_vector.push_back(new MyEventHists(ctx, dirname + "_MyEvent"));
-  
+  hists_vector.push_back(new ttZPrimeMuPreselectionHists(ctx, dirname+"_ZPrimeMuMu"));
 
   JetHists* bJetLooseHists = new JetHists(ctx, dirname + "_bJet_loose", 2);
   JetId btag_loose = CSVBTag(CSVBTag::WP_LOOSE);
@@ -41,10 +42,10 @@ AndHists::AndHists(Context &ctx, const string & dirname):
   JetId btag_tight = CSVBTag(CSVBTag::WP_TIGHT);
   bJetTightHists->set_JetId(btag_tight);
   hists_vector.push_back(bJetTightHists);
-  
+
 }
 
-void AndHists::fill(const Event & event) {  
+void AndHists::fill(const Event & event) {
   nevt->Fill(0., event.weight);
   for (Hists *hist : hists_vector)
     {
@@ -52,7 +53,7 @@ void AndHists::fill(const Event & event) {
     }
 }
 
-void AndHists::add_hist(Hists *hist) { 
+void AndHists::add_hist(Hists *hist) {
   hists_vector.push_back(hist);
 }
 
