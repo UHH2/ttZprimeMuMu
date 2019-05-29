@@ -56,7 +56,7 @@ namespace uhh2examples {
     unique_ptr<MuonCleaner> muoncleaner_iso;
     unique_ptr<ElectronCleaner> electroncleaner;
 
-    unique_ptr<AnalysisModule> syst_module, my_st;
+    unique_ptr<AnalysisModule> syst_module, my_st, my_htlep;
         // declare the Selections to use.
     unique_ptr<Selection> njet_sel, nmuon_sel, n_gen_muon_sel, nele_sel, n_gen_ele_sel, ht_sel, lumi_sel, mu2_sel, trigger_sel, trigger_sel1, trigger_sel2, mttbargen_sel,nbjet_sel;
 
@@ -107,6 +107,7 @@ namespace uhh2examples {
     muoncleaner.reset(new MuonCleaner(MuId));
     syst_module.reset(new MCScaleVariation(ctx));
     my_st.reset(new STCalculator(ctx));
+    my_htlep.reset(new HTlepCalculator(ctx));
 
     // 2. set up selections
 
@@ -128,6 +129,7 @@ namespace uhh2examples {
   }
    bool ttZPrimePreselectionModule::process(Event & event) {
    my_st->process(event);
+   my_htlep->process(event);
 
     h_nocuts->fill(event);
 

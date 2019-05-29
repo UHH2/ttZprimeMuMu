@@ -33,6 +33,6 @@ void MyEventHists::fill(const uhh2::Event & e){
         ST->Fill(st, e.weight);
     }
     if(e.is_valid(h_htlep)){
-      HTLep->Fill(htlep,e.weight);
+      HTLep->Fill(htlep, e.weight);
     }
 }

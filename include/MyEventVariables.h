@@ -27,6 +27,17 @@ public:
 private:
     boost::optional<JetId> jetid;
     uhh2::Event::Handle<double> h_st;
+    boost::optional<ElectronId> electronid;
+    boost::optional<MuonId> muonid;
+};
+
+class  HTlepCalculator: public uhh2::AnalysisModule {
+public:
+    explicit HTlepCalculator(uhh2::Context & ctx,const boost::optional<ElectronId> & electronid = boost::none, const boost::optional<MuonId> & muonid = boost::none, const std::string & name = "HTLep");
+
+    virtual bool process(uhh2::Event & event) override;
+
+private:
     uhh2::Event::Handle<double> h_htlep;
     boost::optional<ElectronId> electronid;
     boost::optional<MuonId> muonid;
