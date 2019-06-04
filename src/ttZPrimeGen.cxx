@@ -8,7 +8,7 @@ ZPrimeGen::ZPrimeGen(const vector<GenParticle> & genparticles, bool throw_on_fai
     for(unsigned int i=0; i<genparticles.size(); ++i) {
         const GenParticle & genp = genparticles[i];
         //cout << genp.pdgId() << endl;
-        if (abs(genp.pdgId()) ==9000005){ // nciht nur die Zahl kann spaeter problem machen = ZPrime's
+        if (abs(genp.pdgId()) ==9000005 && genp.status() == 22){ // nciht nur die Zahl kann spaeter problem machen = ZPrime's
             auto mu = genp.daughter(&genparticles, 1);
             auto muAnti = genp.daughter(&genparticles, 2);
             if(!mu || !muAnti){
@@ -27,6 +27,7 @@ ZPrimeGen::ZPrimeGen(const vector<GenParticle> & genparticles, bool throw_on_fai
                 if(throw_on_failure) throw runtime_error("ZPrimeGen: ZPrime has no MuAnti daughter");
                 return;
             }
+            //cout << "Status" << genp.status() << endl;
             // now get W daughters:
 
             // auto topd1 = top->daughter(&genparticles, 1);
