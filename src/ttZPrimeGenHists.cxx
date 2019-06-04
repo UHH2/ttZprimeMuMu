@@ -16,14 +16,14 @@ ZPrimeGenHists::ZPrimeGenHists(uhh2::Context & ctx, const std::string & dirname)
     eta_ZPrime = book< TH1F>( "eta_ZPrime", "#eta_{Z'}", 1000, -5, 5 ) ;
 
 
-    // Pt_mu = book<TH1F>( "Pt_mu","P_{T,mu} [GeV/c]",250,0,1000);
-    // Pt_antimu = book<TH1F>( "Pt_antimu","P_{T,#bar{mu}} [GeV/c]",250,0,1000);
-    // eta_mu = book<TH1F>( "eta_mu","#eta_{mu}",100,-5,5);
-    // eta_antimu = book<TH1F>( "eta_antimu","#eta_{#bar{mu}}",100,-5,5);
+     Pt_mu = book<TH1F>( "Pt_mu","P_{T,mu} [GeV/c]",250,0,1000);
+     Pt_antimu = book<TH1F>( "Pt_antimu","P_{T,#bar{#mu}} [GeV/c]",250,0,1000);
+     eta_mu = book<TH1F>( "eta_mu","#eta_{#mu}",100,-5,5);
+     eta_antimu = book<TH1F>( "eta_antimu","#eta_{#bar{#mu}}",100,-5,5);
     // y_mu = book<TH1F>( "y_mu","y_{mu}",1000,-5,5);
     // y_antimu = book<TH1F>( "y_antimu","y_{#bar{mu}}",1000,-5,5);
-    // phi_mu = book< TH1F>( "phi_mu", "#phi_{#mu}", 25, -M_PI, M_PI ) ;
-    // phi_antimu = book< TH1F>( "phi_antimu", "#phi_{#bar{#mu}}", 25, -M_PI, M_PI ) ;
+    phi_mu = book< TH1F>( "phi_mu", "#phi_{#mu}", 25, -M_PI, M_PI ) ;
+    phi_antimu = book< TH1F>( "phi_antimu", "#phi_{#bar{#mu}}", 25, -M_PI, M_PI ) ;
     // M_mu = book<TH1F>( "M_mu","M_{mu} [GeV/c^{2}]",100,0,1);
     // M_antimu = book<TH1F>( "M_antimu","M_{#bar{mu}} [GeV/c^{2}]",100,0,1);
     //
@@ -59,6 +59,8 @@ void ZPrimeGenHists::fill(const uhh2::Event & e){
     const auto & ZPrimeGen = e.get(h_ZPrimeGen);
 
     LorentzVector ZPrime = ZPrimeGen.ZPrime().v4();
+    LorentzVector MuZPrime = ZPrimeGen.MuZPrime().v4();
+    LorentzVector MuAntiZPrime = ZPrimeGen.MuAntiZPrime().v4();
 
 
     //double sh = (e.genparticles->at(0).v4()+ e.genparticles->at(1).v4()).M();
@@ -91,14 +93,14 @@ void ZPrimeGenHists::fill(const uhh2::Event & e){
     M_LQLQbar_vs_deltaR_Antitop->Fill(mLQLQbar_gen, deltaR_Antitop, e.weight);*/
 
 
-    // Pt_mu->Fill( LQLQbargen.muLQ().pt(), e.weight);
-    // Pt_antimu->Fill( LQLQbargen.muAntiLQ().pt(), e.weight);
-    // eta_mu->Fill( LQLQbargen.muLQ().eta(), e.weight);
-    // eta_antimu->Fill( LQLQbargen.muAntiLQ().eta(), e.weight);
+    Pt_mu->Fill( MuZPrime.pt(), e.weight);
+    Pt_antimu->Fill( MuAntiZPrime.pt(), e.weight);
+    eta_mu->Fill( MuZPrime.eta(), e.weight);
+    eta_antimu->Fill( MuAntiZPrime.eta(), e.weight);
     // y_mu->Fill( LQLQbargen.muLQ().v4().Rapidity(), e.weight);
     // y_antimu->Fill( LQLQbargen.muAntiLQ().v4().Rapidity(), e.weight);
-    // phi_mu->Fill( LQLQbargen.muLQ().phi(), e.weight);
-    // phi_antimu->Fill( LQLQbargen.muAntiLQ().phi(), e.weight);
+    phi_mu->Fill( MuZPrime.phi(), e.weight);
+    phi_antimu->Fill( MuAntiZPrime.phi(), e.weight);
     // M_mu->Fill( LQLQbargen.muLQ().v4().M(), e.weight);
     // M_antimu->Fill( LQLQbargen.muAntiLQ().v4().M(), e.weight);
     //
