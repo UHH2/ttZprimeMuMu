@@ -28,7 +28,7 @@
 
 <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&PRESELdir;/" PostFix="" TargetLumi="&TargetLumi;" >
 
-<InputData Lumi="152.139584" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeToMuMU_2017v2" Cacheable="&b_Cacheable;">
+<InputData Lumi="152.139584" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeGenHists_2017v2" Cacheable="&b_Cacheable;">
 		    &ZPrimeToMuMU;
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />

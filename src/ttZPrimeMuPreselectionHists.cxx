@@ -14,8 +14,13 @@ using namespace uhh2;
 
 ttZPrimeMuPreselectionHists::ttZPrimeMuPreselectionHists(Context & ctx, const string & dirname): Hists(ctx, dirname){
 
-   book<TH1F>("M_mumu", "M_{#mu#mu}",100 , 0, 2000);
+   book<TH1F>("M_mumu", "M_{#mu#mu} [GeV^2]",100 , 0, 2000);
    book<TH1F>("delta_phi_mumu","#Delta#phi_{#mu#mu}",50,0,TMath::Pi());
+   book<TH1F>("phi_mumu","#phi_{#mu#mu}",50,-TMath::Pi(),TMath::Pi());
+   book<TH1F>("eta_mumu","#eta_{#mu#mu}",50,-3,3);
+   book<TH1F>("Pt_mumu", "P_{T,#mu#mu} [GeV]",100 , 0, 1000);
+
+
 
  }
 
@@ -37,6 +42,9 @@ ttZPrimeMuPreselectionHists::ttZPrimeMuPreselectionHists(Context & ctx, const st
           M_mumu = (muons[i] + muons[j]).M();
           hist("M_mumu")->Fill(M_mumu, weight);
           hist("delta_phi_mumu")->Fill(abs(deltaPhi(muons[i],muons[j])));
+          hist("phi_mumu")->Fill((muons[i] + muons[j]).phi(),weight);
+          hist("eta_mumu")->Fill((muons[i] + muons[j]).eta(),weight);
+          hist("Pt_mumu")->Fill((muons[i] + muons[j]).pt(),weight);
         }
       }
     }
