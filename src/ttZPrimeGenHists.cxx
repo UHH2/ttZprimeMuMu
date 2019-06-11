@@ -6,8 +6,8 @@ using namespace uhh2;
 
 ZPrimeGenHists::ZPrimeGenHists(uhh2::Context & ctx, const std::string & dirname): Hists(ctx, dirname){
 
-    M_ZPrime_gen =  book<TH1F>( "M_ZPrime_gen", "M_{Z'} [GeV/c^{2}]", 1000, 0, 5000 ) ;
-    Pt_ZPrime_gen = book< TH1F>( "Pt_ZPrime_gen", "P_{T,Z'} [GeV/c]", 600, 0, 600 ) ;
+    M_ZPrime_gen =  book<TH1F>( "M_ZPrime_gen", "M_{Z'} [GeV/c^{2}]", 200, 0, 2000 ) ;
+    Pt_ZPrime_gen = book< TH1F>( "Pt_ZPrime_gen", "P_{T,Z'} [GeV/c]", 60, 0, 600 ) ;
     //shat = book< TH1F>( "shat", "#hat{s} [GeV]", 1000, 0, 5000 ) ;
     //DecayChannel = book< TH1F>( "DecayChannel", "decay channel", 11, 0, 11 ) ;
 
@@ -69,7 +69,7 @@ void ZPrimeGenHists::fill(const uhh2::Event & e){
     //if(LQ.M() == 0 || antiLQ.M() == 0){return;}
 
     //std::cout << "MLQLQ = " << mLQLQbar_gen << " & eventweight = " << e.weight << std::endl;
-    //std::cout << "MLQ = " << LQ.M() << " & MAntiLQ = " << antiLQ.M() << std::endl << std::endl;
+    // std::cout << "MZPrime = " << ZPrime.Pt() << std::endl;
     //    if (LQ.M() > 0 && antiLQ.M() > 0){
     M_ZPrime_gen->Fill( ZPrime.M(),e.weight);   //}
     //shat->Fill(sh, e.weight);
