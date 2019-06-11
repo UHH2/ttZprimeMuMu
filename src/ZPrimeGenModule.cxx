@@ -4,10 +4,9 @@
 #include "UHH2/core/include/AnalysisModule.h"
 #include "UHH2/core/include/Event.h"
 #include "UHH2/ttZPrime/include/ZPrimeGen.h"
-//#include "UHH2/common/include/LQGen.h"
 #include "UHH2/common/include/PrintingModules.h"
 #include "UHH2/ttZPrime/include/ZPrimeGenHists.h"
-//#include "UHH2/common/include/LQGenHists.h"
+
 
 using namespace std;
 using namespace uhh2;
@@ -23,7 +22,7 @@ public:
     virtual bool process(Event & event) override;
 
 private:
-  //std::unique_ptr<AnalysisModule> printer;
+  std::unique_ptr<AnalysisModule> printer;
   std::unique_ptr<AnalysisModule> ZPrimegenprod;
   std::unique_ptr<Hists> h_ZPrimegenhists;
   Event::Handle<ZPrimeGen> h_ZPrimegen;
@@ -33,7 +32,7 @@ private:
 ZPrimeGenModule::ZPrimeGenModule(Context & ctx){
 
 
-    //printer.reset(new GenParticlesPrinter(ctx));
+  printer.reset(new GenParticlesPrinter(ctx));
   ZPrimegenprod.reset(new ZPrimeGenProducer(ctx, "ZPrimeGen", false));
   h_ZPrimegen = ctx.get_handle<ZPrimeGen>("ZPrimegGen");
   h_ZPrimegenhists.reset(new ZPrimeGenHists(ctx, "ZPrimeGenHists"));
@@ -41,15 +40,25 @@ ZPrimeGenModule::ZPrimeGenModule(Context & ctx){
 
 
 bool ZPrimeGenModule::process(Event & event) {
-  //printer->process(event);
+  printer->process(event);
   ZPrimegenprod->process(event);
+  bool isAnZPrime = false;
+  cout << "Test" << endl;
+  for(const auto & gp : *event.genparticles){
+    if(gp.pdgId()== 9000005 ){ // && gp.pt() != 0.0 &&  gp.v4().M() != 0.0
+      cout <<"MassOfZPrime" << gp.v4().M() << endl;
+      isAnZPrime = true;
+      break;
+
+    } }
 
     //const auto & LQLQbargen = event.get(h_LQgen);
 
     //cout << "Decay channel is "<< endl;
-
+  if (isAnZPrime)
+  {
     h_ZPrimegenhists->fill(event);
-
+  }
     return true;
 }
 
