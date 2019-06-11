@@ -5,13 +5,14 @@
 	  <!ENTITY TargetLumi      "35867">
 	  <!ENTITY PRESELdir       "/nfs/dust/cms/user/tiedemab/ttZPrime/Run2_80x/Preselection/NOMINAL/test">
 	  <!ENTITY b_Cacheable     "False">
-	  <!ENTITY NEVT            "10000">
+	  <!ENTITY NEVT            "-1">
 	  <!ENTITY PROOFdir        "/nfs/dust/cms/user/tiedemab/.proof2">
 	  <!ENTITY IS_FOR_EFF      "false">
 
 
  <!-- <!ENTITY TTToSemiLeptonic SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_TTToSemiLeptonicTest.xml"> -->
-	<!ENTITY ZPrimeToMuMU SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/MC_ZPrimeToMuMU.xml">
+	<!-- <!ENTITY ZPrimeToMuMU SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/MC_ZPrimeToMuMuPreselection.xml"> -->
+	<!ENTITY ZPrimeToMuMU "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/core/python/Ntuple.root">
 ]>
 
 
@@ -29,7 +30,7 @@
 <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&PRESELdir;/" PostFix="" TargetLumi="&TargetLumi;" >
 
 <InputData Lumi="152.139584" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeGenHists_2017v2" Cacheable="&b_Cacheable;">
-		    &ZPrimeToMuMU;
+				<In FileName="&ZPrimeToMuMU;" Lumi="0.0"/>
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
 </InputData>
@@ -46,20 +47,6 @@
 
 
         <UserConfig>
-            <!-- define which collections to read from the input. Only specify what you need to save I/O time -->
-            <Item Name="PrimaryVertexCollection" Value="offlineSlimmedPrimaryVertices" />
-            <Item Name="ElectronCollection" Value="slimmedElectronsUSER" />
-            <Item Name="MuonCollection" Value="slimmedMuonsUSER" />
- 	    <!-- <Item Name="TauCollection" Value="slimmedTaus" /> -->
-            <Item Name="JetCollection" Value="jetsAk4CHS" />
-            <Item Name="METName" Value="slimmedMETs" />
-            <Item Name="GenJetCollection" Value="slimmedGenJets" />
-	    <Item Name="TopJetCollection" Value="hotvrPuppi" />
-	    <Item Name="GenParticleCollection" Value="GenParticles" />
-	    <Item Name="GenInfoName" Value="genInfo" />
-
-            <Item Name="lumi_file" Value="/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/data/2017/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_v1.root" />
-            <Item Name="lumihists_lumi_per_bin" Value="1000."/>
 
 
 
@@ -88,6 +75,7 @@
 								 <Item Name="readTrigger" Value="false" />
 
             -->
+						<Item Name="GenParticleCollection" Value="GenParticles" />
 						<Item Name="readTrigger" Value="false" />
             <!-- the class name of the AnalysisModule subclasses to run: -->
             <Item Name="AnalysisModule" Value="ZPrimeGenModule" />
@@ -98,16 +86,6 @@
             <Item Name="use_sframe_weight" Value="false" />
 
             <!-- configuration for MCPileupReweight (run as part of CommonModules): -->
-            <Item Name="pileup_directory" Value="/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/data/2017/MyMCPileupHistogram.root" />
-	    <Item Name="pileup_directory_data" Value="/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/data/2017/MyDataPileupHistogram.root" />
-
-	    <Item Name="ScaleVariationMuR"       Value="none" />
-	    <Item Name="ScaleVariationMuF"       Value="none" />
-	    <Item Name="jecsmear_direction"      Value="nominal" />
-	    <Item Name="jersmear_direction"      Value="nominal" />
-	    <Item Name="Systematic_EleFakeRate"  Value="nominal" />
-	    <Item Name="Systematic_MuFakeRate"   Value="nominal" />
-
 
             <!-- Some test configuration; see LQToTopMuModule.cxx for how to access it: -->
             <Item Name="TestKey" Value="TestKeyValue" />
