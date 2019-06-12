@@ -46,6 +46,11 @@ ZPrimeGen::ZPrimeGen(const vector<GenParticle> & genparticles, bool throw_on_fai
             //cout << "Number of ZPrimes: " << n_ZPrime << endl;
 
         }
+        if (abs(genp.pdgId()) == 6)
+        {
+          m_tops.push_back(genp);
+          cout << "I'm a Top" << endl;
+        }
     }
     if(n_ZPrime != 1){
         if(throw_on_failure)  throw runtime_error("ZPrimeGen: did not find exactly one ZPrime in the event");
@@ -68,7 +73,9 @@ GenParticle ZPrimeGen::MuZPrime() const{
 GenParticle ZPrimeGen::MuAntiZPrime() const{
     return m_muAntiZPrime;
 }
-
+std::vector<GenParticle> ZPrimeGen::Tops() const{
+    return  m_tops;
+}
 
 
 

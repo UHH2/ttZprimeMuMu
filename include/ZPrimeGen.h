@@ -56,6 +56,7 @@ public:
   GenParticle ZPrime() const;
   GenParticle MuZPrime() const;
   GenParticle MuAntiZPrime() const;
+  std::vector<GenParticle> Tops() const;
   //E_DecayChannel DecayChannel() const;
 
   //bool IsTopHadronicDecay() const;
@@ -79,7 +80,7 @@ public:
   GenParticle m_ZPrime;
   GenParticle m_muZPrime;
   GenParticle m_muAntiZPrime;
-
+  std::vector<GenParticle> m_tops;
 
 
   // E_DecayChannel m_type;

@@ -55,10 +55,8 @@ bool ZPrimeGenModule::process(Event & event) {
     //const auto & LQLQbargen = event.get(h_LQgen);
 
     //cout << "Decay channel is "<< endl;
-  if (isAnZPrime)
-  {
-    h_ZPrimegenhists->fill(event);
-  }
+  h_ZPrimegenhists->fill(event);
+
     return true;
 }
 

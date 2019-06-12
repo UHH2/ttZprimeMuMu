@@ -27,13 +27,14 @@ ZPrimeGenHists::ZPrimeGenHists(uhh2::Context & ctx, const std::string & dirname)
     // M_mu = book<TH1F>( "M_mu","M_{mu} [GeV/c^{2}]",100,0,1);
     // M_antimu = book<TH1F>( "M_antimu","M_{#bar{mu}} [GeV/c^{2}]",100,0,1);
     //
-    // Pt_top = book<TH1F>( "Pt_top","P_{T,t} [GeV/c]",500,0,2000);
+    N_top = book<TH1F>( "N_top","N_{top}",10,0,10);
+    Pt_top = book<TH1F>( "Pt_top","P_{T,t} [GeV/c]",500,0,2000);
     // Pt_antitop = book<TH1F>( "Pt_antitop","P_{T,#bar{t}} [GeV/c]",500,0,2000);
-    // eta_top = book<TH1F>( "eta_top","#eta_{t}",100,-5,5);
+    eta_top = book<TH1F>( "eta_top","#eta_{t}",100,-5,5);
     // eta_antitop = book<TH1F>( "eta_antitop","#eta_{#bar{t}}",100,-5,5);
     // y_top = book<TH1F>( "y_top","y_{t}",1000,-5,5);
     // y_antitop = book<TH1F>( "y_antitop","y_{#bar{t}}",1000,-5,5);
-    // phi_top = book< TH1F>( "phi_top", "#phi_{t}", 25, -M_PI, M_PI ) ;
+    phi_top = book< TH1F>( "phi_top", "#phi_{t}", 25, -M_PI, M_PI ) ;
     // phi_antitop = book< TH1F>( "phi_antitop", "#phi_{#bar{t}}", 25, -M_PI, M_PI ) ;
     // M_top = book<TH1F>( "M_top","M_{t} [GeV/c^{2}]",1000,150,200);
     // M_antitop = book<TH1F>( "M_antitop","M_{#bar{t}} [GeV/c^{2}]",1000,150,200);
@@ -61,7 +62,7 @@ void ZPrimeGenHists::fill(const uhh2::Event & e){
     LorentzVector ZPrime = ZPrimeGen.ZPrime().v4();
     LorentzVector MuZPrime = ZPrimeGen.MuZPrime().v4();
     LorentzVector MuAntiZPrime = ZPrimeGen.MuAntiZPrime().v4();
-
+    std::vector <GenParticle> Tops = ZPrimeGen.Tops();
 
     //double sh = (e.genparticles->at(0).v4()+ e.genparticles->at(1).v4()).M();
 
@@ -70,7 +71,7 @@ void ZPrimeGenHists::fill(const uhh2::Event & e){
 
     //std::cout << "MLQLQ = " << mLQLQbar_gen << " & eventweight = " << e.weight << std::endl;
     // std::cout << "MZPrime = " << ZPrime.Pt() << std::endl;
-    //    if (LQ.M() > 0 && antiLQ.M() > 0){
+    //    if (LQ.M() > 0 Pt_top = book<TH1F>( "Pt_top","P_{T,t} [GeV/c]",500,0,2000);&& antiLQ.M() > 0){
     M_ZPrime_gen->Fill( ZPrime.M(),e.weight);   //}
     //shat->Fill(sh, e.weight);
     //std::cout <<"ZPrimeMass=" << ZPrime.M() << '\n';
@@ -116,7 +117,15 @@ void ZPrimeGenHists::fill(const uhh2::Event & e){
     //   M_top->Fill( LQLQbargen.TopLQ().v4().M(), e.weight);
     // if(LQLQbargen.TopAntiLQ().v4().isTimelike())
     //   M_antitop->Fill( LQLQbargen.TopAntiLQ().v4().M(), e.weight);
+    N_top->Fill(Tops.size(),e.weight);
+    std::cout << "N_Tops=" << Tops.size() << std::endl;
+    for (const auto & top : Tops)
+    {
+      Pt_top->Fill(top.pt(),e.weight);
+      phi_top->Fill(top.phi(),e.weight);
+      eta_top->Fill(top.eta(),e.weight);
 
+    }
     /*  TLorentzVector LQ_LQLQframe(0,0,0,0);
     LQ_LQLQframe.SetPtEtaPhiE(LQ.pt(), LQ.eta(), LQ.phi(), LQ.E());
     TLorentzVector antiLQ_LQLQframe(0,0,0,0);
