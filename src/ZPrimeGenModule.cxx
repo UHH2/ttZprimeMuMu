@@ -43,18 +43,8 @@ bool ZPrimeGenModule::process(Event & event) {
   printer->process(event);
   ZPrimegenprod->process(event);
   bool isAnZPrime = false;
-  cout << "Test" << endl;
-  for(const auto & gp : *event.genparticles){
-    if(gp.pdgId()== 9000005 ){ // && gp.pt() != 0.0 &&  gp.v4().M() != 0.0
-      cout <<"MassOfZPrime" << gp.v4().M() << endl;
-      isAnZPrime = true;
-      break;
+  //cout << "Test" << endl;
 
-    } }
-
-    //const auto & LQLQbargen = event.get(h_LQgen);
-
-    //cout << "Decay channel is "<< endl;
   h_ZPrimegenhists->fill(event);
 
     return true;

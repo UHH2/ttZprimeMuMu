@@ -49,7 +49,7 @@ ZPrimeGen::ZPrimeGen(const vector<GenParticle> & genparticles, bool throw_on_fai
         if (abs(genp.pdgId()) == 6)
         {
           m_tops.push_back(genp);
-          cout << "I'm a Top" << endl;
+          //cout << "I'm a Top" << endl;
         }
     }
     if(n_ZPrime != 1){
