@@ -42,7 +42,6 @@ ZPrimeGenModule::ZPrimeGenModule(Context & ctx){
 bool ZPrimeGenModule::process(Event & event) {
   //printer->process(event);
   ZPrimegenprod->process(event);
-  bool isAnZPrime = false;
   //cout << "Test" << endl;
 
   h_ZPrimegenhists->fill(event);
