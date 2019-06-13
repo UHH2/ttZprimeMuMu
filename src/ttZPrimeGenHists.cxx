@@ -119,7 +119,6 @@ void ZPrimeGenHists::fill(const uhh2::Event & e){
     // if(LQLQbargen.TopAntiLQ().v4().isTimelike())
     //   M_antitop->Fill( LQLQbargen.TopAntiLQ().v4().M(), e.weight);
     N_top->Fill(Tops.size(),e.weight);
-    std::cout << "N_Tops=" << Tops.size() << std::endl;
     for (const auto & top : Tops)
     {
       Pt_top->Fill(top.pt(),e.weight);
