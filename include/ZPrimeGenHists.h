@@ -13,7 +13,7 @@ public:
     virtual void fill(const uhh2::Event & ev) override;
 
 protected:
-    TH1F *M_ZPrime_gen, *Pt_ZPrime_gen, *phi_ZPrime, *eta_ZPrime, *Pt_mu, *Pt_antimu, *eta_mu, *eta_antimu, *phi_mu, *phi_antimu, *Pt_top, *phi_top, *eta_top, *N_top
+    TH1F *M_ZPrime_gen, *Pt_ZPrime_gen, *phi_ZPrime, *eta_ZPrime, *Pt_mu, *Pt_antimu, *eta_mu, *eta_antimu, *phi_mu, *phi_antimu, *Pt_top, *phi_top, *eta_top, *N_top, *M_MuMu
       //, *cosThetastar_LQ_LQLQframe, *cosThetastar_antiLQ_LQLQframe, *Pt_LQ_LQLQframe, *Pt_antiLQ_LQLQframe, *DecayChannel
 ;
 

@@ -16,10 +16,11 @@ ZPrimeGenHists::ZPrimeGenHists(uhh2::Context & ctx, const std::string & dirname)
     eta_ZPrime = book< TH1F>( "eta_ZPrime", "#eta_{Z'}", 1000, -5, 5 ) ;
 
 
-     Pt_mu = book<TH1F>( "Pt_mu","P_{T,mu} [GeV/c]",250,0,1000);
-     Pt_antimu = book<TH1F>( "Pt_antimu","P_{T,#bar{#mu}} [GeV/c]",250,0,1000);
-     eta_mu = book<TH1F>( "eta_mu","#eta_{#mu}",100,-5,5);
-     eta_antimu = book<TH1F>( "eta_antimu","#eta_{#bar{#mu}}",100,-5,5);
+    M_MuMu =  book<TH1F>( "M_MuMu", "M_{#mu#mu} [GeV/c^{2}]", 200, 0, 2000 ) ;
+    Pt_mu = book<TH1F>( "Pt_mu","P_{T,mu} [GeV/c]",250,0,1000);
+    Pt_antimu = book<TH1F>( "Pt_antimu","P_{T,#bar{#mu}} [GeV/c]",250,0,1000);
+    eta_mu = book<TH1F>( "eta_mu","#eta_{#mu}",100,-5,5);
+    eta_antimu = book<TH1F>( "eta_antimu","#eta_{#bar{#mu}}",100,-5,5);
     // y_mu = book<TH1F>( "y_mu","y_{mu}",1000,-5,5);
     // y_antimu = book<TH1F>( "y_antimu","y_{#bar{mu}}",1000,-5,5);
     phi_mu = book< TH1F>( "phi_mu", "#phi_{#mu}", 25, -M_PI, M_PI ) ;
@@ -93,7 +94,7 @@ void ZPrimeGenHists::fill(const uhh2::Event & e){
     M_LQLQbar_vs_deltaR_Top->Fill(mLQLQbar_gen, deltaR_Top, e.weight);
     M_LQLQbar_vs_deltaR_Antitop->Fill(mLQLQbar_gen, deltaR_Antitop, e.weight);*/
 
-
+    M_MuMu->Fill((MuZPrime+ MuAntiZPrime).M(),e.weight);
     Pt_mu->Fill( MuZPrime.pt(), e.weight);
     Pt_antimu->Fill( MuAntiZPrime.pt(), e.weight);
     eta_mu->Fill( MuZPrime.eta(), e.weight);
