@@ -1,11 +1,6 @@
 #include <iostream>
 #include <memory>
 
-int main()
-{
-  std::cout << "Hello from ttZPrimePreselectionModule!" << std::endl;
-  return 0;
-}
 
 
 #include "UHH2/core/include/AnalysisModule.h"
@@ -123,7 +118,7 @@ namespace uhh2examples {
     h_nocuts.reset(new AndHists(ctx, "NoCuts"));
     //h_trigger.reset(new AndHists(ctx, "Trigger"));
     h_cleaner.reset(new AndHists(ctx, "Cleaner"));
-    h_2mu.reset(new AndHists(ctx, "1Mu"));
+    h_2mu.reset(new AndHists(ctx, "2Mu"));
     h_2jets.reset(new AndHists(ctx, "2Jets"));
     h_1bjet.reset(new AndHists(ctx,"1BJet"));
   }
