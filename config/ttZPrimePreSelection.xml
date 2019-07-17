@@ -78,7 +78,7 @@
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
 </InputData>
-<InputData Lumi="744.320664" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeToMuMU_700_2016v3" Cacheable="&b_Cacheable;">
+<InputData Lumi="744.320664" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeToMuMU_M700_2016v3" Cacheable="&b_Cacheable;">
 		    &ZPrimeToMuMU700;
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
