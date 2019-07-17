@@ -73,23 +73,23 @@
 
 <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&PRESELdir;/" PostFix="" TargetLumi="&TargetLumi;" >
 
-<InputData Lumi="22070" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeToMuMU_M300_2016v3" Cacheable="&b_Cacheable;">
+<InputData Lumi="21698.3412" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeToMuMU_M300_2016v3" Cacheable="&b_Cacheable;">
 		    &ZPrimeToMuMU300;
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
 </InputData>
-<InputData Lumi="745.2" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeToMuMU_7300_2016v3" Cacheable="&b_Cacheable;">
+<InputData Lumi="744.320664" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeToMuMU_700_2016v3" Cacheable="&b_Cacheable;">
 		    &ZPrimeToMuMU700;
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
 </InputData>
-<InputData Lumi="154.4" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeToMuMU_M300_2016v3" Cacheable="&b_Cacheable;">
-		    &ZPrimeToMuMU300;
+<InputData Lumi="152.822032" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeToMuMU_M1000_2016v3" Cacheable="&b_Cacheable;">
+		    &ZPrimeToMuMU1000;
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
 </InputData>
-<InputData Lumi="18.97" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeToMuMU_M300_2016v3" Cacheable="&b_Cacheable;">
-		    &ZPrimeToMuMU300;
+<InputData Lumi="15.1080874" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeToMuMU_M1500_2016v3" Cacheable="&b_Cacheable;">
+		    &ZPrimeToMuMU1500;
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
 </InputData>
