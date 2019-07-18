@@ -19,6 +19,7 @@ ttZPrimeMuPreselectionHists::ttZPrimeMuPreselectionHists(Context & ctx, const st
    book<TH1F>("phi_mumu","#phi_{#mu#mu}",50,-TMath::Pi(),TMath::Pi());
    book<TH1F>("eta_mumu","#eta_{#mu#mu}",50,-3,3);
    book<TH1F>("Pt_mumu", "P_{T,#mu#mu} [GeV]",100 , 0, 1000);
+   book<TH1F>("M_mu1mu2", "M_{#mu_{1}#mu_{2}} [GeV^2]",100 , 0, 2000);
 
 
 
@@ -36,6 +37,7 @@ ttZPrimeMuPreselectionHists::ttZPrimeMuPreselectionHists(Context & ctx, const st
   for(int i=0; i<Nmuons; i++){
     muons[i] = event.muons->at(i).v4();
   }
+  hist("M_mu1mu2")->Fill((muons[0]+muons[1]).M());
   for(int i=0; i<Nmuons; i++){
     for(int j=0; j<Nmuons; j++){
       if(j > i){
