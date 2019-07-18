@@ -6,7 +6,7 @@
 #include "UHH2/core/include/AnalysisModule.h"
 #include "UHH2/core/include/Event.h"
 
-#include "UHH2/common/include/CommonModules.h"
+//#include "UHH2/common/include/CommonModules.h"
 #include "UHH2/common/include/CleaningModules.h"
 #include "UHH2/common/include/JetCorrections.h"
 #include "UHH2/common/include/JetHists.h"
@@ -42,7 +42,7 @@ namespace uhh2examples {
 
   private:
 
-    unique_ptr<CommonModules> common;
+    //unique_ptr<CommonModules> common;
     //unique_ptr<AnalysisModule> Muon_printer, Electron_printer, Jet_printer;
 
     unique_ptr<JetCleaner> jetcleaner;
@@ -51,7 +51,7 @@ namespace uhh2examples {
     unique_ptr<MuonCleaner> muoncleaner_iso;
     unique_ptr<ElectronCleaner> electroncleaner;
 
-    unique_ptr<AnalysisModule> syst_module, my_st, my_htlep;
+    unique_ptr<AnalysisModule> syst_module, my_st, my_htlep, mc_lumi_weight;
         // declare the Selections to use.
     unique_ptr<Selection> njet_sel, nmuon_sel, n_gen_muon_sel, nele_sel, n_gen_ele_sel, ht_sel, lumi_sel, mu2_sel, trigger_sel, trigger_sel1, trigger_sel2, mttbargen_sel,nbjet_sel;
 
@@ -83,6 +83,9 @@ namespace uhh2examples {
         cout << " " << kv.first << " = " << kv.second << endl;
         }
 
+
+    mc_lumi_weight.reset(new MCLumiWeight(ctx));
+
     EleId = AndId<Electron>(ElectronID_Summer16_tight, PtEtaCut(30.0, 2.4));
     MuId = AndId<Muon>(MuonID(Muon::CutBasedIdTight), PtEtaCut(30.0, 2.4), MuonIso(0.15));
 
@@ -91,6 +94,7 @@ namespace uhh2examples {
     Btag_loose = CSVBTag(CSVBTag::wp::WP_LOOSE);
     Btag_medium = CSVBTag(CSVBTag::wp::WP_MEDIUM);
     Btag_tight = CSVBTag(CSVBTag::wp::WP_TIGHT);
+
 
     //common.reset(new CommonModules());
     //common->switch_jetlepcleaner(true);
@@ -125,8 +129,9 @@ namespace uhh2examples {
    bool ttZPrimePreselectionModule::process(Event & event) {
    my_st->process(event);
    my_htlep->process(event);
+   mc_lumi_weight->process(event);
 
-    h_nocuts->fill(event);
+   h_nocuts->fill(event);
 
     // trigger
     //if(!(trigger_sel1->passes(event))) return false;
