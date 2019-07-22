@@ -5,7 +5,7 @@
 	  <!ENTITY TargetLumi      "35867">
 	  <!ENTITY PRESELdir       "/nfs/dust/cms/user/tiedemab/ttZPrime/Run2_10x/Preselection/NOMINAL">
 	  <!ENTITY b_Cacheable     "False">
-	  <!ENTITY NEVT            "100">
+	  <!ENTITY NEVT            "-1">
 	  <!ENTITY PROOFdir        "/nfs/dust/cms/user/tiedemab/.proof2">
 	  <!ENTITY IS_FOR_EFF      "false">
 
@@ -73,22 +73,22 @@
 
 <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&PRESELdir;/" PostFix="" TargetLumi="&TargetLumi;" >
 
-<InputData Lumi="21698.3412" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM300_2016v3" Cacheable="&b_Cacheable;">
+<InputData Lumi="98316" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM300_2016v3" Cacheable="&b_Cacheable;">
 		    &ZPrimeToMuMu300;
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
 </InputData>
-<InputData Lumi="744.320664" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM700_2016v3" Cacheable="&b_Cacheable;">
+<InputData Lumi="99882.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM700_2016v3" Cacheable="&b_Cacheable;">
 		    &ZPrimeToMuMu700;
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
 </InputData>
-<InputData Lumi="152.822032" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM1000_2016v3" Cacheable="&b_Cacheable;">
+<InputData Lumi="98978.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM1000_2016v3" Cacheable="&b_Cacheable;">
 		    &ZPrimeToMuMu1000;
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
 </InputData>
-<InputData Lumi="15.1080874" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM1500_2016v3" Cacheable="&b_Cacheable;">
+<InputData Lumi="79642.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM1500_2016v3" Cacheable="&b_Cacheable;">
 		    &ZPrimeToMuMu1500;
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
