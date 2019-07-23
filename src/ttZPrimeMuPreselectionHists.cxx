@@ -31,22 +31,25 @@ ttZPrimeMuPreselectionHists::ttZPrimeMuPreselectionHists(Context & ctx, const st
    // slow when you have many histograms; therefore, better
    // use histogram pointers as members as in 'UHH2/common/include/ElectronHists.h'
   double weight = event.weight;
+  assert(event.muons);
   int Nmuons = event.muons->size();
-  double M_mumu;
-  LorentzVector muons[Nmuons];
-  for(int i=0; i<Nmuons; i++){
-    muons[i] = event.muons->at(i).v4();
+  vector<Muon> muons;
+  for(const auto & muon : *event.muons){
+    muons.push_back(muon);
   }
-  hist("M_mu1mu2")->Fill((muons[0]+muons[1]).M());
+  if((muons[0].charge()+muons[1].charge())== 0)
+  {
+    hist("M_mu1mu2")->Fill((muons[0].v4()+muons[1].v4()).M());
+  }
   for(int i=0; i<Nmuons; i++){
     for(int j=0; j<Nmuons; j++){
-      if(j > i){
-          M_mumu = (muons[i] + muons[j]).M();
-          hist("M_mumu")->Fill(M_mumu, weight);
-          hist("delta_phi_mumu")->Fill(abs(deltaPhi(muons[i],muons[j])));
-          hist("phi_mumu")->Fill((muons[i] + muons[j]).phi(),weight);
-          hist("eta_mumu")->Fill((muons[i] + muons[j]).eta(),weight);
-          hist("Pt_mumu")->Fill((muons[i] + muons[j]).pt(),weight);
+      if(j > i && (muons[i].charge()+muons[j].charge())== 0){
+          LorentzVector mumu = (muons[i].v4() + muons[j].v4());
+          hist("M_mumu")->Fill(mumu.M(), weight);
+          hist("delta_phi_mumu")->Fill(abs(deltaPhi(muons[i].v4(),muons[j].v4())));
+          hist("phi_mumu")->Fill(mumu.phi(),weight);
+          hist("eta_mumu")->Fill(mumu.eta(),weight);
+          hist("Pt_mumu")->Fill(mumu.pt(),weight);
         }
       }
     }
