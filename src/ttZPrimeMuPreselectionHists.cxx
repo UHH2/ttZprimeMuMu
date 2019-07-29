@@ -37,13 +37,15 @@ ttZPrimeMuPreselectionHists::ttZPrimeMuPreselectionHists(Context & ctx, const st
   for(const auto & muon : *event.muons){
     muons.push_back(muon);
   }
-  if((muons[0].charge()+muons[1].charge())== 0)
-  {
-    hist("M_mu1mu2")->Fill((muons[0].v4()+muons[1].v4()).M());
+  if(Nmuons > 1){
+    if((muons[0].charge()+muons[1].charge())== 0) hist("M_mu1mu2")->Fill((muons[0].v4()+muons[1].v4()).M());
   }
-  for(int i=0; i<Nmuons; i++){
-    for(int j=0; j<Nmuons; j++){
-      if(j > i && (muons[i].charge()+muons[j].charge())== 0){
+  if(Nmuons > 1){
+    // cout << "Nmu=" << Nmuons << endl;
+    for(int i=0; i<Nmuons; i++){
+      for(int j=0; j<Nmuons; j++){
+        if(j > i && ((muons[i].charge()+muons[j].charge())== 0)){
+          // cout << "i=" << i << " ,j=" << j << endl;
           LorentzVector mumu = (muons[i].v4() + muons[j].v4());
           hist("M_mumu")->Fill(mumu.M(), weight);
           hist("delta_phi_mumu")->Fill(abs(deltaPhi(muons[i].v4(),muons[j].v4())));
@@ -54,3 +56,4 @@ ttZPrimeMuPreselectionHists::ttZPrimeMuPreselectionHists(Context & ctx, const st
       }
     }
   }
+}
