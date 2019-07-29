@@ -25,6 +25,8 @@
 
 #include "UHH2/ttZPrime/include/AndHists.h"
 #include "UHH2/ttZPrime/include/MyEventVariables.h"
+#include "UHH2/ttZPrime/include/ttZPrimeSelections.h"
+
 
 
 
@@ -53,10 +55,10 @@ namespace uhh2examples {
 
     unique_ptr<AnalysisModule> syst_module, my_st, my_htlep, mc_lumi_weight;
         // declare the Selections to use.
-    unique_ptr<Selection> njet_sel, nmuon_sel, n_gen_muon_sel, nele_sel, n_gen_ele_sel, ht_sel, lumi_sel, mu2_sel, trigger_sel, trigger_sel1, trigger_sel2, mttbargen_sel,nbjet_sel;
+    unique_ptr<Selection> njet_sel, nmuon_sel, n_gen_muon_sel, nele_sel, n_gen_ele_sel, st_sel, lumi_sel, mu2_sel, trigger_sel, trigger_sel1, trigger_sel2, mttbargen_sel,nbjet_sel;
 
     // store the Hists collection as member variables.
-    unique_ptr<Hists> h_nocuts,h_trigger, h_lumi,h_cleaner,h_2mu, h_2jets,h_1bjet;
+    unique_ptr<Hists> h_nocuts,h_trigger, h_lumi,h_cleaner,h_2mu, h_2jets,h_1bjet, h_st;
 
 
 
@@ -82,6 +84,9 @@ namespace uhh2examples {
     for(auto & kv : ctx.get_all()){
         cout << " " << kv.first << " = " << kv.second << endl;
         }
+
+
+    double st_min = 600.;
 
 
     mc_lumi_weight.reset(new MCLumiWeight(ctx));
@@ -116,6 +121,7 @@ namespace uhh2examples {
     njet_sel.reset(new NJetSelection(2, -1));
     mu2_sel.reset(new NMuonSelection(2, -1));
     nbjet_sel.reset(new NJetSelection(1,-1,Btag_tight ));
+    st_sel.reset(new STSelection(st_min));
     //nmuon_sel.reset(new NMuonSelection(2, -1));
 
     // 3. Set up Hists classes:
@@ -125,10 +131,9 @@ namespace uhh2examples {
     h_2mu.reset(new AndHists(ctx, "2Mu"));
     h_2jets.reset(new AndHists(ctx, "2Jets"));
     h_1bjet.reset(new AndHists(ctx,"1BJet"));
+    h_st.reset(new AndHists(ctx,"StSel"));
   }
    bool ttZPrimePreselectionModule::process(Event & event) {
-   my_st->process(event);
-   my_htlep->process(event);
    mc_lumi_weight->process(event);
 
    h_nocuts->fill(event);
@@ -143,12 +148,12 @@ namespace uhh2examples {
     //bool pass_common = common->process(event);
     //if(!pass_common) return false;
     jetcleaner->process(event);
+
     muoncleaner->process(event);
+
     electroncleaner->process(event);
 
-
     h_cleaner->fill(event);
-
 
     if(!mu2_sel->passes(event)) return false;
     h_2mu->fill(event);
@@ -156,9 +161,14 @@ namespace uhh2examples {
 
     if(!njet_sel->passes(event)) return false;
     h_2jets->fill(event);
+    my_st->process(event);
+    my_htlep->process(event);
 
     if(!nbjet_sel->passes(event)) return false;
     h_1bjet->fill(event);
+
+    if(!st_sel->passes(event)) return false;
+    h_st->fill(event);
 
 
     return true;

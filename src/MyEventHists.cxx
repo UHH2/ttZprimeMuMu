@@ -27,12 +27,12 @@ void MyEventHists::fill(const uhh2::Event & e){
     assert(e.met);
     assert(e.pvs);
     //ht = e.get(h_ht);
-    double st =e.get(h_st);
-    double htlep = e.get(h_htlep);
+    // double st =e.get(h_st);
+    // double htlep = e.get(h_htlep);
     if (e.is_valid(h_st)) {
-        ST->Fill(st, e.weight);
+        ST->Fill(e.get(h_st), e.weight);
     }
     if(e.is_valid(h_htlep)){
-      HTLep->Fill(htlep, e.weight);
+      HTLep->Fill(e.get(h_htlep), e.weight);
     }
 }
