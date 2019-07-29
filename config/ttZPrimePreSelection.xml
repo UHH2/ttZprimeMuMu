@@ -56,6 +56,8 @@
 	<!ENTITY STtChannelTop SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_ST_t-channel_top_inclusiveDecays.xml">
 	<!ENTITY STsChannel SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_ST_s-channel_inclusiveDecays.xml">
 
+	<!ENTITY TTZ_1 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_TTZToLLNuNu_ext2_v1.xml">
+	<!ENTITY TTZ_2 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_TTZToLLNuNu_ext2_v2.xml">
 
 ]>
 
@@ -274,6 +276,19 @@
 </InputData>
 <InputData Lumi="91105257.76" NEventsMax="&NEVT;" Type="MC" Version="STsChannel_2016v3" Cacheable="&b_Cacheable;">
 		    &STsChannel;
+		    <InputTree Name="AnalysisTree" />
+		    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+<!-- TT_V -->
+
+<InputData Lumi="5827337.386" NEventsMax="&NEVT;" Type="MC" Version="TTZ_1_2016v3" Cacheable="&b_Cacheable;">
+		    &TTZ_1;
+		    <InputTree Name="AnalysisTree" />
+		    <OutputTree Name="AnalysisTree" />
+</InputData>
+<InputData Lumi="1985760.606" NEventsMax="&NEVT;" Type="MC" Version="TTZ_2_2016v3" Cacheable="&b_Cacheable;">
+		    &TTZ_2;
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
 </InputData>
