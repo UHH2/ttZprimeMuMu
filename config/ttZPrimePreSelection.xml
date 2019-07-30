@@ -57,7 +57,7 @@
 	<!ENTITY STsChannel SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_ST_s-channel_inclusiveDecays.xml">
 
 	<!ENTITY TTZ_1 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_TTZToLLNuNu_ext2_v1.xml">
-	<!ENTITY TTZ_2 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_TTZToLLNuNu_ext2_v2.xml">
+	<!ENTITY TTZ_2 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_TTZToLLNuNu_ext1_v2.xml">
 
 ]>
 
