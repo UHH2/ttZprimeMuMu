@@ -57,6 +57,8 @@
 		<!ENTITY STtChannelTop "&PRESELdir;/&PRESELfilename;MC.STtChannelTop_2016v3.root">
 		<!ENTITY STsChannel "&PRESELdir;/&PRESELfilename;MC.STsChannel_2016v3.root">
 
+		<!ENTITY TTZ_1 "&PRESELdir;/&PRESELfilename;MC.TTZ_1_2016v3.root">
+		<!ENTITY TTZ_2 "&PRESELdir;/&PRESELfilename;MC.TTZ_1_2016v3.root">
 
 
 
@@ -283,6 +285,20 @@
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
 </InputData>
+
+<InputData Lumi="5827337.386" NEventsMax="&NEVT;" Type="MC" Version="TTZ_1_2016v3" Cacheable="&b_Cacheable;">
+		    <In FileName="&TTZ_1;" Lumi="0.0"/>
+		    <InputTree Name="AnalysisTree" />
+		    <OutputTree Name="AnalysisTree" />
+</InputData>
+<InputData Lumi="1985760.606" NEventsMax="&NEVT;" Type="MC" Version="TTZ_1_2016v3" Cacheable="&b_Cacheable;">
+		    <In FileName="&TTZ_2;" Lumi="0.0"/>
+		    <InputTree Name="AnalysisTree" />
+		    <OutputTree Name="AnalysisTree" />
+</InputData>
+
+
+
 <!-- <InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="WJets" Cacheable="&b_Cacheable;">
 	<In FileName="&WJets;" Lumi="0.0"/>
 	<InputTree Name="AnalysisTree" />
