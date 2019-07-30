@@ -3,6 +3,7 @@
 #include "UHH2/core/include/fwd.h"
 #include "UHH2/core/include/Selection.h"
 
+
 namespace uhh2examples {
 
 /* Select events with at least two jets in which the leading two jets have deltaphi > 2.7 and the third jet pt is
@@ -25,5 +26,14 @@ private:
   double m_st_min;
 
 };
+class MMuMUSelection: public uhh2::Selection {
+public:
+  MMuMUSelection(double mmumu_min);
+  virtual bool passes(const uhh2::Event & event) override;
+private:
+  double m_mmumu_min;
+
+};
+
 
 }

@@ -1,7 +1,7 @@
 #include "UHH2/ttZPrime/include/ttZPrimeSelections.h"
 #include "UHH2/core/include/Event.h"
 #include "UHH2/common/include/Utils.h"
-
+#include "UHH2/core/include/LorentzVector.h"
 
 #include <stdexcept>
 #include <vector>
@@ -47,4 +47,19 @@ bool STSelection::passes(const Event & event) {
   st = ht_lep + ht_jets + met;
 
   return st > m_st_min;
+}
+
+MMuMUSelection::MMuMUSelection(double mmumu_min):
+  m_mmumu_min(mmumu_min) {}
+
+bool MMuMUSelection::passes(const Event & event){
+  assert(event.muons);
+  std::vector<Muon> muons = *event.muons;
+  if((event.muons->size() > 1) && ((muons[0].charge()+muons[1].charge())== 0)){
+    double m = (muons[0].v4() + muons[1].v4()).M();
+    return m > m_mmumu_min;
+  }
+  else{
+    return false;
+  }
 }
