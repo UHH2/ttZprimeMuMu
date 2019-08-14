@@ -55,10 +55,10 @@ namespace uhh2examples {
 
     unique_ptr<AnalysisModule> syst_module, my_st, my_htlep, mc_lumi_weight;
         // declare the Selections to use.
-    unique_ptr<Selection> njet_sel, nmuon_sel, n_gen_muon_sel, nele_sel, n_gen_ele_sel, st_sel, lumi_sel, mu2_sel, trigger_sel, trigger_sel1, trigger_sel2, mttbargen_sel,nbjet_sel;
+    unique_ptr<Selection> njet_sel, nmuon_sel, n_gen_muon_sel, nele_sel, n_gen_ele_sel, st_sel, lumi_sel, mu1_sel, trigger_sel, trigger_sel1, trigger_sel2, mttbargen_sel,nbjet_sel;
 
     // store the Hists collection as member variables.
-    unique_ptr<Hists> h_nocuts,h_trigger, h_lumi,h_cleaner,h_2mu, h_2jets,h_1bjet, h_st;
+    unique_ptr<Hists> h_nocuts,h_trigger, h_lumi,h_cleaner,h_1mu, h_2jets,h_1bjet, h_st;
 
 
 
@@ -119,7 +119,7 @@ namespace uhh2examples {
     //trigger_sel1.reset(new TriggerSelection("HLT_IsoMu24_v*")); //original: IsoMu24
     //trigger_sel2.reset(new TriggerSelection("HLT_IsoTkMu24_v*")); //original: IsoMu24
     njet_sel.reset(new NJetSelection(2, -1));
-    mu2_sel.reset(new NMuonSelection(2, -1));
+    mu1_sel.reset(new NMuonSelection(1, -1));
     nbjet_sel.reset(new NJetSelection(1,-1,Btag_tight ));
     st_sel.reset(new STSelection(st_min));
     //nmuon_sel.reset(new NMuonSelection(2, -1));
@@ -128,7 +128,7 @@ namespace uhh2examples {
     h_nocuts.reset(new AndHists(ctx, "NoCuts"));
     //h_trigger.reset(new AndHists(ctx, "Trigger"));
     h_cleaner.reset(new AndHists(ctx, "Cleaner"));
-    h_2mu.reset(new AndHists(ctx, "2Mu"));
+    h_1mu.reset(new AndHists(ctx, "1Mu"));
     h_2jets.reset(new AndHists(ctx, "2Jets"));
     h_1bjet.reset(new AndHists(ctx,"1BJet"));
     h_st.reset(new AndHists(ctx,"StSel"));
@@ -155,8 +155,8 @@ namespace uhh2examples {
 
     h_cleaner->fill(event);
 
-    if(!mu2_sel->passes(event)) return false;
-    h_2mu->fill(event);
+    if(!mu1_sel->passes(event)) return false;
+    h_1mu->fill(event);
 
 
     if(!njet_sel->passes(event)) return false;
