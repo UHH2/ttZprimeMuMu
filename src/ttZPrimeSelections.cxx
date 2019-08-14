@@ -29,22 +29,27 @@ STSelection::STSelection(double st_min):
 
 
 bool STSelection::passes(const Event & event) {
-  auto met = event.met->pt();
-
   double st = 0.0;
-  double ht_jets = 0.0;
-  double ht_lep = 0.0;
-  for(const auto & jet : *event.jets){
-    ht_jets += jet.pt();
+  if(event.jets){
+      for(const auto & jet : *event.jets){
+          st += jet.pt();
+      }
   }
-  for(const auto & electron : *event.electrons){
-    ht_lep += electron.pt();
+  if(event.electrons){
+    for(const auto & electron : *event.electrons){
+      st += electron.pt();
+
+    }
   }
-  for(const auto & muon : *event.muons){
-    ht_lep += muon.pt();
+  if(event.muons){
+    for(const auto & muon : *event.muons){
+      st += muon.pt();
+    }
+}
+  if(event.met) {
+    st += event.met->pt();
   }
 
-  st = ht_lep + ht_jets + met;
 
   return st > m_st_min;
 }
