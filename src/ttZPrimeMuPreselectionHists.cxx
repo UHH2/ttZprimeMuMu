@@ -38,7 +38,7 @@ ttZPrimeMuPreselectionHists::ttZPrimeMuPreselectionHists(Context & ctx, const st
     muons.push_back(muon);
   }
   if(Nmuons > 1){
-    if((muons[0].charge()+muons[1].charge())== 0) hist("M_mu1mu2")->Fill((muons[0].v4()+muons[1].v4()).M());
+    if((muons[0].charge()+muons[1].charge())== 0) hist("M_mu1mu2")->Fill((muons[0].v4()+muons[1].v4()).M(),weight);
   }
   if(Nmuons > 1){
     // cout << "Nmu=" << Nmuons << endl;
@@ -48,7 +48,7 @@ ttZPrimeMuPreselectionHists::ttZPrimeMuPreselectionHists(Context & ctx, const st
           // cout << "i=" << i << " ,j=" << j << endl;
           LorentzVector mumu = (muons[i].v4() + muons[j].v4());
           hist("M_mumu")->Fill(mumu.M(), weight);
-          hist("delta_phi_mumu")->Fill(abs(deltaPhi(muons[i].v4(),muons[j].v4())));
+          hist("delta_phi_mumu")->Fill(abs(deltaPhi(muons[i].v4(),muons[j].v4())),weight);
           hist("phi_mumu")->Fill(mumu.phi(),weight);
           hist("eta_mumu")->Fill(mumu.eta(),weight);
           hist("Pt_mumu")->Fill(mumu.pt(),weight);
