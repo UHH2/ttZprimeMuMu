@@ -4,7 +4,7 @@
 #include "UHH2/ttZPrime/include/MyEventVariables.h"
 #include "UHH2/common/include/MCWeight.h"
 #include "UHH2/ttZPrime/include/ttZPrimeSelections.h"
-
+#include "UHH2/ttZPrime/include/ttZPrimeControlHists.h"
 
 using namespace std;
 using namespace uhh2;
@@ -28,11 +28,14 @@ namespace uhh2examples {
         h_2mu.reset(new AndHists(ctx, "2Mu"));
         h_3mu.reset(new AndHists(ctx, "3Mu"));
         h_4mu.reset(new AndHists(ctx, "4MuAndMore"));
-        h_control.reset(new AndHists(ctx, "Control"));
+        h_control.reset(new ttZPrimeControlHists(ctx, "Control"));
         m_mu1mu2_sel.reset(new MMuMUSelection(m_mu1mu2_min));
   }
   bool ttZPrimeReconstructionModule::process(Event & event) {
     mc_lumi_weight->process(event);
+    if (event.muons->size() ==1 && event.electrons->size() == 1){
+      h_control->fill(event);
+    }
     if(!m_mu1mu2_sel->passes(event)) return false;
     my_st->process(event);
     my_htlep->process(event);
@@ -48,10 +51,7 @@ namespace uhh2examples {
     {
       h_4mu->fill(event);
     }
-    assert(event.electrons);
-    if (Nmuons ==1 && event.electrons->size() == 1){
-      h_control->fill(event);
-    }
+
     return true;
   }
   UHH2_REGISTER_ANALYSIS_MODULE(ttZPrimeReconstructionModule)
