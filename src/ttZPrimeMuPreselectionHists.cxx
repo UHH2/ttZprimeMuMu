@@ -14,12 +14,12 @@ using namespace uhh2;
 
 ttZPrimeMuPreselectionHists::ttZPrimeMuPreselectionHists(Context & ctx, const string & dirname): Hists(ctx, dirname){
 
-   book<TH1F>("M_mumu", "M_{#mu#mu} [GeV^2]",100 , 0, 2000);
+   book<TH1F>("M_mumu", "M_{#mu#mu} [GeV]",50 , 0, 2000);
    book<TH1F>("delta_phi_mumu","#Delta#phi_{#mu#mu}",50,0,TMath::Pi());
    book<TH1F>("phi_mumu","#phi_{#mu#mu}",50,-TMath::Pi(),TMath::Pi());
    book<TH1F>("eta_mumu","#eta_{#mu#mu}",50,-3,3);
    book<TH1F>("Pt_mumu", "P_{T,#mu#mu} [GeV]",100 , 0, 1000);
-   book<TH1F>("M_mu1mu2", "M_{#mu_{1}#mu_{2}} [GeV^2]",100 , 0, 2000);
+   book<TH1F>("M_mu1mu2", "M_{#mu_{1}#mu_{2}} [GeV]",50 , 0, 2000);
 
 
 

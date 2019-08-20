@@ -14,11 +14,11 @@ using namespace uhh2;
 
 ttZPrimeControlHists::ttZPrimeControlHists(Context & ctx, const string & dirname): Hists(ctx, dirname){
 
-   book<TH1F>("M_emu", "M_{e#mu} [GeV^2]",100 , 0, 2000);
+   book<TH1F>("M_emu", "M_{e#mu} [GeV]",50 , 0, 2000);
    book<TH1F>("delta_phi_emu","#Delta#phi_{e#mu}",50,0,TMath::Pi());
    book<TH1F>("phi_emu","#phi_{e#mu}",50,-TMath::Pi(),TMath::Pi());
    book<TH1F>("eta_emu","#eta_{e#mu}",50,-3,3);
-   book<TH1F>("Pt_emu", "P_{T,e#mu} [GeV]",100 , 0, 1000);
+   book<TH1F>("Pt_emu", "P_{T,e#mu} [GeV]",50 , 0, 1000);
  }
 
  void ttZPrimeControlHists::fill(const Event & event){
