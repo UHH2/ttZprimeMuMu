@@ -6,6 +6,12 @@
 #include "UHH2/ttZPrime/include/ttZPrimeSelections.h"
 #include "UHH2/ttZPrime/include/ttZPrimeControlHists.h"
 
+
+#include "UHH2/ttZPrime/include/TTbarRecoHadHypothesisDiscriminators.h"
+#include "UHH2/ttZPrime/include/TTbarRecoHad.h"
+#include "UHH2/ttZPrime/include/TTbarRecoHadHypothesisHists.h"
+
+
 using namespace std;
 using namespace uhh2;
 
@@ -16,21 +22,28 @@ namespace uhh2examples {
     virtual bool process(Event & event) override;
 
   private:
-    unique_ptr<AnalysisModule> my_st, my_htlep, mc_lumi_weight;
-    unique_ptr<Hists> h_2mu, h_3mu, h_4mu, h_control;
+    unique_ptr<AnalysisModule> my_st, my_htlep, mc_lumi_weight, reco_tt_had, disc_tt_had;
+    unique_ptr<Hists> h_2mu, h_3mu, h_4mu, h_control, h_2MuTopHadReco;
     unique_ptr<Selection> m_mu1mu2_sel;
   };
+
+
   ttZPrimeReconstructionModule::ttZPrimeReconstructionModule(Context & ctx){
         double m_mu1mu2_min = 110. ;
         mc_lumi_weight.reset(new MCLumiWeight(ctx));
         my_st.reset(new STCalculator(ctx));
         my_htlep.reset(new HTlepCalculator(ctx));
         h_2mu.reset(new AndHists(ctx, "2Mu"));
-        h_3mu.reset(new AndHists(ctx, "3Mu"));
-        h_4mu.reset(new AndHists(ctx, "4MuAndMore"));
+//         h_3mu.reset(new AndHists(ctx, "3Mu"));
+//         h_4mu.reset(new AndHists(ctx, "4MuAndMore"));
         h_control.reset(new ttZPrimeControlHists(ctx, "Control"));
         m_mu1mu2_sel.reset(new MMuMUSelection(m_mu1mu2_min));
+        reco_tt_had.reset(new TTbarRecoHad(ctx, "TTbarRecoHad"));
+        disc_tt_had.reset(new Chi2DiscriminatorHad(ctx, "TTbarRecoHad"));
+        h_2MuTopHadReco.reset(new TTbarRecoHadHypothesisHists(ctx,"2MuTopRecoHad","TTbarRecoHad","Chi2Had"));
   }
+
+
   bool ttZPrimeReconstructionModule::process(Event & event) {
     mc_lumi_weight->process(event);
     if (event.muons->size() ==1 && event.electrons->size() == 1){
@@ -41,18 +54,25 @@ namespace uhh2examples {
     my_htlep->process(event);
     int Nmuons = event.muons->size();
     if(Nmuons == 2){
-      h_2mu->fill(event);
+        reco_tt_had->process(event);
+        disc_tt_had->process(event);
+        h_2mu->fill(event);
+        // std::cout << "Hallo1" << std::endl;
+        h_2MuTopHadReco->fill(event);
+
     }
-    else if(Nmuons == 3)
-    {
-      h_3mu->fill(event);
-    }
-    else if(Nmuons >= 4)
-    {
-      h_4mu->fill(event);
-    }
+//     else if(Nmuons == 3)
+//     {
+//       h_3mu->fill(event);
+//     }
+//     else if(Nmuons >= 4)
+//     {
+//       h_4mu->fill(event);
+//     }
 
     return true;
+
+
   }
   UHH2_REGISTER_ANALYSIS_MODULE(ttZPrimeReconstructionModule)
 }
