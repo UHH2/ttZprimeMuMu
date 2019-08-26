@@ -5,11 +5,14 @@
 #include "UHH2/common/include/MCWeight.h"
 #include "UHH2/ttZPrime/include/ttZPrimeSelections.h"
 #include "UHH2/ttZPrime/include/ttZPrimeControlHists.h"
-
+#include "UHH2/common/include/TTbarGen.h"
+#include "UHH2/common/include/TTbarGenHists.h"
 
 #include "UHH2/ttZPrime/include/TTbarRecoHadHypothesisDiscriminators.h"
 #include "UHH2/ttZPrime/include/TTbarRecoHad.h"
 #include "UHH2/ttZPrime/include/TTbarRecoHadHypothesisHists.h"
+
+
 
 
 using namespace std;
@@ -22,9 +25,10 @@ namespace uhh2examples {
     virtual bool process(Event & event) override;
 
   private:
-    unique_ptr<AnalysisModule> my_st, my_htlep, mc_lumi_weight, reco_tt_had, disc_tt_had;
-    unique_ptr<Hists> h_2mu, h_3mu, h_4mu, h_control, h_2MuTopHadReco;
+    unique_ptr<AnalysisModule> my_st, my_htlep, mc_lumi_weight, reco_tt_had, disc_tt_had, ttgenprod;
+    unique_ptr<Hists> h_2mu, h_3mu, h_4mu, h_control, h_2MuTopHadReco, h_ttgenhists;;
     unique_ptr<Selection> m_mu1mu2_sel;
+    Event::Handle<TTbarGen> h_ttbargen;
   };
 
 
@@ -40,7 +44,12 @@ namespace uhh2examples {
         m_mu1mu2_sel.reset(new MMuMUSelection(m_mu1mu2_min));
         reco_tt_had.reset(new TTbarRecoHad(ctx, "TTbarRecoHad"));
         disc_tt_had.reset(new Chi2DiscriminatorHad(ctx, "TTbarRecoHad"));
-        h_2MuTopHadReco.reset(new TTbarRecoHadHypothesisHists(ctx,"2MuTopRecoHad","TTbarRecoHad","Chi2Had"));
+        h_2MuTopHadReco.reset(new TTbarRecoHadHypothesisHists(ctx,"2Mu_TopRecoHad","TTbarRecoHad","Chi2Had"));
+        ttgenprod.reset(new TTbarGenProducer(ctx, "ttbargen", false));
+        // h_ttgenhists.reset(new TTbarGenHists(ctx, "ttgenhists"));
+
+        h_ttbargen = ctx.get_handle<TTbarGen>("ttbargen");
+
   }
 
 
@@ -52,6 +61,7 @@ namespace uhh2examples {
     if(!m_mu1mu2_sel->passes(event)) return false;
     my_st->process(event);
     my_htlep->process(event);
+    ttgenprod->process(event);
     int Nmuons = event.muons->size();
     if(Nmuons == 2){
         reco_tt_had->process(event);
@@ -59,6 +69,7 @@ namespace uhh2examples {
         h_2mu->fill(event);
         // std::cout << "Hallo1" << std::endl;
         h_2MuTopHadReco->fill(event);
+        // h_ttgenhists->fill(event);
 
     }
 //     else if(Nmuons == 3)
