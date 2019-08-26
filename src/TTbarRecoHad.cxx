@@ -34,13 +34,13 @@ bool TTbarRecoHad::process(uhh2::Event & event) {
             int num = j;
             TTbarRecoHadHypothesis hyp;
             for (unsigned int k=0; k<n_jets; k++) {
-                if(num%3==0) {
+                if(num%3==0 && hadjets1 < 4) {
                     tophad1_v4 = tophad1_v4 + event.jets->at(k).v4();
                     hyp.add_tophad1_jet(event.jets->at(k));
                     hadjets1++;
                 }
 
-                if(num%3==1) {
+                if(num%3==1 && hadjets2 < 4) {
                     tophad2_v4 = tophad2_v4 + event.jets->at(k).v4();
                     hyp.add_tophad2_jet(event.jets->at(k));
                     hadjets2++;
@@ -50,7 +50,7 @@ bool TTbarRecoHad::process(uhh2::Event & event) {
                 num /= 3;
             }
             //fill only hypotheses with at least one jet assigned to each top quark
-            if(hadjets1>0 && hadjets2>0) {
+            if(hadjets1>0 && hadjets2>0 ) {
                 hyp.set_tophad1_v4(tophad1_v4);
                 hyp.set_tophad2_v4(tophad2_v4);
                 recoHyps.emplace_back(std::move(hyp));
