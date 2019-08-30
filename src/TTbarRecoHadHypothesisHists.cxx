@@ -1,4 +1,5 @@
 #include "UHH2/ttZPrime/include/TTbarRecoHadHypothesisHists.h"
+#include "UHH2/common/include/JetIds.h"
 #include "TH1F.h"
 #include "TH2F.h"
 
@@ -9,7 +10,7 @@ TTbarRecoHadHypothesisHists::TTbarRecoHadHypothesisHists(uhh2::Context & ctx, co
   TString name = discriminator_name;
     double min=0;
     double max=500;
-    if(discriminator_name=="Chi2"){
+    if(discriminator_name=="Chi2Had"){
       name = "#Chi^{2}";
     }
     else{
@@ -20,7 +21,7 @@ TTbarRecoHadHypothesisHists::TTbarRecoHadHypothesisHists(uhh2::Context & ctx, co
       min=0;
       max=2;
     }
-    if( discriminator_name=="TopDRMC"){
+    if( discriminator_name=="TopDRMCHad"){
       min=0;
       max=6;
     }
@@ -41,7 +42,7 @@ TTbarRecoHadHypothesisHists::TTbarRecoHadHypothesisHists(uhh2::Context & ctx, co
 
     DeltaR_Mu1_Jets = book<TH1F>("DeltaR_Mu1_Jets","#DeltaR_{jet,#mu1}",100,0,5);
     DeltaR_Mu2_Jets = book<TH1F>("DeltaR_Mu2_Jets","#DeltaR_{jet,#mu2}",100,0,5);
-    DeltaTop_gen_rec = book<TH1F>("DeltaTop_gen_rec","#DeltaRTop_{gen,rec}",100,0,5);
+    DeltaTop_gen_rec = book<TH1F>("DeltaRSumTop_gen_rec","#DeltaRSumTop_{gen,rec}",100,0,5);
 
     DeepCSV_tophad1_rec = book<TH2F>("DeepCSV_tophad1_rec","CSV_{jet,had1}",5,0.,1.,7,0,7);
     DeepCSV_tophad2_rec = book<TH1F>("DeepCSV_tophad2_rec","CSV_{jet,had2}",100,0,1);
@@ -84,9 +85,9 @@ TTbarRecoHadHypothesisHists::TTbarRecoHadHypothesisHists(uhh2::Context & ctx, co
 
 
 void TTbarRecoHadHypothesisHists::fill(const uhh2::Event & e){
-
   std::vector<TTbarRecoHadHypothesis> hyps = e.get(h_hyps);
   const TTbarRecoHadHypothesis* hyp = get_best_hypothesis( hyps, m_discriminator_name );
+  if(hyp){
   double weight = e.weight;
   // double mttbar_rec = 0;
   // if( (hyp->tophad1_v4()+hyp->tophad2_v4()).isTimelike() )
@@ -103,15 +104,16 @@ void TTbarRecoHadHypothesisHists::fill(const uhh2::Event & e){
   //
   if(e.is_valid(h_ttbargen)){
     const auto & ttbargen = e.get(h_ttbargen);
-    double dr_gen_reco1 = deltaR(hyp->tophad1_v4(),ttbargen.Top().v4());
-    double dr_gen_reco2 = deltaR(hyp->tophad2_v4(),ttbargen.Antitop().v4());
-    if(dr_gen_reco1 < deltaR(hyp->tophad1_v4(),ttbargen.Antitop().v4()) && dr_gen_reco2 < deltaR(hyp->tophad2_v4(),ttbargen.Top().v4()))
+    double dr_gen_reco1 = deltaR(hyp->tophad1_v4(),ttbargen.Top().v4())+ deltaR(hyp->tophad2_v4(),ttbargen.Antitop().v4());
+    double dr_gen_reco2 = deltaR(hyp->tophad1_v4(),ttbargen.Antitop().v4())+ deltaR(hyp->tophad2_v4(),ttbargen.Top().v4());
+    if(dr_gen_reco1 < dr_gen_reco2)
     {
-      dr_gen_reco1 = deltaR(hyp->tophad1_v4(),ttbargen.Antitop().v4());
-      dr_gen_reco2 = deltaR(hyp->tophad2_v4(),ttbargen.Top().v4());
+      DeltaTop_gen_rec->Fill(dr_gen_reco1,weight);
     }
-    DeltaTop_gen_rec->Fill(dr_gen_reco1,weight);
-    DeltaTop_gen_rec->Fill(dr_gen_reco2,weight);
+    else{
+      DeltaTop_gen_rec->Fill(dr_gen_reco2,weight);
+    }
+
   //   mttbar_gen = ( ttbargen.Top().v4() + ttbargen.Antitop().v4()).M();
   //   ptttbar_gen = ( ttbargen.Top().v4() + ttbargen.Antitop().v4()).Pt();
   //
@@ -202,6 +204,6 @@ void TTbarRecoHadHypothesisHists::fill(const uhh2::Event & e){
   //
   Pt_tophad1_rec->Fill( hyp->tophad1_v4().Pt(),weight );
   Pt_tophad2_rec->Fill( hyp->tophad2_v4().Pt(),weight );
-
+ }
 
 }
