@@ -43,8 +43,9 @@ namespace uhh2examples {
         h_control.reset(new ttZPrimeControlHists(ctx, "Control"));
         m_mu1mu2_sel.reset(new MMuMUSelection(m_mu1mu2_min));
         reco_tt_had.reset(new TTbarRecoHad(ctx, "TTbarRecoHad"));
-        disc_tt_had.reset(new Chi2DiscriminatorHad(ctx, "TTbarRecoHad"));
-        h_2MuTopHadReco.reset(new TTbarRecoHadHypothesisHists(ctx,"2Mu_TopRecoHad","TTbarRecoHad","Chi2Had"));
+        // disc_tt_had.reset(new Chi2DiscriminatorHad(ctx, "TTbarRecoHad"));
+        disc_tt_had.reset(new TopDRMCDiscriminatorHad(ctx, "TTbarRecoHad"));
+        h_2MuTopHadReco.reset(new TTbarRecoHadHypothesisHists(ctx,"2Mu_TopRecoHad","TTbarRecoHad","TopDRMCHad"));
         ttgenprod.reset(new TTbarGenProducer(ctx, "ttbargen", false));
         // h_ttgenhists.reset(new TTbarGenHists(ctx, "ttgenhists"));
 

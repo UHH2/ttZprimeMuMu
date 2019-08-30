@@ -79,16 +79,16 @@ class Chi2DiscriminatorHad: public uhh2::AnalysisModule {
  *
  * NOTE: This used to be called "BestPossible" in UHHAnalysis.
  */
-/*
-class TopDRMCDiscriminator: public uhh2::AnalysisModule {
+
+class TopDRMCDiscriminatorHad: public uhh2::AnalysisModule {
 public:
     struct cfg {
         std::string ttbargen_name;
         std::string discriminator_label;
-        cfg(): ttbargen_name("ttbargen"), discriminator_label("TopDRMC"){}
+        cfg(): ttbargen_name("ttbargen"), discriminator_label("TopDRMCHad"){}
     };
 
-    TopDRMCDiscriminator(uhh2::Context & ctx, const std::string & rechyps_name, const cfg & config = cfg());
+    TopDRMCDiscriminatorHad(uhh2::Context & ctx, const std::string & rechyps_name, const cfg & config = cfg());
     virtual bool process(uhh2::Event & event) override;
 
 private:
@@ -97,7 +97,7 @@ private:
     uhh2::Event::Handle<TTbarGen> h_ttbargen;
     cfg config;
 };
-*/
+
 
 /** \brief Try to match the reconstruction hypotheses to Monte-Carlo truth, jet-by-jet
  *

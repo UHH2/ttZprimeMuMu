@@ -56,14 +56,14 @@ bool Chi2DiscriminatorHad::process(uhh2::Event& event){
     const double chi2_thad_2 = pow((Mthad_reco_2 - Mthad_mean_) / Mthad_sigma_, 2);
 
     hyp.set_discriminator(config.discriminator_label+"_thad1", chi2_thad_1);
-    hyp.set_discriminator(config.discriminator_label+"_thad2",             chi2_thad_2);
-    hyp.set_discriminator(config.discriminator_label        , chi2_thad_1 + chi2_thad_2);
+    hyp.set_discriminator(config.discriminator_label+"_thad2", chi2_thad_2);
+    hyp.set_discriminator(config.discriminator_label         , chi2_thad_1 + chi2_thad_2);
   }
 
   return true;
 }
 ////
-/*
+
 TopDRMCDiscriminatorHad::TopDRMCDiscriminatorHad(Context & ctx, const std::string & rechyps_name, const cfg & config_): config(config_){
     h_hyps = ctx.get_handle<vector<TTbarRecoHadHypothesis>>(rechyps_name);
     h_ttbargen = ctx.get_handle<TTbarGen>(config.ttbargen_name);
@@ -74,14 +74,17 @@ bool TopDRMCDiscriminatorHad::process(uhh2::Event & event){
     auto & hyps = event.get(h_hyps);
     const auto & ttbargen = event.get(h_ttbargen);
     for(auto & hyp: hyps){
-        auto deltar_sum = deltaR(ttbargen.Top(), hyp.tophad1_v4()) + deltaR(ttbargen.Antitop(), hyp.tophad2_v4());
+        auto deltar_sum1 = deltaR(ttbargen.Top(), hyp.tophad1_v4()) + deltaR(ttbargen.Antitop(), hyp.tophad2_v4());
+        auto deltar_sum2 = deltaR(ttbargen.Top(), hyp.tophad1_v4()) + deltaR(ttbargen.Antitop(), hyp.tophad2_v4());
+        double deltar_sum = deltar_sum1;
+        if(deltar_sum2 < deltar_sum1) deltar_sum = deltar_sum2;
         hyp.set_discriminator(config.discriminator_label, deltar_sum);
     }
     return true;
 }
 
 
-
+/*
 CorrectMatchDiscriminator::CorrectMatchDiscriminator(Context & ctx, const std::string & rechyps_name, const cfg & config_): config(config_){
     h_hyps = ctx.get_handle<vector<TTbarRecoHadHypothesis>>(rechyps_name);
     h_ttbargen = ctx.get_handle<TTbarGen>(config.ttbargen_name);
