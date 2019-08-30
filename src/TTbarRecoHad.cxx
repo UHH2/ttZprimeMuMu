@@ -17,6 +17,7 @@ TTbarRecoHad::~TTbarRecoHad() {}
 
 bool TTbarRecoHad::process(uhh2::Event & event) {
     assert(event.jets);
+    assert(event.muons);
     std::vector<TTbarRecoHadHypothesis> recoHyps;
     unsigned int n_jets = event.jets->size();
     if(n_jets>7) n_jets=7; //avoid crashes in events with many jets
@@ -25,32 +26,40 @@ bool TTbarRecoHad::process(uhh2::Event & event) {
     // to assign each jet to the hadronic side (0), leptonic side (1),
     // or none of them (2).
     const unsigned int max_j = pow(3, n_jets);
-
+    auto muons = *event.muons;
     for (unsigned int j=0; j < max_j; j++) {
             LorentzVector tophad1_v4;
             LorentzVector tophad2_v4;
             int hadjets1=0;
             int hadjets2=0;
+            // int bjet1 = 0;
+            // int bjet2 = 0;
             int num = j;
             TTbarRecoHadHypothesis hyp;
             for (unsigned int k=0; k<n_jets; k++) {
-                if(num%3==0 && hadjets1 < 4) {
+                // double dr1 = deltaR(event.jets->at(k),muons[0]);
+                // double dr2 = deltaR(event.jets->at(k),muons[1]);
+                // if(dr1 > 0.3 && dr2 > 0.3){
+                if(num%3==0) {
                     tophad1_v4 = tophad1_v4 + event.jets->at(k).v4();
                     hyp.add_tophad1_jet(event.jets->at(k));
                     hadjets1++;
+                    // if(event.jets->at(k).btag_DeepCSV() > 0.89) bjet1++;
                 }
 
-                if(num%3==1 && hadjets2 < 4) {
+                if(num%3==1) {
                     tophad2_v4 = tophad2_v4 + event.jets->at(k).v4();
                     hyp.add_tophad2_jet(event.jets->at(k));
                     hadjets2++;
+                    // if(event.jets->at(k).btag_DeepCSV() > 0.89) bjet2++;
                 }
+                // }
                 //in case num%3==2 do not take this jet at all
                 //shift the trigits of num to the right:
                 num /= 3;
             }
             //fill only hypotheses with at least one jet assigned to each top quark
-            if(hadjets1>0 && hadjets2>0 ) {
+            if(hadjets1 > 1 && hadjets2 > 1) {
                 hyp.set_tophad1_v4(tophad1_v4);
                 hyp.set_tophad2_v4(tophad2_v4);
                 recoHyps.emplace_back(std::move(hyp));
