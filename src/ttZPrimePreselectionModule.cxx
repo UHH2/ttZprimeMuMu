@@ -6,7 +6,7 @@
 #include "UHH2/core/include/AnalysisModule.h"
 #include "UHH2/core/include/Event.h"
 
-//#include "UHH2/common/include/CommonModules.h"
+#include "UHH2/common/include/CommonModules.h"
 #include "UHH2/common/include/CleaningModules.h"
 #include "UHH2/common/include/JetCorrections.h"
 #include "UHH2/common/include/JetHists.h"
@@ -44,7 +44,7 @@ namespace uhh2examples {
 
   private:
 
-    //unique_ptr<CommonModules> common;
+    unique_ptr<CommonModules> common;
     //unique_ptr<AnalysisModule> Muon_printer, Electron_printer, Jet_printer;
 
     unique_ptr<JetCleaner> jetcleaner;
@@ -53,7 +53,7 @@ namespace uhh2examples {
     unique_ptr<MuonCleaner> muoncleaner_iso;
     unique_ptr<ElectronCleaner> electroncleaner;
 
-    unique_ptr<AnalysisModule> syst_module, my_st, my_htlep, mc_lumi_weight;
+    unique_ptr<AnalysisModule> syst_module, my_st, my_htlep; //mc_lumi_weight;
         // declare the Selections to use.
     unique_ptr<Selection> njet_sel, nmuon_sel, n_gen_muon_sel, nele_sel, n_gen_ele_sel, st_sel, lumi_sel, mu1_sel, trigger_sel, trigger_sel1, trigger_sel2, mttbargen_sel,nbjet_sel;
 
@@ -89,7 +89,7 @@ namespace uhh2examples {
     double st_min = 600.;
 
 
-    mc_lumi_weight.reset(new MCLumiWeight(ctx));
+    // mc_lumi_weight.reset(new MCLumiWeight(ctx));
 
     EleId = AndId<Electron>(ElectronID_Summer16_tight, PtEtaCut(30.0, 2.4));
     MuId = AndId<Muon>(MuonID(Muon::CutBasedIdTight), PtEtaCut(30.0, 2.4), MuonIso(0.15));
@@ -101,11 +101,12 @@ namespace uhh2examples {
     Btag_tight = CSVBTag(CSVBTag::wp::WP_TIGHT);
 
 
-    //common.reset(new CommonModules());
-    //common->switch_jetlepcleaner(true);
-    //common->set_electron_id(EleId);
-    //common->set_muon_id(MuId);
-    //common->init(ctx);
+    common.reset(new CommonModules());
+    common->disable_metfilters();
+    common->switch_jetlepcleaner(true);
+    common->set_electron_id(EleId);
+    common->set_muon_id(MuId);
+    common->init(ctx);
     jetcleaner.reset(new JetCleaner(ctx,Jet_ID));
     electroncleaner.reset(new ElectronCleaner(EleId));
     muoncleaner.reset(new MuonCleaner(MuId));
@@ -134,7 +135,7 @@ namespace uhh2examples {
     h_st.reset(new AndHists(ctx,"StSel"));
   }
    bool ttZPrimePreselectionModule::process(Event & event) {
-   mc_lumi_weight->process(event);
+   // mc_lumi_weight->process(event);
 
    h_nocuts->fill(event);
 
@@ -145,8 +146,8 @@ namespace uhh2examples {
     //h_trigger->fill(event);
 
 
-    //bool pass_common = common->process(event);
-    //if(!pass_common) return false;
+    bool pass_common = common->process(event);
+    if(!pass_common) return false;
     jetcleaner->process(event);
 
     muoncleaner->process(event);
