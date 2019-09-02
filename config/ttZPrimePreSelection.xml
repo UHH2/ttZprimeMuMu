@@ -11,10 +11,10 @@
 
 
  <!-- <!ENTITY TTToSemiLeptonic SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_TTToSemiLeptonicTest.xml"> -->
-	<!ENTITY ZPrimeToMuMu300 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/MC_TTZPrimeToMuMu_M300_2016v3.xml">
-	<!ENTITY ZPrimeToMuMu700 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/MC_TTZPrimeToMuMu_M700_2016v3.xml">
-	<!ENTITY ZPrimeToMuMu1000 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/MC_TTZPrimeToMuMu_M1000_2016v3.xml">
-	<!ENTITY ZPrimeToMuMu1500 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/MC_TTZPrimeToMuMu_M1500_2016v3.xml">
+	<!ENTITY ZPrimeToMuMu300 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/MC_TTZPrimeToMuMu_M300_2016.xml">
+	<!ENTITY ZPrimeToMuMu700 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/MC_TTZPrimeToMuMu_M700_2016.xml">
+	<!ENTITY ZPrimeToMuMu1000 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/MC_TTZPrimeToMuMu_M1000_2016.xml">
+	<!ENTITY ZPrimeToMuMu1400 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/MC_TTZPrimeToMuMu_M1400_2016.xml">
 
 	<!ENTITY WW SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_WW.xml">
 	<!ENTITY WZ SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_WZ.xml">
@@ -75,23 +75,23 @@
 
 <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&PRESELdir;/" PostFix="" TargetLumi="&TargetLumi;" >
 
-<InputData Lumi="98316" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM300_2016v3" Cacheable="&b_Cacheable;">
+<InputData Lumi="99898.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM300_2016v3" Cacheable="&b_Cacheable;">
 		    &ZPrimeToMuMu300;
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
 </InputData>
-<InputData Lumi="99882.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM700_2016v3" Cacheable="&b_Cacheable;">
+<InputData Lumi="99846.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM700_2016v3" Cacheable="&b_Cacheable;">
 		    &ZPrimeToMuMu700;
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
 </InputData>
-<InputData Lumi="98978.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM1000_2016v3" Cacheable="&b_Cacheable;">
+<InputData Lumi="96590.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM1000_2016v3" Cacheable="&b_Cacheable;">
 		    &ZPrimeToMuMu1000;
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
 </InputData>
-<InputData Lumi="79642.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM1500_2016v3" Cacheable="&b_Cacheable;">
-		    &ZPrimeToMuMu1500;
+<InputData Lumi="99578.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM1400_2016v3" Cacheable="&b_Cacheable;">
+		    &ZPrimeToMuMu1400;
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
 </InputData>
