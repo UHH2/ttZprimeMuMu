@@ -59,7 +59,7 @@ bool TTbarRecoHad::process(uhh2::Event & event) {
                 num /= 3;
             }
             //fill only hypotheses with at least one jet assigned to each top quark
-            if(hadjets1 > 1 && hadjets2 > 1) {
+            if(hadjets1 > 2 && hadjets2 > 2) {
                 hyp.set_tophad1_v4(tophad1_v4);
                 hyp.set_tophad2_v4(tophad2_v4);
                 recoHyps.emplace_back(std::move(hyp));
