@@ -66,7 +66,7 @@ class Chi2DiscriminatorHad: public uhh2::AnalysisModule {
  private:
   cfg config;
   uhh2::Event::Handle<std::vector<TTbarRecoHadHypothesis>> h_hyps;
-  float Mthad_mean_, Mthad_sigma_;
+  float Mthad_mean_, Mthad_sigma_, Mw_mean, Mw_sigma;
 };
 
 

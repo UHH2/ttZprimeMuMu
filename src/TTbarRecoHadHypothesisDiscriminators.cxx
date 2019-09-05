@@ -40,15 +40,41 @@ Chi2DiscriminatorHad::Chi2DiscriminatorHad(Context & ctx, const std::string & re
 
   Mthad_mean_  = 181.;
   Mthad_sigma_ =  15.;
+  Mw_mean = 80.;
+  Mw_sigma = 1.;
 }
 
 bool Chi2DiscriminatorHad::process(uhh2::Event& event){
 
   auto& hyps = event.get(h_hyps);
-
-
+   
   for(auto& hyp : hyps){
-
+    const int NJet1 =  hyp.tophad1_jets().size();
+    const int NJet2 =  hyp.tophad2_jets().size();
+    auto& jets1 = hyp.tophad1_jets();
+    auto& jets2 = hyp.tophad2_jets();
+    float chi2_w1 = numeric_limits<float>::infinity();
+    float chi2_w2 = numeric_limits<float>::infinity();
+    for(int k = 0; k < NJet1; k++)
+     {
+        for(int j = 0; j < k; j++)
+        {
+            float wmass = ( jets1.at(k).v4()+jets1.at(j).v4()).M();
+            float chi2 = pow((wmass - Mw_mean) / Mw_sigma, 2);
+            if(chi2 < chi2_w1) chi2_w1 = chi2;
+        }
+     }
+    for(int k = 0; k < NJet2; k++)
+     {
+        for(int j = 0; j < k; j++)
+        {
+            float wmass = (jets2.at(k).v4()+jets2.at(j).v4()).M();
+            float chi2 = pow((wmass - Mw_mean) / Mw_sigma, 2);
+            if(chi2 < chi2_w2) chi2_w2 = chi2;
+        }
+     }
+      
+      
     const float Mthad_reco_1 = inv_mass(hyp.tophad1_v4());
     const float Mthad_reco_2 = inv_mass(hyp.tophad2_v4());
 
@@ -57,7 +83,7 @@ bool Chi2DiscriminatorHad::process(uhh2::Event& event){
 
     hyp.set_discriminator(config.discriminator_label+"_thad1", chi2_thad_1);
     hyp.set_discriminator(config.discriminator_label+"_thad2", chi2_thad_2);
-    hyp.set_discriminator(config.discriminator_label         , chi2_thad_1 + chi2_thad_2);
+    hyp.set_discriminator(config.discriminator_label         , chi2_thad_1 + chi2_thad_2+chi2_w1+chi2_w2);
   }
 
   return true;
