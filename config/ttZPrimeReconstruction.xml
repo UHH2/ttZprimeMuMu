@@ -291,7 +291,7 @@
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
 </InputData>
-<InputData Lumi="1985760.606" NEventsMax="&NEVT;" Type="MC" Version="TTZ_1_2016v3" Cacheable="&b_Cacheable;">
+<InputData Lumi="1985760.606" NEventsMax="&NEVT;" Type="MC" Version="TTZ_2_2016v3" Cacheable="&b_Cacheable;">
 		    <In FileName="&TTZ_2;" Lumi="0.0"/>
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
