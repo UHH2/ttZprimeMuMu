@@ -38,43 +38,53 @@ Chi2DiscriminatorHad::Chi2DiscriminatorHad(Context & ctx, const std::string & re
 
   h_hyps = ctx.get_handle<vector<TTbarRecoHadHypothesis>>(rechyps_name);
 
-  Mthad_mean_  = 181.;
-  Mthad_sigma_ =  15.;
-  Mw_mean = 80.;
-  Mw_sigma = 1.;
+  Mthad_mean_  = 180.;
+  Mthad_sigma_ =  37.;
+  Mw_mean = 84.;
+  Mw_sigma = 19.;
 }
 
 bool Chi2DiscriminatorHad::process(uhh2::Event& event){
 
   auto& hyps = event.get(h_hyps);
-   
+
   for(auto& hyp : hyps){
-    const int NJet1 =  hyp.tophad1_jets().size();
-    const int NJet2 =  hyp.tophad2_jets().size();
-    auto& jets1 = hyp.tophad1_jets();
-    auto& jets2 = hyp.tophad2_jets();
+    auto& wjets1 = hyp.tophad1_wjets();
+    auto& wjets2 = hyp.tophad2_wjets();
     float chi2_w1 = numeric_limits<float>::infinity();
     float chi2_w2 = numeric_limits<float>::infinity();
-    for(int k = 0; k < NJet1; k++)
-     {
-        for(int j = 0; j < k; j++)
+    int w1_njets = 0;
+    int w2_njets = 0;
+    LorentzVector wmass1;
+    LorentzVector wmass2;
+    for(auto & jet : wjets1)
+    {
+      wmass1 += jet.v4();
+      w1_njets ++;
+      if(w1_njets > 1)
+      {
+        float chi2 = pow((wmass1.M() - Mw_mean) / Mw_sigma, 2);
+        if(chi2 < chi2_w1)
         {
-            float wmass = ( jets1.at(k).v4()+jets1.at(j).v4()).M();
-            float chi2 = pow((wmass - Mw_mean) / Mw_sigma, 2);
-            if(chi2 < chi2_w1) chi2_w1 = chi2;
+           chi2_w1 = chi2;
+           hyp.set_w1_v4(wmass1);
         }
-     }
-    for(int k = 0; k < NJet2; k++)
-     {
-        for(int j = 0; j < k; j++)
+      }
+    }
+    for(auto & jet : wjets2)
+    {
+      wmass2 += jet.v4();
+      w2_njets ++;
+      if(w2_njets > 1)
+      {
+        float chi2 = pow((wmass2.M() - Mw_mean) / Mw_sigma, 2);
+        if(chi2 < chi2_w2)
         {
-            float wmass = (jets2.at(k).v4()+jets2.at(j).v4()).M();
-            float chi2 = pow((wmass - Mw_mean) / Mw_sigma, 2);
-            if(chi2 < chi2_w2) chi2_w2 = chi2;
+          chi2_w2 = chi2;
+          hyp.set_w2_v4(wmass2);
         }
-     }
-      
-      
+      }
+    }
     const float Mthad_reco_1 = inv_mass(hyp.tophad1_v4());
     const float Mthad_reco_2 = inv_mass(hyp.tophad2_v4());
 
