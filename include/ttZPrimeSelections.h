@@ -3,6 +3,8 @@
 #include "UHH2/core/include/fwd.h"
 #include "UHH2/core/include/Selection.h"
 
+#include "UHH2/ttZPrime/include/TTbarRecoHadHypothesis.h"
+#include "UHH2/ttZPrime/include/TTbarRecoHadHypothesisDiscriminators.h"
 
 namespace uhh2examples {
 
@@ -35,5 +37,14 @@ private:
 
 };
 
+class TopDRMCHadSelection: public uhh2::Selection{
+public:
+  TopDRMCHadSelection(uhh2::Context &ctx, double dr_max, const std::string & hyps_name, const std::string & discriminator_name);
+  virtual bool passes(const uhh2::Event & event) override;
+private:
+  double m_dr_max;
+  uhh2::Event::Handle<std::vector<TTbarRecoHadHypothesis>> h_hyps;
+  std::string m_discriminator_name;
+};
 
 }

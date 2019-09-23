@@ -1,7 +1,9 @@
-#include "UHH2/ttZPrime/include/ttZPrimeSelections.h"
 #include "UHH2/core/include/Event.h"
 #include "UHH2/common/include/Utils.h"
 #include "UHH2/core/include/LorentzVector.h"
+
+#include "UHH2/ttZPrime/include/ttZPrimeSelections.h"
+#include "UHH2/ttZPrime/include/TTbarRecoHadHypothesisDiscriminators.h"
 
 #include <stdexcept>
 #include <vector>
@@ -65,6 +67,23 @@ bool MMuMUSelection::passes(const Event & event){
     return m > m_mmumu_min;
   }
   else{
+    return false;
+  }
+}
+
+TopDRMCHadSelection::TopDRMCHadSelection(uhh2::Context &ctx, double dr_max, const std::string & hyps_name, const std::string & discriminator_name):
+  m_dr_max(dr_max),
+  h_hyps(ctx.get_handle<std::vector<TTbarRecoHadHypothesis>>(hyps_name)),
+  m_discriminator_name(discriminator_name) {}
+bool TopDRMCHadSelection::passes(const Event &event) {
+  const TTbarRecoHadHypothesis* hyp = get_best_hypothesis(event.get(h_hyps), m_discriminator_name );
+  if(hyp)
+  {
+    double dr = hyp->discriminator(m_discriminator_name);
+    return dr > m_dr_max;
+  }
+  else
+  {
     return false;
   }
 }
