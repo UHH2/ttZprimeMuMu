@@ -62,6 +62,32 @@ bool TTbarRecoHad::process(uhh2::Event & event) {
             if(hadjets1 > 2 && hadjets2 > 2) {
                 hyp.set_tophad1_v4(tophad1_v4);
                 hyp.set_tophad2_v4(tophad2_v4);
+                Jet bjet1 = hyp.tophad1_jets().at(0);
+                Jet bjet2 = hyp.tophad2_jets().at(0);
+                for(auto & jet : hyp.tophad1_jets())
+                {
+                  if(bjet1.btag_DeepCSV() <= jet.btag_DeepCSV())
+                  {
+                    bjet1 = jet;
+                  }
+                  else
+                  {
+                    hyp.add_tophad1_wjet(jet);
+                  }
+                }
+                for(auto & jet : hyp.tophad2_jets())
+                {
+                  if(bjet2.btag_DeepCSV() <= jet.btag_DeepCSV())
+                  {
+                    bjet2 = jet;
+                  }
+                  else
+                  {
+                    hyp.add_tophad2_wjet(jet);
+                  }
+                }
+                hyp.set_tophad1_bjet(bjet1);
+                hyp.set_tophad2_bjet(bjet2);
                 recoHyps.emplace_back(std::move(hyp));
 
             }

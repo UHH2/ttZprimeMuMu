@@ -26,7 +26,7 @@ TTbarRecoHadHypothesisHists::TTbarRecoHadHypothesisHists(uhh2::Context & ctx, co
       max=6;
     }
 
-    Discriminator = book<TH1F>("Discriminator",name,100,min,max);
+    Discriminator = book<TH1F>("Discriminator",name,50,min,max);
     // Discriminator_2 = book<TH1F>("Discriminator_2",name,50,0,10);
     // Discriminator_3 = book<TH1F>("Discriminator_3",name,300,0,30);
     //
@@ -35,7 +35,11 @@ TTbarRecoHadHypothesisHists::TTbarRecoHadHypothesisHists(uhh2::Context & ctx, co
     //
     M_tophad1_rec = book<TH1F>( "M_tophad1_rec", "M^{top,had1} [GeV/c^{2}]", 50, 0, 500 ) ;
     M_tophad2_rec = book<TH1F>( "M_tophad2_rec", "M^{top,had2} [GeV/c^{2}]", 50, 0, 500 ) ;
-    DeltaM_rec = book<TH1F>("DeltaM_rec","#DeltaM_{top1,top2} [Gev]", 25,0,250);
+    Mw_tophad1_rec = book<TH1F>( "Mw_tophad1_rec", "M^{W,had1} [GeV/c^{2}]", 50, 0, 500 ) ;
+    Mw_tophad2_rec = book<TH1F>( "Mw_tophad2_rec", "M^{W,had2} [GeV/c^{2}]", 50, 0, 500 ) ;
+
+    DeltaM_rec = book<TH1F>("DeltaM_rec","#DeltaM_{top1,top2} [Gev]", 100,-500,500);
+    DeltaM_rec_W = book<TH1F>("DeltaM_rec_W","#DeltaM_{W1,W2} [Gev]", 100,-500,500);
 
     NJet_tophad1_rec = book<TH1F>("NJet_tophad1_rec","NJet^{top,had1}",7,0,7);
     NJet_tophad2_rec = book<TH1F>("NJet_tophad2_rec","NJet^{top,had2}",7,0,7);
@@ -44,8 +48,8 @@ TTbarRecoHadHypothesisHists::TTbarRecoHadHypothesisHists(uhh2::Context & ctx, co
     DeltaR_Mu2_Jets = book<TH1F>("DeltaR_Mu2_Jets","#DeltaR_{jet,#mu2}",100,0,5);
     DeltaTop_gen_rec = book<TH1F>("DeltaRSumTop_gen_rec","#DeltaRSumTop_{gen,rec}",100,0,5);
 
-    DeepCSV_tophad1_rec = book<TH2F>("DeepCSV_tophad1_rec","CSV_{jet,had1}",5,0.,1.,7,0,7);
-    DeepCSV_tophad2_rec = book<TH1F>("DeepCSV_tophad2_rec","CSV_{jet,had2}",100,0,1);
+    DeepCSV_tophad1_rec = book<TH1F>("DeepCSV_tophad1_rec","CSV_{bjet,had1}",50,0,1);
+    DeepCSV_tophad2_rec = book<TH1F>("DeepCSV_tophad2_rec","CSV_{bjet,had2}",50,0,1);
     //
     M_tophad1_rec_1jet = book<TH1F>( "M_tophad1_rec_1jet", "M^{top,had} [GeV/c^{2}]", 50, 0, 500 ) ;
     M_tophad1_rec_2jet = book<TH1F>( "M_tophad1_rec_2jet", "M^{top,had} [GeV/c^{2}]", 50, 0, 500 ) ;
@@ -163,37 +167,26 @@ void TTbarRecoHadHypothesisHists::fill(const uhh2::Event & e){
   auto muon = *e.muons;
   if(hyp->tophad1_v4().isTimelike()) mtophad1 = hyp->tophad1_v4().M();
   if(hyp->tophad2_v4().isTimelike()) mtophad2 = hyp->tophad2_v4().M();
-
-
   M_tophad1_rec->Fill(mtophad1,weight);
   M_tophad2_rec->Fill(mtophad2,weight);
-  DeltaM_rec->Fill(abs(mtophad1-mtophad2));
+  DeltaM_rec->Fill(mtophad1-mtophad2,weight);
+  double wmass1 = 0;
+  double wmass2 = 0;
+  if(hyp->w1_v4().isTimelike()) wmass1 = hyp->w1_v4().M();
+  if(hyp->w2_v4().isTimelike()) wmass2 = hyp->w2_v4().M();
+  Mw_tophad1_rec->Fill(wmass1,weight);
+  Mw_tophad2_rec->Fill(wmass2,weight);
+  DeltaM_rec_W->Fill(wmass1-wmass2,weight);
   NJet_tophad1_rec->Fill(hyp->tophad1_jets().size(),weight);
   NJet_tophad2_rec->Fill(hyp->tophad2_jets().size(),weight);
-  int NJet_CSV20 = 0;
-  int NJet_CSV40 = 0;
-  int NJet_CSV60 = 0;
-  int NJet_CSV80 = 0;
-  int NJet_CSV100 = 0;
   for(auto & jet : hyp->tophad1_jets()){
-    double csv = jet.btag_DeepCSV();
-    if(csv <= 0.2) NJet_CSV20++;
-    if(csv <= 0.4 && csv > 0.2) NJet_CSV40++;
-    if(csv <= 0.6 && csv > 0.4) NJet_CSV60++;
-    if(csv <= 0.8 && csv > 0.6) NJet_CSV80++;
-    if(csv > 0.8) NJet_CSV100++;
-
     DeltaR_Mu1_Jets->Fill(deltaR(muon[0],jet),weight);
     DeltaR_Mu2_Jets->Fill(deltaR(muon[1],jet),weight);
 
   }
-  DeepCSV_tophad1_rec->Fill(0.1,NJet_CSV20,weight);
-  DeepCSV_tophad1_rec->Fill(0.3,NJet_CSV40,weight);
-  DeepCSV_tophad1_rec->Fill(0.5,NJet_CSV60,weight);
-  DeepCSV_tophad1_rec->Fill(0.7,NJet_CSV80,weight);
-  DeepCSV_tophad1_rec->Fill(0.9,NJet_CSV100,weight);
+  DeepCSV_tophad1_rec->Fill(hyp->tophad1_bjet().btag_DeepCSV(),weight);
+  DeepCSV_tophad2_rec->Fill(hyp->tophad2_bjet().btag_DeepCSV(),weight);
   for(auto & jet : hyp->tophad2_jets()){
-    DeepCSV_tophad2_rec->Fill(jet.btag_DeepCSV(),weight);
     DeltaR_Mu1_Jets->Fill(deltaR(muon[0],jet),weight);
     DeltaR_Mu2_Jets->Fill(deltaR(muon[1],jet),weight);
 

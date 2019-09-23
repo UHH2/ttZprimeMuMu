@@ -21,8 +21,14 @@ public:
 
   LorentzVector tophad1_v4() const{return m_tophad1_v4;}
   LorentzVector tophad2_v4() const{return m_tophad2_v4;}
+  LorentzVector w1_v4() const{return m_w1_v4;}
+  LorentzVector w2_v4() const{return m_w2_v4;}
   const std::vector<Jet>& tophad1_jets() const{return m_tophad1_jets;}
   const std::vector<Jet>& tophad2_jets() const{return m_tophad2_jets;}
+  const std::vector<Jet>& tophad1_wjets() const{return m_tophad1_wjets;}
+  const std::vector<Jet>& tophad2_wjets() const{return m_tophad2_wjets;}
+  const Jet& tophad1_bjet() const{return m_tophad1_bjet;}
+  const Jet& tophad2_bjet() const{return m_tophad2_bjet;}
 
 
 // get the discriminator value for this hypothesis; thows a runtime_error if it does not exist.
@@ -41,19 +47,29 @@ public:
 
   void set_tophad1_v4(LorentzVector v4){m_tophad1_v4=v4;}
   void set_tophad2_v4(LorentzVector v4){m_tophad2_v4=v4;}
+  void set_w1_v4(LorentzVector v4){m_w1_v4=v4;}
+  void set_w2_v4(LorentzVector v4){m_w2_v4=v4;}
   void add_tophad1_jet(const Jet& j){m_tophad1_jets.push_back(j);}
   void add_tophad2_jet(const Jet& j){m_tophad2_jets.push_back(j);}
+  void add_tophad1_wjet(const Jet& j){m_tophad1_wjets.push_back(j);}
+  void add_tophad2_wjet(const Jet& j){m_tophad2_wjets.push_back(j);}
   void set_discriminator(const std::string & label, float discr){
-      m_discriminators[label] = discr;
-  }
+      m_discriminators[label] = discr;}
+  void set_tophad1_bjet(const Jet& j){m_tophad1_bjet = j;}
+  void set_tophad2_bjet(const Jet& j){m_tophad2_bjet = j;}
+
 
 private:
   LorentzVector m_tophad1_v4;
   LorentzVector m_tophad2_v4;
-
+  LorentzVector m_w1_v4;
+  LorentzVector m_w2_v4;
   std::vector<Jet> m_tophad1_jets;
   std::vector<Jet> m_tophad2_jets;
-
+  std::vector<Jet> m_tophad1_wjets;
+  std::vector<Jet> m_tophad2_wjets;
+  Jet m_tophad1_bjet;
+  Jet m_tophad2_bjet;
 
 
   std::map<std::string, float> m_discriminators;

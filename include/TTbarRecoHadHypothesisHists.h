@@ -17,10 +17,9 @@ public:
 
 protected:
     TH1F *Discriminator; //, *Discriminator_2, *Discriminator_3;
-    TH1F *M_tophad1_rec, *M_tophad2_rec, *M_tophad1_rec_1jet, *M_tophad1_rec_2jet, *M_tophad1_rec_3jet,*DeltaM_rec;//*M_ttbar_rec, *M_ttbar_gen;
-    TH1F *Pt_tophad1_rec, *Pt_tophad2_rec, *Pt_ttbar_rec, *Pt_ttbar_gen;
-    TH1F *NJet_tophad1_rec, *NJet_tophad2_rec, *DeltaR_Mu1_Jets, *DeltaR_Mu2_Jets,*DeepCSV_tophad2_rec,*DeltaTop_gen_rec;
-    TH2F *DeepCSV_tophad1_rec;
+    TH1F *M_tophad1_rec, *M_tophad2_rec, *M_tophad1_rec_1jet, *M_tophad1_rec_2jet, *M_tophad1_rec_3jet,*DeltaM_rec,*DeltaM_rec_W;//*M_ttbar_rec, *M_ttbar_gen;
+    TH1F *Pt_tophad1_rec, *Pt_tophad2_rec, *Pt_ttbar_rec, *Pt_ttbar_gen,*Mw_tophad1_rec, *Mw_tophad2_rec;
+    TH1F *NJet_tophad1_rec, *NJet_tophad2_rec, *DeltaR_Mu1_Jets, *DeltaR_Mu2_Jets,*DeepCSV_tophad2_rec,*DeepCSV_tophad1_rec,*DeltaTop_gen_rec;
     // TH2F *Pt_ttbar_rec_vs_Pt_ttbar_gen, *Discriminator_vs_M_ttbar, *M_ttbar_rec_vs_M_ttbar_gen, *M_ttbar_gen_vs_M_ttbar_rec;
     // TH1F *M_ttbar_resolution;
     // TH2F *Pt_toplep_rec_vs_Pt_toplep_gen, *Pt_tophad_rec_vs_Pt_tophad_gen, *Pt_lepton_rec_vs_Pt_lepton_gen, *Pt_blep_rec_vs_Pt_blep_gen, *Pt_neutrino_rec_vs_Pt_neutrino_gen;
