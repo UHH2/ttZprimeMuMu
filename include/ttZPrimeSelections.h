@@ -46,5 +46,13 @@ private:
   uhh2::Event::Handle<std::vector<TTbarRecoHadHypothesis>> h_hyps;
   std::string m_discriminator_name;
 };
+class DRMuJetSelection: public uhh2::Selection{
+public:
+  DRMuJetSelection(double deltaR_min);
+  virtual bool passes(const uhh2::Event & event) override;
+private:
+  double m_deltaR_min;
+};
+
 
 }

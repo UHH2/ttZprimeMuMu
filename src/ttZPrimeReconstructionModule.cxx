@@ -26,26 +26,35 @@ namespace uhh2examples {
 
   private:
     unique_ptr<AnalysisModule> my_st, my_htlep, mc_lumi_weight, reco_tt_had, disc_tt_had, ttgenprod;
-    unique_ptr<Hists> h_2mu, h_3mu, h_4mu, h_control, h_2MuTopHadReco, h_ttgenhists;;
-    unique_ptr<Selection> m_mu1mu2_sel;
+    unique_ptr<Hists> h_2mu, h_3mu, h_4mu, h_control, h_2MuTopHadReco, h_ttgenhists;
+    unique_ptr<Selection> m_topdrmc_sel, deltaR_mu_jet_sel;
     Event::Handle<TTbarGen> h_ttbargen;
   };
 
 
   ttZPrimeReconstructionModule::ttZPrimeReconstructionModule(Context & ctx){
-        double m_mu1mu2_min = 110. ;
+        double m_dr_max_min = 0.6;
+        double deltaR_min = 0.2;
         mc_lumi_weight.reset(new MCLumiWeight(ctx));
         my_st.reset(new STCalculator(ctx));
         my_htlep.reset(new HTlepCalculator(ctx));
+
+        deltaR_mu_jet_sel.reset(new DRMuJetSelection(deltaR_min));
+
         h_2mu.reset(new AndHists(ctx, "2Mu"));
 //         h_3mu.reset(new AndHists(ctx, "3Mu"));
 //         h_4mu.reset(new AndHists(ctx, "4MuAndMore"));
         h_control.reset(new ttZPrimeControlHists(ctx, "Control"));
-        m_mu1mu2_sel.reset(new MMuMUSelection(m_mu1mu2_min));
+
         reco_tt_had.reset(new TTbarRecoHad(ctx, "TTbarRecoHad"));
-        // disc_tt_had.reset(new Chi2DiscriminatorHad(ctx, "TTbarRecoHad"));
-        disc_tt_had.reset(new TopDRMCDiscriminatorHad(ctx, "TTbarRecoHad"));
-        h_2MuTopHadReco.reset(new TTbarRecoHadHypothesisHists(ctx,"2Mu_TopRecoHad","TTbarRecoHad","TopDRMCHad"));
+
+        disc_tt_had.reset(new Chi2DiscriminatorHad(ctx, "TTbarRecoHad"));
+        h_2MuTopHadReco.reset(new TTbarRecoHadHypothesisHists(ctx,"2Mu_TopRecoHad","TTbarRecoHad","Chi2Had"));
+
+        // disc_tt_had.reset(new TopDRMCDiscriminatorHad(ctx, "TTbarRecoHad"));
+        // h_2MuTopHadReco.reset(new TTbarRecoHadHypothesisHists(ctx,"2Mu_TopRecoHad","TTbarRecoHad","TopDRMCHad"));
+        // m_topdrmc_sel.reset(new TopDRMCHadSelection(ctx,m_dr_max_min,"TTbarRecoHad","TopDRMCHad"));
+
         ttgenprod.reset(new TTbarGenProducer(ctx, "ttbargen", false));
         // h_ttgenhists.reset(new TTbarGenHists(ctx, "ttgenhists"));
 
@@ -55,11 +64,13 @@ namespace uhh2examples {
 
 
   bool ttZPrimeReconstructionModule::process(Event & event) {
+    if(!deltaR_mu_jet_sel->passes(event)) return false;
     mc_lumi_weight->process(event);
+
     if (event.muons->size() ==1 && event.electrons->size() == 1){
       h_control->fill(event);
     }
-    if(!m_mu1mu2_sel->passes(event)) return false;
+
     my_st->process(event);
     my_htlep->process(event);
     ttgenprod->process(event);
@@ -67,6 +78,7 @@ namespace uhh2examples {
     if(Nmuons == 2){
         reco_tt_had->process(event);
         disc_tt_had->process(event);
+        // if(m_topdrmc_sel->passes(event)) return false;
         h_2mu->fill(event);
         // std::cout << "Hallo1" << std::endl;
         h_2MuTopHadReco->fill(event);

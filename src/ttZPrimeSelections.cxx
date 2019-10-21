@@ -56,6 +56,24 @@ bool STSelection::passes(const Event & event) {
   return st > m_st_min;
 }
 
+DRMuJetSelection::DRMuJetSelection(double deltaR_min):
+m_deltaR_min(deltaR_min) {}
+bool DRMuJetSelection::passes(const Event & event){
+  assert(event.muons);
+  assert(event.jets);
+  std::vector<Jet> jets = *event.jets;
+  std::vector<Muon> muons = *event.muons;
+  for(auto& muon : muons)
+  {
+    for(auto & jet : jets)
+    {
+      auto dr = deltaR(jet,muon);
+      if(dr < m_deltaR_min) return false;
+    }
+  }
+  return true;
+}
+
 MMuMUSelection::MMuMUSelection(double mmumu_min):
   m_mmumu_min(mmumu_min) {}
 
