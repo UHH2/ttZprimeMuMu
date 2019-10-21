@@ -9,7 +9,8 @@ TTbarRecoHadHypothesisHists::TTbarRecoHadHypothesisHists(uhh2::Context & ctx, co
 
   TString name = discriminator_name;
     double min=0;
-    double max=500;
+    double max = 50;
+    int nbins = 50;
     if(discriminator_name=="Chi2Had"){
       name = "#Chi^{2}";
     }
@@ -26,9 +27,12 @@ TTbarRecoHadHypothesisHists::TTbarRecoHadHypothesisHists(uhh2::Context & ctx, co
       max=6;
     }
 
-    Discriminator = book<TH1F>("Discriminator",name,50,min,max);
-    // Discriminator_2 = book<TH1F>("Discriminator_2",name,50,0,10);
-    // Discriminator_3 = book<TH1F>("Discriminator_3",name,300,0,30);
+    Discriminator = book<TH1F>("Discriminator",name,nbins,min,max);
+    Discriminator_top1 = book<TH1F>("Discriminator_top1",name+"Top1",nbins,min,max);
+    Discriminator_top2 = book<TH1F>("Discriminator_top2",name+"Top2",nbins,min,max);
+    Discriminator_w1 = book<TH1F>("Discriminator_W1",name+"W1",nbins,min,max);
+    Discriminator_w2 = book<TH1F>("Discriminator_W2",name+"W2",nbins,min,max);
+
     //
     // M_ttbar_rec = book<TH1F>( "M_ttbar_rec", "M_{t#bar{t}}^{rec} [GeV/c^{2}]", 100, 0, 5000 ) ;
     // M_ttbar_gen = book<TH1F>( "M_ttbar_gen", "M_{t#bar{t}}^{gen} [GeV/c^{2}]", 100, 0, 5000 ) ;
@@ -157,6 +161,12 @@ void TTbarRecoHadHypothesisHists::fill(const uhh2::Event & e){
   }
 
   Discriminator->Fill(hyp->discriminator(m_discriminator_name) ,weight);
+  if(m_discriminator_name =="Chi2Had"){
+    Discriminator_top1->Fill(hyp->discriminator(m_discriminator_name+"_thad1") ,weight);
+    Discriminator_top2->Fill(hyp->discriminator(m_discriminator_name+"_thad2") ,weight);
+    Discriminator_w1->Fill(hyp->discriminator(m_discriminator_name+"_whad1") ,weight);
+    Discriminator_w2->Fill(hyp->discriminator(m_discriminator_name+"_whad2") ,weight);
+  }
   // Discriminator_2->Fill(hyp->discriminator(m_discriminator_name) ,weight);
   // Discriminator_3->Fill(hyp->discriminator(m_discriminator_name) ,weight);
 
@@ -170,13 +180,10 @@ void TTbarRecoHadHypothesisHists::fill(const uhh2::Event & e){
   M_tophad1_rec->Fill(mtophad1,weight);
   M_tophad2_rec->Fill(mtophad2,weight);
   DeltaM_rec->Fill(mtophad1-mtophad2,weight);
-  double wmass1 = 0;
-  double wmass2 = 0;
-  if(hyp->w1_v4().isTimelike()) wmass1 = hyp->w1_v4().M();
-  if(hyp->w2_v4().isTimelike()) wmass2 = hyp->w2_v4().M();
-  Mw_tophad1_rec->Fill(wmass1,weight);
-  Mw_tophad2_rec->Fill(wmass2,weight);
-  DeltaM_rec_W->Fill(wmass1-wmass2,weight);
+  if(hyp->w1_v4().isTimelike()) Mw_tophad1_rec->Fill(hyp->w1_v4().M(),weight);
+  if(hyp->w2_v4().isTimelike()) Mw_tophad2_rec->Fill(hyp->w2_v4().M(),weight);
+  if(hyp->w1_v4().isTimelike() && hyp->w2_v4().isTimelike()) DeltaM_rec_W->Fill(hyp->w1_v4().M()-hyp->w2_v4().M(),weight);
+
   NJet_tophad1_rec->Fill(hyp->tophad1_jets().size(),weight);
   NJet_tophad2_rec->Fill(hyp->tophad2_jets().size(),weight);
   for(auto & jet : hyp->tophad1_jets()){
