@@ -38,10 +38,12 @@ Chi2DiscriminatorHad::Chi2DiscriminatorHad(Context & ctx, const std::string & re
 
   h_hyps = ctx.get_handle<vector<TTbarRecoHadHypothesis>>(rechyps_name);
 
-  Mthad_mean_  = 180.;
-  Mthad_sigma_ =  37.;
+  Mthad_mean_  = 170.;
+  Mthad_sigma_ =  25.;
   Mw_mean = 84.;
-  Mw_sigma = 19.;
+  Mw_sigma = 16.;
+  DMthad_mean_ = 0.;
+  DMthad_sigma_ = 55.;
 }
 
 bool Chi2DiscriminatorHad::process(uhh2::Event& event){
@@ -90,10 +92,13 @@ bool Chi2DiscriminatorHad::process(uhh2::Event& event){
 
     const double chi2_thad_1 = pow((Mthad_reco_1 - Mthad_mean_) / Mthad_sigma_, 2);
     const double chi2_thad_2 = pow((Mthad_reco_2 - Mthad_mean_) / Mthad_sigma_, 2);
-
+    const double DeltaMTop = Mthad_reco_1-Mthad_reco_2;
+    const double chi2_DeltaMTop = pow((DeltaMTop - DMthad_mean_) / DMthad_sigma_, 2);
     hyp.set_discriminator(config.discriminator_label+"_thad1", chi2_thad_1);
     hyp.set_discriminator(config.discriminator_label+"_thad2", chi2_thad_2);
-    hyp.set_discriminator(config.discriminator_label         , chi2_thad_1 + chi2_thad_2+chi2_w1+chi2_w2);
+    hyp.set_discriminator(config.discriminator_label+"_whad1", chi2_w1);
+    hyp.set_discriminator(config.discriminator_label+"_whad2", chi2_w2);
+    hyp.set_discriminator(config.discriminator_label         , chi2_thad_1 + chi2_thad_2+chi2_w1+chi2_w2+chi2_DeltaMTop);
   }
 
   return true;
@@ -110,8 +115,49 @@ bool TopDRMCDiscriminatorHad::process(uhh2::Event & event){
     auto & hyps = event.get(h_hyps);
     const auto & ttbargen = event.get(h_ttbargen);
     for(auto & hyp: hyps){
-        auto deltar_sum1 = deltaR(ttbargen.Top(), hyp.tophad1_v4()) + deltaR(ttbargen.Antitop(), hyp.tophad2_v4());
-        auto deltar_sum2 = deltaR(ttbargen.Top(), hyp.tophad1_v4()) + deltaR(ttbargen.Antitop(), hyp.tophad2_v4());
+        auto& wjets1 = hyp.tophad1_wjets();
+        auto& wjets2 = hyp.tophad2_wjets();
+        if(wjets1.size() > 1 && wjets2.size() > 1)
+        {
+          LorentzVector wmass1;
+          LorentzVector wmass2;
+          int w1_njets = 0;
+          int w2_njets = 0;
+          double deltaRW1 = deltaR(ttbargen.WTop().v4(),hyp.tophad1_wjets().at(0).v4());
+          double deltaRW2 = deltaR(ttbargen.WTop().v4(),hyp.tophad2_wjets().at(0).v4());
+          for(auto & jet : wjets1)
+          {
+            wmass1 += jet.v4();
+            w1_njets ++;
+            if(deltaRW1 < deltaR(wmass1,ttbargen.WTop().v4()) && w1_njets > 1)
+            {
+              deltaRW1 = deltaR(wmass1,ttbargen.WTop().v4());
+              hyp.set_w1_v4(wmass1);
+            }
+            else if(deltaRW1 < deltaR(wmass1,ttbargen.WAntitop().v4()) && w2_njets > 1)
+            {
+              deltaRW1 = deltaR(wmass1,ttbargen.WAntitop().v4());
+              hyp.set_w1_v4(wmass1);
+            }
+          }
+          for(auto & jet : wjets2)
+          {
+            wmass2 += jet.v4();
+            w2_njets ++;
+            if(deltaRW2 < deltaR(wmass2,ttbargen.WTop().v4()) && w2_njets > 1)
+            {
+              deltaRW2 = deltaR(wmass2,ttbargen.WTop().v4());
+              hyp.set_w2_v4(wmass2);
+            }
+            else if(deltaRW2 < deltaR(wmass2,ttbargen.WAntitop().v4()) && w2_njets > 1)
+            {
+              deltaRW2 = deltaR(wmass2,ttbargen.WAntitop().v4());
+              hyp.set_w2_v4(wmass2);
+            }
+          }
+        }
+        auto deltar_sum1 = deltaR(ttbargen.Top().v4(), hyp.tophad1_v4()) + deltaR(ttbargen.Antitop().v4(), hyp.tophad2_v4());
+        auto deltar_sum2 = deltaR(ttbargen.Top().v4(), hyp.tophad2_v4()) + deltaR(ttbargen.Antitop().v4(), hyp.tophad1_v4());
         double deltar_sum = deltar_sum1;
         if(deltar_sum2 < deltar_sum1) deltar_sum = deltar_sum2;
         hyp.set_discriminator(config.discriminator_label, deltar_sum);
