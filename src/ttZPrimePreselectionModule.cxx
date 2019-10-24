@@ -121,7 +121,7 @@ namespace uhh2examples {
     //trigger_sel2.reset(new TriggerSelection("HLT_IsoTkMu24_v*")); //original: IsoMu24
     njet_sel.reset(new NJetSelection(2, -1));
     mu1_sel.reset(new NMuonSelection(1, -1));
-    nbjet_sel.reset(new NJetSelection(1,-1,Btag_tight ));
+    nbjet_sel.reset(new NJetSelection(1,-1,Btag_medium ));
     st_sel.reset(new STSelection(st_min));
     //nmuon_sel.reset(new NMuonSelection(2, -1));
 
