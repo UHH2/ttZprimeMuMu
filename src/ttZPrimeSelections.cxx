@@ -98,7 +98,7 @@ bool TopDRMCHadSelection::passes(const Event &event) {
   if(hyp)
   {
     double dr = hyp->discriminator(m_discriminator_name);
-    return dr > m_dr_max;
+    return dr < m_dr_max;
   }
   else
   {
