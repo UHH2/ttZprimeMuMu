@@ -53,7 +53,7 @@ namespace uhh2examples {
     unique_ptr<MuonCleaner> muoncleaner_iso;
     unique_ptr<ElectronCleaner> electroncleaner;
 
-    unique_ptr<AnalysisModule> syst_module, my_st, my_htlep; //mc_lumi_weight;
+    unique_ptr<AnalysisModule> genjet_cleaner,  syst_module, my_st, my_htlep; //mc_lumi_weight;
         // declare the Selections to use.
     unique_ptr<Selection> njet_sel, nmuon_sel, n_gen_muon_sel, nele_sel, n_gen_ele_sel, st_sel, lumi_sel, mu1_sel, trigger_sel, trigger_sel1, trigger_sel2, mttbargen_sel,nbjet_sel;
 
@@ -96,9 +96,9 @@ namespace uhh2examples {
 
     Jet_ID = AndId<Jet>(JetPFID(JetPFID::WP_TIGHT_CHS), PtEtaCut(30.0, 2.4));
 
-    Btag_loose = CSVBTag(CSVBTag::wp::WP_LOOSE);
-    Btag_medium = CSVBTag(CSVBTag::wp::WP_MEDIUM);
-    Btag_tight = CSVBTag(CSVBTag::wp::WP_TIGHT);
+    Btag_loose = DeepJetBTag(DeepJetBTag::wp::WP_LOOSE);
+    Btag_medium = DeepJetBTag(DeepJetBTag::wp::WP_MEDIUM);
+    Btag_tight = DeepJetBTag(DeepJetBTag::wp::WP_TIGHT);
 
 
     common.reset(new CommonModules());
@@ -107,6 +107,7 @@ namespace uhh2examples {
     common->set_electron_id(EleId);
     common->set_muon_id(MuId);
     common->init(ctx);
+    genjet_cleaner.reset(new GenJetCleaner(ctx, 30.0, 2.4));
     jetcleaner.reset(new JetCleaner(ctx,Jet_ID));
     electroncleaner.reset(new ElectronCleaner(EleId));
     muoncleaner.reset(new MuonCleaner(MuId));
@@ -121,7 +122,7 @@ namespace uhh2examples {
     //trigger_sel2.reset(new TriggerSelection("HLT_IsoTkMu24_v*")); //original: IsoMu24
     njet_sel.reset(new NJetSelection(2, -1));
     mu1_sel.reset(new NMuonSelection(1, -1));
-    nbjet_sel.reset(new NJetSelection(1,-1,Btag_medium ));
+    nbjet_sel.reset(new NJetSelection(2,-1,Btag_loose ));
     st_sel.reset(new STSelection(st_min));
     //nmuon_sel.reset(new NMuonSelection(2, -1));
 
@@ -148,6 +149,9 @@ namespace uhh2examples {
 
     bool pass_common = common->process(event);
     if(!pass_common) return false;
+
+    genjet_cleaner->process(event);
+
     jetcleaner->process(event);
 
     muoncleaner->process(event);
