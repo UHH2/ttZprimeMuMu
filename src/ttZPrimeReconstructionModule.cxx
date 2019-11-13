@@ -26,25 +26,27 @@ namespace uhh2examples {
 
   private:
     unique_ptr<AnalysisModule> my_st, my_htlep, mc_lumi_weight, reco_tt_had, disc_tt_had, ttgenprod;
-    unique_ptr<Hists> h_2mu, h_2mu_6jets , h_2mu_chi2, h_3mu, h_4mu, h_control, h_2MuTopHadReco, h_2MuTopHadReco_chi2, h_ttgenhists;
+    unique_ptr<Hists> h_2mu, h_2mu_4jets , h_2mu_chi2, h_3mu, h_4mu, h_control, h_2MuTopHadReco, h_2MuTopHadReco_chi2, h_ttgenhists,h_DRMuJet;
     unique_ptr<Selection> m_topdrmc_sel, deltaR_mu_jet_sel,njet_sel;
     Event::Handle<TTbarGen> h_ttbargen;
   };
 
 
   ttZPrimeReconstructionModule::ttZPrimeReconstructionModule(Context & ctx){
-        double m_dr_max = 20.;
+        double m_dr_max = 10.;
         double deltaR_min = 0.2;
         mc_lumi_weight.reset(new MCLumiWeight(ctx));
         my_st.reset(new STCalculator(ctx));
         my_htlep.reset(new HTlepCalculator(ctx));
 
         deltaR_mu_jet_sel.reset(new DRMuJetSelection(deltaR_min));
-        njet_sel.reset(new NJetSelection(6, -1));
+        njet_sel.reset(new NJetSelection(4, -1));
 
+        h_DRMuJet.reset(new AndHists(ctx,"DRMuJet"));
         h_2mu.reset(new AndHists(ctx, "2Mu"));
         h_2mu_chi2.reset(new AndHists(ctx, "2MuChi2"));
-        h_2mu_6jets.reset(new AndHists(ctx, "2Mu6Jets"));
+        h_2mu_4jets.reset(new AndHists(ctx, "2Mu4Jets"));
+
 //         h_3mu.reset(new AndHists(ctx, "3Mu"));
 //         h_4mu.reset(new AndHists(ctx, "4MuAndMore"));
         h_control.reset(new ttZPrimeControlHists(ctx, "Control"));
@@ -69,21 +71,23 @@ namespace uhh2examples {
 
 
   bool ttZPrimeReconstructionModule::process(Event & event) {
-    if(!deltaR_mu_jet_sel->passes(event)) return false;
     mc_lumi_weight->process(event);
+    if(!deltaR_mu_jet_sel->passes(event)) return false;
+    h_DRMuJet->fill(event);
 
-    if (event.muons->size() ==1 && event.electrons->size() == 1){
-      h_control->fill(event);
-    }
+
+    // if (event.muons->size() ==1 && event.electrons->size() == 1){
+    //   h_control->fill(event);
+    // }
 
     my_st->process(event);
     my_htlep->process(event);
-    ttgenprod->process(event);
+    // ttgenprod->process(event);
     int Nmuons = event.muons->size();
     if(Nmuons == 2){
         h_2mu->fill(event);
         if(!njet_sel->passes(event)) return false;
-        h_2mu_6jets->fill(event);
+        h_2mu_4jets->fill(event);
         reco_tt_had->process(event);
         disc_tt_had->process(event);
 
