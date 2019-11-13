@@ -51,54 +51,72 @@ bool Chi2DiscriminatorHad::process(uhh2::Event& event){
   auto& hyps = event.get(h_hyps);
 
   for(auto& hyp : hyps){
-    auto& wjets1 = hyp.tophad1_wjets();
-    auto& wjets2 = hyp.tophad2_wjets();
-    float chi2_w1 = numeric_limits<float>::infinity();
-    float chi2_w2 = numeric_limits<float>::infinity();
-    int w1_njets = 0;
-    int w2_njets = 0;
-    LorentzVector wmass1;
-    LorentzVector wmass2;
-    for(auto & jet : wjets1)
-    {
-      wmass1 += jet.v4();
-      w1_njets ++;
-      if(w1_njets > 1)
-      {
-        float chi2 = pow((wmass1.M() - Mw_mean) / Mw_sigma, 2);
-        if(chi2 < chi2_w1)
-        {
-           chi2_w1 = chi2;
-           hyp.set_w1_v4(wmass1);
-        }
-      }
-    }
-    for(auto & jet : wjets2)
-    {
-      wmass2 += jet.v4();
-      w2_njets ++;
-      if(w2_njets > 1)
-      {
-        float chi2 = pow((wmass2.M() - Mw_mean) / Mw_sigma, 2);
-        if(chi2 < chi2_w2)
-        {
-          chi2_w2 = chi2;
-          hyp.set_w2_v4(wmass2);
-        }
-      }
-    }
+    // auto& wjets1 = tophad1_jets();
+    // auto& wjets2 = tophad2_jets();
+    // if(wjets1.size() > 0)
+    // {
+    //   chi2_w1 = pow((wjets1.v4().M() - Mw_mean) / Mw_sigma, 2);
+    //   hyp.set_w1_v4((wjets1.v4().M());
+    //   LorentzVector wmass;
+    //   for(auto & jet : wjets1)
+    //  {
+    //    wmass1 += jet.v4();
+    //    float chi2 = pow((wmass1.M() - Mw_mean) / Mw_sigma, 2);
+    //       if(chi2 < chi2_w1)
+    //      {
+    //         chi2_w1 = chi2;
+    //         hyp.set_w1_v4(wmass1);
+    //      }
+    //    }
+    //  }
+    // }
+
+
+
+    // float chi2_w2 = numeric_limits<float>::infinity();
+    // int w1_njets = 0;
+    // int w2_njets = 0;
+    // LorentzVector wmass1;
+    // LorentzVector wmass2;
+    // for(auto & jet : wjets1)
+    // {
+    //   wmass1 += jet.v4();
+    //   w1_njets ++;
+    //   if( w1_njets > 1)
+    //   {
+    //     float chi2 = pow((wmass1.M() - Mw_mean) / Mw_sigma, 2);
+    //     if(chi2 < chi2_w1)
+    //     {
+    //        chi2_w1 = chi2;
+    //        hyp.set_w1_v4(wmass1);
+    //     }
+    //   }
+    // }
+    // for(auto & jet : wjets2)
+    // {
+    //   wmass2 += jet.v4();
+    //   w2_njets ++;
+    //   if(w2_njets > 1 )
+    //   {
+    //     float chi2 = pow((wmass2.M() - Mw_mean) / Mw_sigma, 2);
+    //     if(chi2 < chi2_w2)
+    //     {
+    //       chi2_w2 = chi2;
+    //       hyp.set_w2_v4(wmass2);
+    //     }
+    //   }
+    // }
     const float Mthad_reco_1 = inv_mass(hyp.tophad1_v4());
     const float Mthad_reco_2 = inv_mass(hyp.tophad2_v4());
 
     const double chi2_thad_1 = pow((Mthad_reco_1 - Mthad_mean_) / Mthad_sigma_, 2);
     const double chi2_thad_2 = pow((Mthad_reco_2 - Mthad_mean_) / Mthad_sigma_, 2);
-    const double DeltaMTop = Mthad_reco_1-Mthad_reco_2;
-    const double chi2_DeltaMTop = pow((DeltaMTop - DMthad_mean_) / DMthad_sigma_, 2);
     hyp.set_discriminator(config.discriminator_label+"_thad1", chi2_thad_1);
     hyp.set_discriminator(config.discriminator_label+"_thad2", chi2_thad_2);
-    hyp.set_discriminator(config.discriminator_label+"_whad1", chi2_w1);
-    hyp.set_discriminator(config.discriminator_label+"_whad2", chi2_w2);
-    hyp.set_discriminator(config.discriminator_label         , chi2_thad_1 + chi2_thad_2+chi2_w1+chi2_w2+chi2_DeltaMTop);
+    // hyp.set_discriminator(config.discriminator_label+"_whad1", chi2_w1);
+    // hyp.set_discriminator(config.discriminator_label+"_whad2", chi2_w2);
+    hyp.set_discriminator(config.discriminator_label         , chi2_thad_1 + chi2_thad_2);
+
   }
 
   return true;
@@ -117,7 +135,7 @@ bool TopDRMCDiscriminatorHad::process(uhh2::Event & event){
     for(auto & hyp: hyps){
         auto& wjets1 = hyp.tophad1_wjets();
         auto& wjets2 = hyp.tophad2_wjets();
-        if(wjets1.size() > 1 && wjets2.size() > 1)
+        if(wjets1.size() > 0 && wjets2.size() > 0)
         {
           LorentzVector wmass1;
           LorentzVector wmass2;
@@ -129,12 +147,12 @@ bool TopDRMCDiscriminatorHad::process(uhh2::Event & event){
           {
             wmass1 += jet.v4();
             w1_njets ++;
-            if(deltaRW1 < deltaR(wmass1,ttbargen.WTop().v4()) && w1_njets > 1)
+            if(deltaRW1 < deltaR(wmass1,ttbargen.WTop().v4()) && w1_njets > 0)
             {
               deltaRW1 = deltaR(wmass1,ttbargen.WTop().v4());
               hyp.set_w1_v4(wmass1);
             }
-            else if(deltaRW1 < deltaR(wmass1,ttbargen.WAntitop().v4()) && w2_njets > 1)
+            else if(deltaRW1 < deltaR(wmass1,ttbargen.WAntitop().v4()) && w2_njets > 0)
             {
               deltaRW1 = deltaR(wmass1,ttbargen.WAntitop().v4());
               hyp.set_w1_v4(wmass1);
@@ -144,12 +162,12 @@ bool TopDRMCDiscriminatorHad::process(uhh2::Event & event){
           {
             wmass2 += jet.v4();
             w2_njets ++;
-            if(deltaRW2 < deltaR(wmass2,ttbargen.WTop().v4()) && w2_njets > 1)
+            if(deltaRW2 < deltaR(wmass2,ttbargen.WTop().v4()) && w2_njets > 0)
             {
               deltaRW2 = deltaR(wmass2,ttbargen.WTop().v4());
               hyp.set_w2_v4(wmass2);
             }
-            else if(deltaRW2 < deltaR(wmass2,ttbargen.WAntitop().v4()) && w2_njets > 1)
+            else if(deltaRW2 < deltaR(wmass2,ttbargen.WAntitop().v4()) && w2_njets > 0)
             {
               deltaRW2 = deltaR(wmass2,ttbargen.WAntitop().v4());
               hyp.set_w2_v4(wmass2);
