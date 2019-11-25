@@ -3,20 +3,20 @@
 
 
 	  <!ENTITY TargetLumi      "35867">
-	  <!ENTITY RECOdir         "/nfs/dust/cms/user/tiedemab/ttZPrime/Run2_10x/Reconstruction/NOMINAL/test">
+	  <!ENTITY RECOdir         "/nfs/dust/cms/user/tiedemab/ttZPrime/Run2_10x/Reconstruction/NOMINAL/test/">
 	  <!ENTITY b_Cacheable     "False">
 	  <!ENTITY NEVT            "-1">
-    <!ENTITY PRESELdir       "/nfs/dust/cms/user/tiedemab/ttZPrime/Run2_10x/Preselection/NOMINAL/">
-		<!ENTITY PRESELfilename  "uhh2.AnalysisModuleRunner.">
+          <!ENTITY PRESELdir       "/nfs/dust/cms/user/tiedemab/ttZPrime/Run2_10x/Preselection/NOMINAL/">
+          <!ENTITY PRESELfilename  "uhh2.AnalysisModuleRunner.">
 	  <!ENTITY PROOFdir        "/nfs/dust/cms/user/tiedemab/.proof2">
 	  <!ENTITY IS_FOR_EFF      "false">
 
 
 		<!ENTITY ZPrimeToMuMu300 "&PRESELdir;/&PRESELfilename;MC.ZPrimeM300_2016v3.root">
 	<!--	<!ENTITY ZPrimeToMuMu700 "&PRESELdir;/&PRESELfilename;MC.ZPrimeM700_2016v3.root">
-		<!ENTITY ZPrimeToMuMu1000 "&PRESELdir;/&PRESELfilename;MC.ZPrimeM1000_2016v3.root">
-		<!ENTITY ZPrimeToMuMu1500 "&PRESELdir;/&PRESELfilename;MC.ZPrimeM1500_2016v3.root">
-
+		<!ENTITY ZPrimeToMuMu1000 "&PRESELdir;/&PRESELfilename;MC.ZPrimeM1000_2016v3.root"> -->
+		<!-- <!ENTITY ZPrimeToMuMu1400 "&PRESELdir;/&PRESELfilename;MC.ZPrimeM1400_2016v3.root"> -->
+<!--
 		<!ENTITY WW "&PRESELdir;/&PRESELfilename;MC.WW_2016v3.root">
 		<!ENTITY WZ "&PRESELdir;/&PRESELfilename;MC.WZ_2016v3.root">
 		<!ENTITY ZZ "&PRESELdir;/&PRESELfilename;MC.ZZ_2016v3.root">
@@ -42,22 +42,22 @@
 		<!-- <!ENTITY WJetsToLNuPt100To250 "&PRESELdir;/&PRESELfilename;MC.WJetsToLNuPt100To250_2016v3.root">
 		<!ENTITY WJetsToLNuPt250To400 "&PRESELdir;/&PRESELfilename;MC.WJetsToLNuPt250To400_2016v3.root">
 		<!ENTITY WJetsToLNuPt400To600 "&PRESELdir;/&PRESELfilename;MC.WJetsToLNuPt400To600_2016v3.root">
-		<!ENTITY WJetsToLNuPt600ToInf "&PRESELdir;/&PRESELfilename;MC.WJetsToLNuPt600ToInf_2016v3.root">
+		<!ENTITY WJetsToLNuPt600ToInf "&PRESELdir;/&PRESELfilename;MC.WJetsToLNuPt600ToInf_2016v3.root"> -->
 
-		<!ENTITY DYJetsToLLM50HT70to100 "&PRESELdir;/&PRESELfilename;MC.DYJetsToLLM50HT70to100_2016v3.root">
+		<!-- <!ENTITY DYJetsToLLM50HT70to100 "&PRESELdir;/&PRESELfilename;MC.DYJetsToLLM50HT70to100_2016v3.root">
 		<!ENTITY DYJetsToLLM50HT100to200 "&PRESELdir;/&PRESELfilename;MC.DYJetsToLLM50HT100to200_2016v3.root">
 		<!ENTITY DYJetsToLLM50HT200to400 "&PRESELdir;/&PRESELfilename;MC.DYJetsToLLM50HT200to400_2016v3.root">
 		<!ENTITY DYJetsToLLM50HT400to600 "&PRESELdir;/&PRESELfilename;MC.DYJetsToLLM50HT400to600_2016v3.root">
 		<!ENTITY DYJetsToLLM50HT600to800 "&PRESELdir;/&PRESELfilename;MC.DYJetsToLLM50HT600to800_2016v3.root">
 		<!ENTITY DYJetsToLLM50HT800to1200 "&PRESELdir;/&PRESELfilename;MC.DYJetsToLLM50HT800to1200_2016v3.root">
 		<!ENTITY DYJetsToLLM50HT1200to2500 "&PRESELdir;/&PRESELfilename;MC.DYJetsToLLM50HT1200to2500_2016v3.root">
-		<!ENTITY DYJetsToLLM50HT2500toInf "&PRESELdir;/&PRESELfilename;MC.DYJetsToLLM50HT2500toInf_2016v3.root">
+		<!ENTITY DYJetsToLLM50HT2500toInf "&PRESELdir;/&PRESELfilename;MC.DYJetsToLLM50HT2500toInf_2016v3.root"> -->
 
-		<!ENTITY STtChannelAntiTop "&PRESELdir;/&PRESELfilename;MC.STtChannelAntiTop_2016v3.root">
-		<!ENTITY STtChannelTop "&PRESELdir;/&PRESELfilename;MC.STtChannelTop_2016v3.root">
-		<!ENTITY STsChannel "&PRESELdir;/&PRESELfilename;MC.STsChannel_2016v3.root">
+		<!-- <!ENTITY STtChannelAntiTop "&PRESELdir;/&PRESELfilename;MC.STtChannelAntiTop_2016v3.root"> -->
+		<!-- <!ENTITY STtChannelTop "&PRESELdir;/&PRESELfilename;MC.STtChannelTop_2016v3.root"> -->
+		<!-- <!ENTITY STsChannel "&PRESELdir;/&PRESELfilename;MC.STsChannel_2016v3.root"> -->
 
-		<!ENTITY TTZ_1 "&PRESELdir;/&PRESELfilename;MC.TTZ_1_2016v3.root">
+		<!-- <!ENTITY TTZ_1 "&PRESELdir;/&PRESELfilename;MC.TTZ_1_2016v3.root">
 		<!ENTITY TTZ_2 "&PRESELdir;/&PRESELfilename;MC.TTZ_1_2016v3.root"> -->
 
 
@@ -82,10 +82,10 @@
 
 
  <InputData Lumi="99898.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM300_2016v3" Cacheable="&b_Cacheable;">
-		    <In FileName="&ZPrimeToMuMu300;" Lumi="0.0"/>
-		    <InputTree Name="AnalysisTree" />
-		    <OutputTree Name="AnalysisTree" />
-</InputData>
+ 		    <In FileName="&ZPrimeToMuMu300;" Lumi="0.0"/>
+ 		    <InputTree Name="AnalysisTree" />
+ 		    <OutputTree Name="AnalysisTree" />
+ </InputData>
 <!--<InputData Lumi="99882.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM700_2016v3" Cacheable="&b_Cacheable;">
 		    <In FileName="&ZPrimeToMuMu700;" Lumi="0.0"/>
 		    <InputTree Name="AnalysisTree" />
@@ -95,14 +95,14 @@
 		    <In FileName="&ZPrimeToMuMu1000;" Lumi="0.0"/>
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
-</InputData>
-<InputData Lumi="79642.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM1500_2016v3" Cacheable="&b_Cacheable;">
-		    <In FileName="&ZPrimeToMuMu1500;" Lumi="0.0"/>
+</InputData>-->
+ <!-- <InputData Lumi="79642.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM1400_2016v3" Cacheable="&b_Cacheable;">
+		    <In FileName="&ZPrimeToMuMu1400;" Lumi="0.0"/>
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
-</InputData>
+</InputData> -->
 
-
+<!--
 <InputData Lumi="69352.89646" NEventsMax="&NEVT;" Type="MC" Version="WW_2016v3" Cacheable="&b_Cacheable;">
 		    <In FileName="&WW;" Lumi="0.0"/>
 		    <InputTree Name="AnalysisTree" />
@@ -223,11 +223,11 @@
 		   <In FileName="&WJetsToLNuPt600ToInf;" Lumi="0.0"/>
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
-</InputData>
+</InputData> -->
 
 
 
-<InputData Lumi="46376.6826" NEventsMax="&NEVT;" Type="MC" Version="DYJetsToLLM50HT70to100_2016v3" Cacheable="&b_Cacheable;">
+<!-- <InputData Lumi="46376.6826" NEventsMax="&NEVT;" Type="MC" Version="DYJetsToLLM50HT70to100_2016v3" Cacheable="&b_Cacheable;">
 		    <In FileName="&DYJetsToLLM50HT70to100;" Lumi="0.0"/>
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
@@ -266,9 +266,9 @@
 		    <In FileName="&DYJetsToLLM50HT2500toInf;" Lumi="0.0"/>
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
-</InputData>
+</InputData> -->
 
-
+<!--
 <InputData Lumi="3447373.715" NEventsMax="&NEVT;" Type="MC" Version="STtChannelAntiTop_2016v3" Cacheable="&b_Cacheable;">
 		    <In FileName="&STtChannelAntiTop;" Lumi="0.0"/>
 		    <InputTree Name="AnalysisTree" />
@@ -283,9 +283,9 @@
 		    <In FileName="&STsChannel;" Lumi="0.0"/>
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
-</InputData>
+</InputData> -->
 
-<InputData Lumi="5827337.386" NEventsMax="&NEVT;" Type="MC" Version="TTZ_1_2016v3" Cacheable="&b_Cacheable;">
+<!-- <InputData Lumi="5827337.386" NEventsMax="&NEVT;" Type="MC" Version="TTZ_1_2016v3" Cacheable="&b_Cacheable;">
 		    <In FileName="&TTZ_1;" Lumi="0.0"/>
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
