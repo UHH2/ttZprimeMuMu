@@ -59,23 +59,45 @@ class Chi2DiscriminatorHad: public uhh2::AnalysisModule {
 
     if(s <= 0.) throw std::runtime_error("Chi2DiscriminatorHad::set_Mthad_sigma -- logic error: non-positive input value: "+std::to_string(s));
   }
-  virtual void set_DMthad_mean (const float m){ DMthad_mean_  = m; }
-  virtual void set_DMthad_sigma(const float s){ DMthad_sigma_ = s;
 
 
-    if(s <= 0.) throw std::runtime_error("Chi2DiscriminatorHad::set_Mthad_sigma -- logic error: non-positive input value: "+std::to_string(s));
+  virtual float Mthad_mean () const { return Mthad_mean_; }
+  virtual float Mthad_sigma() const { return Mthad_sigma_; }
+
+ private:
+  cfg config;
+  uhh2::Event::Handle<std::vector<TTbarRecoHadHypothesis>> h_hyps;
+  float Mthad_mean_, Mthad_sigma_, Mw_mean_, Mw_sigma_;
+};
+
+class Chi2Discriminator4Jets: public uhh2::AnalysisModule {
+
+ public:
+  struct cfg {
+
+   std::string discriminator_label;
+   cfg(): discriminator_label("Chi24Jets"){}
+  };
+
+  Chi2Discriminator4Jets(uhh2::Context&, const std::string&, const cfg& config=cfg());
+  virtual bool process(uhh2::Event&) override;
+
+
+  virtual void set_Mthad_mean (const float m){ Mthad_mean_  = m; }
+  virtual void set_Mthad_sigma(const float s){ Mthad_sigma_ = s;
+
+
+    if(s <= 0.) throw std::runtime_error("Chi2Discriminator4Jets::set_Mthad_sigma -- logic error: non-positive input value: "+std::to_string(s));
   }
 
   virtual float Mthad_mean () const { return Mthad_mean_; }
   virtual float Mthad_sigma() const { return Mthad_sigma_; }
-  virtual float DMthad_mean () const { return DMthad_mean_; }
-  virtual float DMthad_sigma() const { return DMthad_sigma_; }
+
  private:
   cfg config;
   uhh2::Event::Handle<std::vector<TTbarRecoHadHypothesis>> h_hyps;
-  float Mthad_mean_, Mthad_sigma_, Mw_mean, Mw_sigma, DMthad_sigma_, DMthad_mean_;
+  float Mthad_mean_, Mthad_sigma_;
 };
-
 
 /** \brief Top-DeltaR quality flag for Monte-Carlo
  *
@@ -119,16 +141,16 @@ private:
  * NOTE: This class only works for events which are (on gen-level) electron+jets or muon+jets. Otherwise, all discriminator
  * values are set to +infinity. The reconstructed lepton is ignored in this discriminator criterion.
  */
-/*
-class CorrectMatchDiscriminator: public uhh2::AnalysisModule {
+
+class CorrectMatchDiscriminatorHad: public uhh2::AnalysisModule {
 public:
     struct cfg {
         std::string ttbargen_name;
         std::string discriminator_label;
-        cfg(): ttbargen_name("ttbargen"), discriminator_label("CorrectMatch"){}
+        cfg(): ttbargen_name("ttbargen"), discriminator_label("CorrectMatchHad"){}
     };
 
-    CorrectMatchDiscriminator(uhh2::Context & ctx, const std::string & rechyps_name, const cfg & config = cfg());
+    CorrectMatchDiscriminatorHad(uhh2::Context & ctx, const std::string & rechyps_name, const cfg & config = cfg());
     virtual bool process(uhh2::Event & event) override;
 
 private:
@@ -137,4 +159,21 @@ private:
     uhh2::Event::Handle<TTbarGen> h_ttbargen;
     cfg config;
 };
-*/
+
+class CorrectMatchDiscriminator4Jets: public uhh2::AnalysisModule {
+public:
+    struct cfg {
+        std::string ttbargen_name;
+        std::string discriminator_label;
+        cfg(): ttbargen_name("ttbargen"), discriminator_label("CorrectMatch4Jets"){}
+    };
+
+    CorrectMatchDiscriminator4Jets(uhh2::Context & ctx, const std::string & rechyps_name, const cfg & config = cfg());
+    virtual bool process(uhh2::Event & event) override;
+
+private:
+
+    uhh2::Event::Handle<std::vector<TTbarRecoHadHypothesis>> h_hyps;
+    uhh2::Event::Handle<TTbarGen> h_ttbargen;
+    cfg config;
+};
