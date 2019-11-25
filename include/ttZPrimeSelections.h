@@ -5,6 +5,10 @@
 
 #include "UHH2/ttZPrime/include/TTbarRecoHadHypothesis.h"
 #include "UHH2/ttZPrime/include/TTbarRecoHadHypothesisDiscriminators.h"
+#include "UHH2/common/include/TTbarGen.h"
+#include <iostream>
+#include <vector>
+
 
 namespace uhh2examples {
 
@@ -53,6 +57,19 @@ public:
 private:
   double m_deltaR_min;
 };
-
+class JetQuarkMatchingSelection: public uhh2::Selection{
+public:
+  JetQuarkMatchingSelection(uhh2::Context & ctx, int NMatchs, const std::string & hyps_name, const std::string & discriminator_name);
+  virtual bool passes (const uhh2::Event & event) override;
+private:
+  int m_nmatchs;
+  std::string m_discriminator_name;
+  uhh2::Event::Handle<TTbarGen> h_ttbargen;
+  std::vector<GenParticle> GenP;
+  uhh2::Event::Handle<std::vector<TTbarRecoHadHypothesis>> h_hyps;
+  std::vector<TTbarRecoHadHypothesis> hyps;
+  const TTbarRecoHadHypothesis* hyp;
+  std::vector<Jet> jets;
+};
 
 }
