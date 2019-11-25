@@ -5,6 +5,7 @@
 #include "UHH2/ttZPrime/include/ttZPrimeSelections.h"
 #include "UHH2/ttZPrime/include/TTbarRecoHadHypothesisDiscriminators.h"
 
+#include <iostream>
 #include <stdexcept>
 #include <vector>
 
@@ -104,4 +105,41 @@ bool TopDRMCHadSelection::passes(const Event &event) {
   {
     return false;
   }
+}
+
+JetQuarkMatchingSelection::JetQuarkMatchingSelection(uhh2::Context & ctx, int NMatchs,const std::string & hyps_name, const std::string & discriminator_name):
+  m_nmatchs(NMatchs),
+  h_ttbargen(ctx.get_handle<TTbarGen>("ttbargen")),
+  h_hyps (ctx.get_handle<std::vector<TTbarRecoHadHypothesis>>(hyps_name)),
+  m_discriminator_name (discriminator_name){}
+bool JetQuarkMatchingSelection::passes(const Event & event){
+  hyps = event.get(h_hyps);
+  hyp = get_best_hypothesis( hyps, m_discriminator_name );
+  if(!hyp) return false;
+  jets.insert(jets.end(),hyp->tophad1_jets().begin(), hyp->tophad1_jets().end());
+  jets.insert(jets.end(),hyp->tophad2_jets().begin(), hyp->tophad2_jets().end());
+  jets.insert(jets.end(),hyp->tophad1_bjet().begin(), hyp->tophad1_bjet().end());
+  jets.insert(jets.end(),hyp->tophad2_bjet().begin(), hyp->tophad2_bjet().end());
+
+  // auto  jets = event.jets;
+  const auto & ttbargen = event.get(h_ttbargen);
+
+  GenP.push_back(ttbargen.bTop());
+  GenP.push_back(ttbargen.bAntitop());
+  GenP.push_back(ttbargen.Wdecay1());
+  GenP.push_back(ttbargen.Wdecay2());
+  GenP.push_back(ttbargen.WMinusdecay1());
+  GenP.push_back(ttbargen.WMinusdecay2());
+
+  for(unsigned int k = 0; k<GenP.size(); k++){
+    int n = 0;
+    for(unsigned int i = 0; i< jets.size(); i++)
+    {
+        double dr = uhh2::deltaR(GenP.at(k), jets.at(i));
+        if (dr < 0.4) n++;
+
+    }
+    if(n != m_nmatchs) return false;
+  }
+  return true;
 }
