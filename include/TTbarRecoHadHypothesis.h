@@ -18,7 +18,7 @@
 class TTbarRecoHadHypothesis {
 public:
   explicit TTbarRecoHadHypothesis(){};
-
+  float chi2_tt() const{return m_ch2_tt;}
   LorentzVector tophad1_v4() const{return m_tophad1_v4;}
   LorentzVector tophad2_v4() const{return m_tophad2_v4;}
   LorentzVector w1_v4() const{return m_w1_v4;}
@@ -45,6 +45,7 @@ public:
       return m_discriminators.find(label) != m_discriminators.end();
   }
 
+  void set_chi2_tt (float chi2){m_ch2_tt = chi2;}
   void set_tophad1_v4(LorentzVector v4){m_tophad1_v4=v4;}
   void set_tophad2_v4(LorentzVector v4){m_tophad2_v4=v4;}
   void set_w1_v4(LorentzVector v4){m_w1_v4=v4;}
@@ -70,7 +71,7 @@ private:
   std::vector<Jet> m_tophad2_wjets;
   std::vector<Jet> m_tophad1_bjet;
   std::vector<Jet> m_tophad2_bjet;
-
+  float m_ch2_tt;
 
   std::map<std::string, float> m_discriminators;
 };

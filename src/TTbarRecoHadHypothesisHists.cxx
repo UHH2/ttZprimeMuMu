@@ -37,6 +37,7 @@ TTbarRecoHadHypothesisHists::TTbarRecoHadHypothesisHists(uhh2::Context & ctx, co
     // M_ttbar_rec = book<TH1F>( "M_ttbar_rec", "M_{t#bar{t}}^{rec} [GeV/c^{2}]", 100, 0, 5000 ) ;
     // M_ttbar_gen = book<TH1F>( "M_ttbar_gen", "M_{t#bar{t}}^{gen} [GeV/c^{2}]", 100, 0, 5000 ) ;
     //
+    M_topshad_rec = book<TH1F>( "M_topshad_rec", "M^{tops,had} [GeV/c^{2}]", 50, 0, 500 ) ;
     M_tophad1_rec = book<TH1F>( "M_tophad1_rec", "M^{top,had1} [GeV/c^{2}]", 50, 0, 500 ) ;
     M_tophad2_rec = book<TH1F>( "M_tophad2_rec", "M^{top,had2} [GeV/c^{2}]", 50, 0, 500 ) ;
     Mw_tophad1_rec = book<TH1F>( "Mw_tophad1_rec", "M^{W,had1} [GeV/c^{2}]", 50, 0, 500 ) ;
@@ -49,6 +50,7 @@ TTbarRecoHadHypothesisHists::TTbarRecoHadHypothesisHists(uhh2::Context & ctx, co
     NJet_tophad1_rec = book<TH1F>("NJet_tophad1_rec","NJet^{top,had1}",7,0,7);
     NJet_tophad2_rec = book<TH1F>("NJet_tophad2_rec","NJet^{top,had2}",7,0,7);
     NJet_sum_rec = book<TH1F>("NJet_sum_rec","NJet^{top,sum}",10,0,10);
+    NBJets_sum_rec = book<TH1F>("NBJets_sum_rec","NBJet^{top,sum}",5,0,5);
 
 
     DeltaR_Mu1_Jets = book<TH1F>("DeltaR_Mu1_Jets","#DeltaR_{jet,#mu1}",100,0,5);
@@ -58,15 +60,15 @@ TTbarRecoHadHypothesisHists::TTbarRecoHadHypothesisHists(uhh2::Context & ctx, co
     DeepCSV_tophad1_rec = book<TH1F>("DeepCSV_tophad1_rec","CSV_{bjet,had1}",50,0,1);
     DeepCSV_tophad2_rec = book<TH1F>("DeepCSV_tophad2_rec","CSV_{bjet,had2}",50,0,1);
     //
-    M_tophad1_rec_0jet = book<TH1F>( "M_tophad1_rec_0jet", "M^{top,had} [GeV/c^{2}]", 50, 0, 500 ) ;
     M_tophad1_rec_1jet = book<TH1F>( "M_tophad1_rec_1jet", "M^{top,had} [GeV/c^{2}]", 50, 0, 500 ) ;
     M_tophad1_rec_2jet = book<TH1F>( "M_tophad1_rec_2jet", "M^{top,had} [GeV/c^{2}]", 50, 0, 500 ) ;
     M_tophad1_rec_3jet = book<TH1F>( "M_tophad1_rec_3jet", "M^{top,had} [GeV/c^{2}]", 50, 0, 500 ) ;
+    M_tophad1_rec_4jet = book<TH1F>( "M_tophad1_rec_4jet", "M^{top,had} [GeV/c^{2}]", 50, 0, 500 ) ;
 
-    M_tophad2_rec_0jet = book<TH1F>( "M_tophad2_rec_0jet", "M^{top,had} [GeV/c^{2}]", 50, 0, 500 ) ;
     M_tophad2_rec_1jet = book<TH1F>( "M_tophad2_rec_1jet", "M^{top,had} [GeV/c^{2}]", 50, 0, 500 ) ;
     M_tophad2_rec_2jet = book<TH1F>( "M_tophad2_rec_2jet", "M^{top,had} [GeV/c^{2}]", 50, 0, 500 ) ;
     M_tophad2_rec_3jet = book<TH1F>( "M_tophad2_rec_3jet", "M^{top,had} [GeV/c^{2}]", 50, 0, 500 ) ;
+    M_tophad2_rec_4jet = book<TH1F>( "M_tophad2_rec_4jet", "M^{top,had} [GeV/c^{2}]", 50, 0, 500 ) ;
 
     Pt_tophad1_rec = book<TH1F>( "Pt_tophad1_rec", "P_{T}^{top,lep} [GeV/c]", 60, 0, 1200 ) ;
     Pt_tophad2_rec = book<TH1F>( "Pt_tophad2_rec", "P_{T}^{top,had} [GeV/c]", 60, 0, 1200 ) ;
@@ -178,8 +180,22 @@ void TTbarRecoHadHypothesisHists::fill(const uhh2::Event & e){
     Discriminator->Fill(hyp->discriminator(m_discriminator_name) ,weight);
   }
   if(m_discriminator_name =="Chi2Had"){
-    Discriminator_top1->Fill(hyp->discriminator(m_discriminator_name+"_thad1") ,weight);
-    Discriminator_top2->Fill(hyp->discriminator(m_discriminator_name+"_thad2") ,weight);
+    if(hyp->discriminator(m_discriminator_name + "_thad1") > maxbin)
+    {
+    Discriminator_top1->Fill(maxbin ,weight);
+    }
+    else
+    {
+      Discriminator_top1->Fill(hyp->discriminator(m_discriminator_name+"_thad1") ,weight);
+    }
+    if(hyp->discriminator(m_discriminator_name + "_thad2") > maxbin)
+    {
+    Discriminator_top2->Fill(maxbin ,weight);
+    }
+    else
+    {
+      Discriminator_top2->Fill(hyp->discriminator(m_discriminator_name+"_thad2") ,weight);
+    }
     // Discriminator_w1->Fill(hyp->discriminator(m_discriminator_name+"_whad1") ,weight);
     // Discriminator_w2->Fill(hyp->discriminator(m_discriminator_name+"_whad2") ,weight);
   }
@@ -195,17 +211,20 @@ void TTbarRecoHadHypothesisHists::fill(const uhh2::Event & e){
   if(hyp->tophad2_v4().isTimelike()) mtophad2 = hyp->tophad2_v4().M();
   M_tophad1_rec->Fill(mtophad1,weight);
   M_tophad2_rec->Fill(mtophad2,weight);
+  M_topshad_rec->Fill(mtophad1,weight);
+  M_topshad_rec->Fill(mtophad2,weight);
   DeltaM_rec->Fill(mtophad1-mtophad2,weight);
-  if(hyp->w1_v4().isTimelike()) Mw_tophad1_rec->Fill(hyp->w1_v4().M(),weight);
-  if(hyp->w2_v4().isTimelike()) Mw_tophad2_rec->Fill(hyp->w2_v4().M(),weight);
-  if(hyp->w1_v4().isTimelike() && hyp->w2_v4().isTimelike()) DeltaM_rec_W->Fill(hyp->w1_v4().M()-hyp->w2_v4().M(),weight);
 
-  NJet_tophad1_rec->Fill(hyp->tophad1_jets().size(),weight);
-  NJet_tophad2_rec->Fill(hyp->tophad2_jets().size(),weight);
-  NJet_sum_rec->Fill(hyp->tophad1_jets().size()+hyp->tophad2_jets().size(),weight);
+
+
+
+
+
+  LorentzVector mwhad1, mwhad2;
   for(auto & jet : hyp->tophad1_jets()){
     DeltaR_Mu1_Jets->Fill(deltaR(muon[0],jet),weight);
     DeltaR_Mu2_Jets->Fill(deltaR(muon[1],jet),weight);
+    mwhad1 += jet.v4();
 
   }
   // DeepCSV_tophad1_rec->Fill(hyp->tophad1_bjet().btag_DeepJet(),weight);
@@ -213,20 +232,40 @@ void TTbarRecoHadHypothesisHists::fill(const uhh2::Event & e){
   for(auto & jet : hyp->tophad2_jets()){
     DeltaR_Mu1_Jets->Fill(deltaR(muon[0],jet),weight);
     DeltaR_Mu2_Jets->Fill(deltaR(muon[1],jet),weight);
-
+    mwhad2 += jet.v4();
   }
-  if(hyp->tophad1_jets().size()==0) M_tophad1_rec_0jet->Fill(mtophad1,weight);
-  if(hyp->tophad1_jets().size()==1) M_tophad1_rec_1jet->Fill(mtophad1,weight);
-  if(hyp->tophad1_jets().size()==2) M_tophad1_rec_2jet->Fill(mtophad1,weight);
-  if(hyp->tophad1_jets().size()>=3) M_tophad1_rec_3jet->Fill(mtophad1,weight);
 
-  if(hyp->tophad2_jets().size()==0) M_tophad2_rec_0jet->Fill(mtophad2,weight);
-  if(hyp->tophad2_jets().size()==1) M_tophad2_rec_1jet->Fill(mtophad2,weight);
-  if(hyp->tophad2_jets().size()==2) M_tophad2_rec_2jet->Fill(mtophad2,weight);
-  if(hyp->tophad2_jets().size()>=3) M_tophad2_rec_3jet->Fill(mtophad2,weight);
-  //
+  Mw_tophad1_rec->Fill(mwhad1.M(),weight);
+  Mw_tophad2_rec->Fill(mwhad2.M(),weight);
+  DeltaM_rec_W->Fill(mwhad1.M()-mwhad2.M(),weight);
+
+  auto NJets1 = hyp->tophad1_jets().size() + hyp->tophad1_bjet().size();
+  auto NJets2 = hyp->tophad2_jets().size() + hyp->tophad2_bjet().size();
+  auto NBjets = hyp->tophad1_bjet().size() + hyp->tophad2_bjet().size();
+
+  NJet_tophad1_rec->Fill(NJets1,weight);
+  NJet_tophad2_rec->Fill(NJets2,weight);
+
+
+  if(NJets1==1) M_tophad1_rec_1jet->Fill(mtophad1,weight);
+  if(NJets1==2) M_tophad1_rec_2jet->Fill(mtophad1,weight);
+  if(NJets1==3) M_tophad1_rec_3jet->Fill(mtophad1,weight);
+  if(NJets1>=4) M_tophad1_rec_4jet->Fill(mtophad1,weight);
+
+  if(NJets2==1) M_tophad2_rec_1jet->Fill(mtophad2,weight);
+  if(NJets2==2) M_tophad2_rec_2jet->Fill(mtophad2,weight);
+  if(NJets2==3) M_tophad2_rec_3jet->Fill(mtophad2,weight);
+  if(NJets2>=4) M_tophad2_rec_4jet->Fill(mtophad2,weight);
+
+  NJet_sum_rec->Fill(NJets1+NJets2,weight);
+  NBJets_sum_rec->Fill(NBjets, weight);
+
   Pt_tophad1_rec->Fill( hyp->tophad1_v4().Pt(),weight );
   Pt_tophad2_rec->Fill( hyp->tophad2_v4().Pt(),weight );
+
+  // std::cout << m_discriminator_name << ":" << std::endl;
+  // std::cout << "NJetSum:" << NJets1+NJets2 << ", Chi2:" << chi2_thad_1 + chi2_thad_2 << ", M(Top1):" << mtophad1 << ", M(Top2):" << mtophad2 <<std::endl;
+
  }
 
 }
