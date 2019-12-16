@@ -99,6 +99,53 @@ class Chi2Discriminator4Jets: public uhh2::AnalysisModule {
   float Mthad_mean_, Mthad_sigma_;
 };
 
+
+class Chi2Discriminator5Jets: public uhh2::AnalysisModule {
+
+ public:
+  struct cfg {
+
+   std::string discriminator_label;
+   cfg(): discriminator_label("Chi25Jets"){}
+  };
+
+Chi2Discriminator5Jets(uhh2::Context&, const std::string&, const cfg& config=cfg());
+virtual bool process(uhh2::Event&) override;
+
+
+virtual void set_Mthad_mean_2jets (const float m){ Mthad_mean_2jets_  = m; }
+virtual void set_Mthad_sigma_2jets(const float s){ Mthad_sigma_2jets_ = s;
+
+
+  if(s <= 0.) throw std::runtime_error("Chi2Discriminator4Jets::set_Mthad_sigma -- logic error: non-positive input value: "+std::to_string(s));
+}
+
+virtual void set_Mthad_mean_3jets (const float m){ Mthad_mean_3jets_  = m; }
+virtual void set_Mthad_sigma_3jets(const float s){ Mthad_sigma_3jets_ = s;
+
+
+  if(s <= 0.) throw std::runtime_error("Chi2Discriminator4Jets::set_Mthad_sigma -- logic error: non-positive input value: "+std::to_string(s));
+}
+
+virtual void set_Mw_mean_3jets (const float m){ Mw_mean_3jets_  = m; }
+virtual void set_Mw_sigma_3jets(const float s){ Mw_sigma_3jets_ = s;
+
+
+  if(s <= 0.) throw std::runtime_error("Chi2Discriminator4Jets::set_Mthad_sigma -- logic error: non-positive input value: "+std::to_string(s));
+}
+virtual float Mthad_mean_2jets () const { return Mthad_mean_2jets_; }
+virtual float Mthad_sigma_2jets() const { return Mthad_sigma_2jets_; }
+virtual float Mthad_mean_3jets () const { return Mthad_mean_3jets_; }
+virtual float Mthad_sigma_3jets() const { return Mthad_sigma_3jets_; }
+virtual float Mw_mean_3jets () const { return Mw_mean_3jets_; }
+virtual float Mw_sigma_3jets() const { return Mw_sigma_3jets_; }
+
+private:
+cfg config;
+uhh2::Event::Handle<std::vector<TTbarRecoHadHypothesis>> h_hyps;
+float Mthad_mean_2jets_, Mthad_sigma_2jets_,Mthad_mean_3jets_,Mthad_sigma_3jets_,Mw_mean_3jets_,Mw_sigma_3jets_;
+};
+
 /** \brief Top-DeltaR quality flag for Monte-Carlo
  *
  * Requires a TTbarGen object in the event (see TTbarGen.h).
@@ -169,6 +216,24 @@ public:
     };
 
     CorrectMatchDiscriminator4Jets(uhh2::Context & ctx, const std::string & rechyps_name, const cfg & config = cfg());
+    virtual bool process(uhh2::Event & event) override;
+
+private:
+
+    uhh2::Event::Handle<std::vector<TTbarRecoHadHypothesis>> h_hyps;
+    uhh2::Event::Handle<TTbarGen> h_ttbargen;
+    cfg config;
+};
+
+class CorrectMatchDiscriminator5Jets: public uhh2::AnalysisModule {
+public:
+    struct cfg {
+        std::string ttbargen_name;
+        std::string discriminator_label;
+        cfg(): ttbargen_name("ttbargen"), discriminator_label("CorrectMatch5Jets"){}
+    };
+
+    CorrectMatchDiscriminator5Jets(uhh2::Context & ctx, const std::string & rechyps_name, const cfg & config = cfg());
     virtual bool process(uhh2::Event & event) override;
 
 private:
