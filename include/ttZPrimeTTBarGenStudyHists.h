@@ -18,5 +18,5 @@ protected:
   uhh2::Event::Handle<std::vector<TTbarRecoHadHypothesis>> h_hyps;
   uhh2::Event::Handle<TTbarGen> h_ttbargen;
 
-  TH1F* mindrqq, *mindrqj, *matchsperjet, *ptResolution, *matchedevents, *matchedbjets;
+  TH1F* mindrqq, *mindrqj, *matchsperjet, *ptResolution, *matchedevents, *matchedbjets, *matchedw, *matchedjets;
 };

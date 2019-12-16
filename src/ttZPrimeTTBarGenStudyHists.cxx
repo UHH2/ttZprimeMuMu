@@ -11,7 +11,9 @@ ttZPrimeTTBarGenStudyHists::ttZPrimeTTBarGenStudyHists(uhh2::Context & ctx, cons
     mindrqq = book<TH1F> ("GenPMinQQ","#GenP_{q_{i},q_{j}}",60,0,6);
     matchedevents = book<TH1F> ("RightRecoEvents","RightRecoEvents",5,0,4);
     matchedbjets = book<TH1F> ("RightRecoBJets","RightRecoBJets",5,0,4);
-    mindrqj = book<TH1F> ("GenPMinQJet","#GenP_{jet_{i},q_{j}}",40,0,2);
+    matchedjets = book<TH1F> ("RightRecoJets","RightRecoJets",5,0,4);
+    matchedw = book<TH1F> ("RightRecoW","RightRecoW",5,0,4);
+    mindrqj = book<TH1F> ("GenPMinQJet","GenP_{jet_{i},q_{j}}",40,0,2);
     matchsperjet = book<TH1F> ("MatchsPerJet","MatchsPerJet",5,0,5);
     ptResolution = book<TH1F> ("ptResolutionQJ", "#DeltaPt_{q,Jet} [GeV]",100,-50,50);
     h_ttbargen = ctx.get_handle<TTbarGen>("ttbargen");
@@ -35,6 +37,34 @@ void ttZPrimeTTBarGenStudyHists::fill(const uhh2::Event & e){
   const auto & weight = e.weight;
   float chi2_tt_match = hyp_match->chi2_tt();
   float chi2_tt_reco = hyp_reco->chi2_tt();
+  auto jets1_match = hyp_match->tophad1_jets();
+  auto jets1_reco = hyp_reco->tophad1_jets();
+  auto jets2_match = hyp_match->tophad2_jets();
+  auto jets2_reco = hyp_reco->tophad2_jets();
+  if (jets1_match.size() == jets1_reco.size())
+  {
+    for (unsigned int i = 0; i < jets1_match.size(); i++)
+    {
+      if(deltaR(jets1_match.at(i),jets1_reco.at(i))< 0.4) matchedjets->Fill(1, weight);
+      else matchedjets->Fill(3, weight);
+    }
+  }
+  if (jets2_match.size() == jets2_reco.size())
+  {
+    for (unsigned int i = 0; i < jets2_match.size(); i++)
+    {
+      if(deltaR(jets2_match.at(i),jets2_reco.at(i))< 0.4) matchedjets->Fill(1, weight);
+      else matchedjets->Fill(3, weight);
+    }
+  }
+  if(deltaR(hyp_match->tophad1_bjet().at(0),hyp_reco->tophad1_bjet().at(0))< 0.4) matchedbjets->Fill(1, weight);
+  else matchedbjets->Fill(3, weight);
+  if(deltaR(hyp_match->tophad2_bjet().at(0),hyp_reco->tophad2_bjet().at(0))< 0.4) matchedbjets->Fill(1, weight);
+  else matchedbjets->Fill(3, weight);
+  if(deltaR(hyp_match->w1_v4(),hyp_reco->w1_v4())< 0.4) matchedw->Fill(1, weight);
+  else matchedw->Fill(3, weight);
+  if(deltaR(hyp_match->w2_v4(),hyp_reco->w2_v4())< 0.4) matchedw->Fill(1, weight);
+  else matchedw->Fill(3, weight);
   if(chi2_tt_match == chi2_tt_reco) matchedevents->Fill(1, weight);
   else matchedevents->Fill(3, weight);
   vector<GenParticle> GenP;
