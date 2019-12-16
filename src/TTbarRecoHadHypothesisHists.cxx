@@ -40,6 +40,7 @@ TTbarRecoHadHypothesisHists::TTbarRecoHadHypothesisHists(uhh2::Context & ctx, co
     M_topshad_rec = book<TH1F>( "M_topshad_rec", "M^{tops,had} [GeV/c^{2}]", 50, 0, 500 ) ;
     M_tophad1_rec = book<TH1F>( "M_tophad1_rec", "M^{top,had1} [GeV/c^{2}]", 50, 0, 500 ) ;
     M_tophad2_rec = book<TH1F>( "M_tophad2_rec", "M^{top,had2} [GeV/c^{2}]", 50, 0, 500 ) ;
+    Mw_tophad_rec = book<TH1F>( "Mw_tophad_rec", "M^{W,had} [GeV/c^{2}]", 50, 0, 500 ) ;
     Mw_tophad1_rec = book<TH1F>( "Mw_tophad1_rec", "M^{W,had1} [GeV/c^{2}]", 50, 0, 500 ) ;
     Mw_tophad2_rec = book<TH1F>( "Mw_tophad2_rec", "M^{W,had2} [GeV/c^{2}]", 50, 0, 500 ) ;
 
@@ -220,23 +221,24 @@ void TTbarRecoHadHypothesisHists::fill(const uhh2::Event & e){
 
 
 
-  LorentzVector mwhad1, mwhad2;
+
+
   for(auto & jet : hyp->tophad1_jets()){
     DeltaR_Mu1_Jets->Fill(deltaR(muon[0],jet),weight);
     DeltaR_Mu2_Jets->Fill(deltaR(muon[1],jet),weight);
-    mwhad1 += jet.v4();
-
   }
   // DeepCSV_tophad1_rec->Fill(hyp->tophad1_bjet().btag_DeepJet(),weight);
   // DeepCSV_tophad2_rec->Fill(hyp->tophad2_bjet().btag_DeepJet(),weight);
   for(auto & jet : hyp->tophad2_jets()){
     DeltaR_Mu1_Jets->Fill(deltaR(muon[0],jet),weight);
     DeltaR_Mu2_Jets->Fill(deltaR(muon[1],jet),weight);
-    mwhad2 += jet.v4();
   }
-
+  LorentzVector mwhad1 = hyp->w1_v4();
+  LorentzVector mwhad2 = hyp->w2_v4();
   Mw_tophad1_rec->Fill(mwhad1.M(),weight);
   Mw_tophad2_rec->Fill(mwhad2.M(),weight);
+  Mw_tophad_rec->Fill(mwhad1.M(), weight);
+  Mw_tophad_rec->Fill(mwhad2.M(), weight);
   DeltaM_rec_W->Fill(mwhad1.M()-mwhad2.M(),weight);
 
   auto NJets1 = hyp->tophad1_jets().size() + hyp->tophad1_bjet().size();
