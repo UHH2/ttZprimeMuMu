@@ -21,10 +21,10 @@ namespace uhh2examples {
       explicit ttZPrimeTTBarGenStudyModule(Context & ctx);
       virtual bool process(Event & event) override;
     private:
-      unique_ptr<AnalysisModule> ttgenprod, mc_lumi_weight, reco_tt_had, disc_tt_had_cm, disc_tt_had_chi2,disc_tt_had_cm4jets,disc_tt_had_chi24jets,disc_tt_had_cm5jets,disc_tt_had_chi25jets;
+      unique_ptr<AnalysisModule> ttgenprod, mc_lumi_weight, reco_tt_had, disc_tt_had_cm, disc_tt_had_chi2,disc_tt_had_cm4jets,disc_tt_had_chi24jets,disc_tt_had_cm5jets,disc_tt_had_chi25jets, disc_tt_had_dr;
       Event::Handle<TTbarGen> h_ttbargen;
       unique_ptr<Selection> m_topdrmc_sel,m_topdrmc4jets_sel, m_topdrmc5jets_sel, njet_sel,nmuon_sel, jetQ_sel;
-      unique_ptr<Hists> h_ttbargen_study, h_2MuTopHadRecoCM, h_2MuTopHadRecoChi2,h_2MuTopHadRecoCM4Jets,h_2MuTopHadRecoChi24Jets,h_ttbargen_study4jets,h_2MuTopHadRecoCM5Jets,h_2MuTopHadRecoChi25Jets,h_ttbargen_study5jets;
+      unique_ptr<Hists> h_ttbargen_study, h_2MuTopHadRecoCM, h_2MuTopHadRecoChi2,h_2MuTopHadRecoCM4Jets,h_2MuTopHadRecoChi24Jets,h_ttbargen_study4jets,h_2MuTopHadRecoCM5Jets,h_2MuTopHadRecoChi25Jets,h_ttbargen_study5jets, h_2MuTopHadRecoDR;
       MuonId MuId;
   };
 
@@ -45,7 +45,9 @@ namespace uhh2examples {
     reco_tt_had.reset(new TTbarRecoHad(ctx, "TTbarRecoHad"));
 
     // disc_tt_had.reset(new TopDRMCDiscriminatorHad(ctx, "TTbarRecoHad"));
-    // h_2MuTopHadReco.reset(new TTbarRecoHadHypothesisHists(ctx,"MCTopRecoHad","TTbarRecoHad","TopDRMCHad"));
+
+    disc_tt_had_dr.reset(new TopDRMCDiscriminatorHad(ctx, "TTbarRecoHad"));
+    h_2MuTopHadRecoDR.reset(new TTbarRecoHadHypothesisHists(ctx,"MCTopRecoHadDR","TTbarRecoHad","TopDRMCHad"));
     disc_tt_had_cm.reset(new CorrectMatchDiscriminatorHad(ctx, "TTbarRecoHad"));
     h_2MuTopHadRecoCM.reset(new TTbarRecoHadHypothesisHists(ctx,"2Mu_TopRecoHadCM","TTbarRecoHad","CorrectMatchHad"));
 
@@ -65,7 +67,7 @@ namespace uhh2examples {
 
     m_topdrmc_sel.reset(new TopDRMCHadSelection(ctx,deltaR_max,"TTbarRecoHad","CorrectMatchHad"));
 
-    disc_tt_had_chi2.reset(new Chi2DiscriminatorHad(ctx, "TTbarRecoHad"));
+    disc_tt_had_chi2.reset(new Chi2Discriminator6Jets(ctx, "TTbarRecoHad"));
     h_2MuTopHadRecoChi2.reset(new TTbarRecoHadHypothesisHists(ctx,"2Mu_TopRecoHadChi2","TTbarRecoHad","Chi2Had"));
     // jetQ_sel.reset(new JetQuarkMatchingSelection(ctx, nmatchs,"TTbarRecoHad","Chi2Had"));
 
@@ -80,10 +82,11 @@ namespace uhh2examples {
     if(!event.is_valid(h_ttbargen)) return false;
 
     // mc_lumi_weight->process(event);
-
     reco_tt_had->process(event);
     if(event.jets->size() == 4)
     {
+      disc_tt_had_dr->process(event);
+      h_2MuTopHadRecoDR->fill(event);
       disc_tt_had_cm4jets->process(event);
       h_2MuTopHadRecoCM4Jets->fill(event);
       if(!m_topdrmc4jets_sel->passes(event)) return false;

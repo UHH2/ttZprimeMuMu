@@ -19,7 +19,7 @@
 #include "UHH2/common/include/LumiSelection.h"
 #include "UHH2/common/include/NSelections.h"
 #include "UHH2/common/include/PrintingModules.h"
-//#include "UHH2/common/include/TriggerSelection.h"
+#include "UHH2/common/include/TriggerSelection.h"
 #include "UHH2/common/include/MCWeight.h"
 #include "UHH2/common/include/AdditionalSelections.h"
 
@@ -102,7 +102,7 @@ namespace uhh2examples {
 
 
     common.reset(new CommonModules());
-    common->disable_metfilters();
+    // common->disable_metfilters();
     common->switch_jetlepcleaner(true);
     common->set_electron_id(EleId);
     common->set_muon_id(MuId);
@@ -118,8 +118,8 @@ namespace uhh2examples {
     // 2. set up selections
 
     //Preselection
-    //trigger_sel1.reset(new TriggerSelection("HLT_IsoMu24_v*")); //original: IsoMu24
-    //trigger_sel2.reset(new TriggerSelection("HLT_IsoTkMu24_v*")); //original: IsoMu24
+    trigger_sel1.reset(new TriggerSelection("HLT_IsoMu24_v*")); //original: IsoMu24
+    trigger_sel2.reset(new TriggerSelection("HLT_IsoTkMu24_v*")); //original: IsoMu24
     njet_sel.reset(new NJetSelection(2, -1));
     mu1_sel.reset(new NMuonSelection(1, -1));
     nbjet_sel.reset(new NJetSelection(2,-1,Btag_loose ));
@@ -128,7 +128,7 @@ namespace uhh2examples {
 
     // 3. Set up Hists classes:
     h_nocuts.reset(new AndHists(ctx, "NoCuts"));
-    //h_trigger.reset(new AndHists(ctx, "Trigger"));
+    h_trigger.reset(new AndHists(ctx, "Trigger"));
     h_cleaner.reset(new AndHists(ctx, "Cleaner"));
     h_1mu.reset(new AndHists(ctx, "1Mu"));
     h_2jets.reset(new AndHists(ctx, "2Jets"));
@@ -141,10 +141,9 @@ namespace uhh2examples {
    h_nocuts->fill(event);
 
     // trigger
-    //if(!(trigger_sel1->passes(event))) return false;
-    //if(!(trigger_sel1->passes(event) || trigger_sel2->passes(event))) return false;
+    if(!(trigger_sel1->passes(event) || trigger_sel2->passes(event))) return false;
 
-    //h_trigger->fill(event);
+    h_trigger->fill(event);
 
 
     bool pass_common = common->process(event);
