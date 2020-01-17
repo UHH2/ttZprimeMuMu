@@ -19,4 +19,5 @@ protected:
   uhh2::Event::Handle<TTbarGen> h_ttbargen;
 
   TH1F* mindrqq, *mindrqj, *matchsperjet, *ptResolution, *matchedevents, *matchedbjets, *matchedw, *matchedjets;
+  TH1F* matchedbjets1, *matchedbjets2, *matchedw1, *matchedw2 ,*matchedjets1, *matchedjets2; 
 };
