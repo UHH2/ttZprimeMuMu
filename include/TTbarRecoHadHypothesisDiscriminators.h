@@ -40,16 +40,16 @@ const TTbarRecoHadHypothesis * get_best_hypothesis(const std::vector<TTbarRecoHa
  * For numeric values of the means and widths for the masses used see the implementation in the .cxx file;
  * they are the 8TeV values.
  */
-class Chi2DiscriminatorHad: public uhh2::AnalysisModule {
+class Chi2Discriminator6Jets: public uhh2::AnalysisModule {
 
  public:
   struct cfg {
 
    std::string discriminator_label;
-   cfg(): discriminator_label("Chi2Had"){}
+   cfg(): discriminator_label("Chi26Jets"){}
   };
 
-  Chi2DiscriminatorHad(uhh2::Context&, const std::string&, const cfg& config=cfg());
+  Chi2Discriminator6Jets(uhh2::Context&, const std::string&, const cfg& config=cfg());
   virtual bool process(uhh2::Event&) override;
 
 
@@ -57,7 +57,7 @@ class Chi2DiscriminatorHad: public uhh2::AnalysisModule {
   virtual void set_Mthad_sigma(const float s){ Mthad_sigma_ = s;
 
 
-    if(s <= 0.) throw std::runtime_error("Chi2DiscriminatorHad::set_Mthad_sigma -- logic error: non-positive input value: "+std::to_string(s));
+    if(s <= 0.) throw std::runtime_error("Chi2Discriminator6Jets::set_Mthad_sigma -- logic error: non-positive input value: "+std::to_string(s));
   }
 
 
@@ -83,20 +83,37 @@ class Chi2Discriminator4Jets: public uhh2::AnalysisModule {
   virtual bool process(uhh2::Event&) override;
 
 
-  virtual void set_Mthad_mean (const float m){ Mthad_mean_  = m; }
-  virtual void set_Mthad_sigma(const float s){ Mthad_sigma_ = s;
+  virtual void set_Mthad_mean_2jets (const float m){ Mthad_mean_2jets_  = m; }
+  virtual void set_Mthad_sigma_2jets(const float s){ Mthad_sigma_2jets_ = s;
 
 
     if(s <= 0.) throw std::runtime_error("Chi2Discriminator4Jets::set_Mthad_sigma -- logic error: non-positive input value: "+std::to_string(s));
   }
 
-  virtual float Mthad_mean () const { return Mthad_mean_; }
-  virtual float Mthad_sigma() const { return Mthad_sigma_; }
+  virtual void set_Mthad_mean_3jets (const float m){ Mthad_mean_3jets_  = m; }
+  virtual void set_Mthad_sigma_3jets(const float s){ Mthad_sigma_3jets_ = s;
 
- private:
+
+    if(s <= 0.) throw std::runtime_error("Chi2Discriminator4Jets::set_Mthad_sigma -- logic error: non-positive input value: "+std::to_string(s));
+  }
+
+  virtual void set_Mw_mean_3jets (const float m){ Mw_mean_3jets_  = m; }
+  virtual void set_Mw_sigma_3jets(const float s){ Mw_sigma_3jets_ = s;
+
+
+    if(s <= 0.) throw std::runtime_error("Chi2Discriminator4Jets::set_Mthad_sigma -- logic error: non-positive input value: "+std::to_string(s));
+  }
+  virtual float Mthad_mean_2jets () const { return Mthad_mean_2jets_; }
+  virtual float Mthad_sigma_2jets() const { return Mthad_sigma_2jets_; }
+  virtual float Mthad_mean_3jets () const { return Mthad_mean_3jets_; }
+  virtual float Mthad_sigma_3jets() const { return Mthad_sigma_3jets_; }
+  virtual float Mw_mean_3jets () const { return Mw_mean_3jets_; }
+  virtual float Mw_sigma_3jets() const { return Mw_sigma_3jets_; }
+
+  private:
   cfg config;
   uhh2::Event::Handle<std::vector<TTbarRecoHadHypothesis>> h_hyps;
-  float Mthad_mean_, Mthad_sigma_;
+  float Mthad_mean_2jets_, Mthad_sigma_2jets_,Mthad_mean_3jets_,Mthad_sigma_3jets_,Mw_mean_3jets_,Mw_sigma_3jets_;
 };
 
 
@@ -117,21 +134,21 @@ virtual void set_Mthad_mean_2jets (const float m){ Mthad_mean_2jets_  = m; }
 virtual void set_Mthad_sigma_2jets(const float s){ Mthad_sigma_2jets_ = s;
 
 
-  if(s <= 0.) throw std::runtime_error("Chi2Discriminator4Jets::set_Mthad_sigma -- logic error: non-positive input value: "+std::to_string(s));
+  if(s <= 0.) throw std::runtime_error("Chi2Discriminator5Jets::set_Mthad_sigma -- logic error: non-positive input value: "+std::to_string(s));
 }
 
 virtual void set_Mthad_mean_3jets (const float m){ Mthad_mean_3jets_  = m; }
 virtual void set_Mthad_sigma_3jets(const float s){ Mthad_sigma_3jets_ = s;
 
 
-  if(s <= 0.) throw std::runtime_error("Chi2Discriminator4Jets::set_Mthad_sigma -- logic error: non-positive input value: "+std::to_string(s));
+  if(s <= 0.) throw std::runtime_error("Chi2Discriminator5Jets::set_Mthad_sigma -- logic error: non-positive input value: "+std::to_string(s));
 }
 
 virtual void set_Mw_mean_3jets (const float m){ Mw_mean_3jets_  = m; }
 virtual void set_Mw_sigma_3jets(const float s){ Mw_sigma_3jets_ = s;
 
 
-  if(s <= 0.) throw std::runtime_error("Chi2Discriminator4Jets::set_Mthad_sigma -- logic error: non-positive input value: "+std::to_string(s));
+  if(s <= 0.) throw std::runtime_error("Chi2Discriminator5Jets::set_Mthad_sigma -- logic error: non-positive input value: "+std::to_string(s));
 }
 virtual float Mthad_mean_2jets () const { return Mthad_mean_2jets_; }
 virtual float Mthad_sigma_2jets() const { return Mthad_sigma_2jets_; }

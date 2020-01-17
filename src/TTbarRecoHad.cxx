@@ -35,6 +35,8 @@ bool TTbarRecoHad::process(uhh2::Event & event) {
             int bjet1 = 0;
             int bjet2 = 0;
             int num = j;
+            float maxbtag1 = 0.;
+            float maxbtag2 = 0.;
             TTbarRecoHadHypothesis hyp;
             for (unsigned int k=0; k<n_jets; k++) {
                 // double dr1 = deltaR(event.jets->at(k),muons[0]);
@@ -42,29 +44,31 @@ bool TTbarRecoHad::process(uhh2::Event & event) {
                 // if(dr1 > 0.2 && dr2 > 0.2){
                 if(num%3==0) {
                     tophad1_v4 = tophad1_v4 + event.jets->at(k).v4();
-                    if(event.jets->at(k).btag_DeepJet() > 0.0614)
+                    hyp.add_tophad1_jet(event.jets->at(k));
+                    float btag = event.jets->at(k).btag_DeepJet();
+                    hadjets1++;
+                    if(btag > 0.0614 && btag > maxbtag1)
                     {
+
                       bjet1++;
-                      hyp.add_tophad1_bjet(event.jets->at(k));
-                    }
-                    else
-                    {
-                      hyp.add_tophad1_jet(event.jets->at(k));
-                      hadjets1++;
+                      maxbtag1 = btag;
+                      hyp.set_tophad1_bjet(event.jets->at(k));
+
                     }
                 }
 
                 if(num%3==1) {
+
+                    float btag = event.jets->at(k).btag_DeepJet();
+                    hyp.add_tophad2_jet(event.jets->at(k));
                     tophad2_v4 = tophad2_v4 + event.jets->at(k).v4();
-                    if(event.jets->at(k).btag_DeepJet() > 0.0614)
+                    hadjets2++;
+                    if(btag > 0.0614 && btag > maxbtag2)
                     {
                       bjet2++;
-                      hyp.add_tophad2_bjet(event.jets->at(k));
-                    }
-                    else
-                    {
-                      hyp.add_tophad2_jet(event.jets->at(k));
-                      hadjets2++;
+                      maxbtag2 = btag;
+                      hyp.set_tophad2_bjet(event.jets->at(k));
+
                     }
                 }
                 // }
@@ -76,32 +80,23 @@ bool TTbarRecoHad::process(uhh2::Event & event) {
             if(bjet1 > 0 && bjet2 > 0 && hadjets1>0 &&hadjets2>0) {
                 hyp.set_tophad1_v4(tophad1_v4);
                 hyp.set_tophad2_v4(tophad2_v4);
-                // Jet bjet1 = hyp.tophad1_jets().at(0);
-                // Jet bjet2 = hyp.tophad2_jets().at(0);
-                // for(auto & jet : hyp.tophad1_jets())
-                // {
-                //   if(bjet1.btag_DeepCSV() <= jet.btag_DeepCSV())
-                //   {
-                //     bjet1 = jet;
-                //   }
-                //   else
-                //   {
-                //     hyp.add_tophad1_wjet(jet);
-                //   }
-                // }
-                // for(auto & jet : hyp.tophad2_jets())
-                // {
-                //   if(bjet2.btag_DeepCSV() <= jet.btag_DeepCSV())
-                //   {
-                //     bjet2 = jet;
-                //   }
-                //   else
-                //   {
-                //     hyp.add_tophad2_wjet(jet);
-                //   }
-                // }
-                // hyp.set_tophad1_bjet(bjet1);
-                // hyp.set_tophad2_bjet(bjet2);
+                Jet bjet1 = hyp.tophad1_bjet();
+                Jet bjet2 = hyp.tophad2_bjet();
+                for(auto & jet : hyp.tophad1_jets())
+                {
+                  if(bjet1.btag_DeepJet() > jet.btag_DeepJet())
+                  {
+                    hyp.add_tophad1_wjet(jet);
+                  }
+                }
+                for(auto & jet : hyp.tophad2_jets())
+                {
+                  if(bjet2.btag_DeepJet() > jet.btag_DeepJet())
+                  {
+                    hyp.add_tophad2_wjet(jet);
+                  }
+                }
+
                 recoHyps.emplace_back(std::move(hyp));
 
             }

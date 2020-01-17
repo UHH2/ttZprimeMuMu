@@ -34,32 +34,42 @@ const TTbarRecoHadHypothesis * get_best_hypothesis(const std::vector<TTbarRecoHa
 }
 ////
 
-Chi2DiscriminatorHad::Chi2DiscriminatorHad(Context & ctx, const std::string & rechyps_name, const cfg & config_): config(config_){
+Chi2Discriminator6Jets::Chi2Discriminator6Jets(Context & ctx, const std::string & rechyps_name, const cfg & config_): config(config_){
 
   h_hyps = ctx.get_handle<vector<TTbarRecoHadHypothesis>>(rechyps_name);
 
-  Mthad_mean_  = 174.;
+  Mthad_mean_  = 172.;
   Mthad_sigma_ =  20.;
   Mw_mean_ = 84.;
   Mw_sigma_ = 13.;
 
 }
 
-bool Chi2DiscriminatorHad::process(uhh2::Event& event){
-
+bool Chi2Discriminator6Jets::process(uhh2::Event& event){
+  if(event.jets->size() < 6) return true;
   auto& hyps = event.get(h_hyps);
 
   for(auto& hyp : hyps){
+    auto NJets1 = hyp.tophad1_jets().size();
+    auto NJets2 = hyp.tophad2_jets().size();
+    if(NJets1 != 3 || NJets2 !=3)
+    {
+      hyp.set_discriminator(config.discriminator_label,  infinity);
+      continue;
+    }
+
     float chi2_w1 = numeric_limits<float>::infinity();
     float chi2_w2 = numeric_limits<float>::infinity();
-    auto& wjets1 = hyp.tophad1_jets();
-    auto& wjets2 = hyp.tophad2_jets();
+    auto& wjets1 = hyp.tophad1_wjets();
+    auto& wjets2 = hyp.tophad2_wjets();
     LorentzVector wmass1, wmass2;
+    int n1 = 0, n2 = 0;
     for(auto & wjet : wjets1)
     {
       wmass1 += wjet.v4();
+      n1 ++;
       float chi2 = pow((wmass1.M() - Mw_mean_) / Mw_sigma_, 2);
-      if(chi2 < chi2_w1)
+      if(chi2 < chi2_w1 && n1 > 1)
       {
           chi2_w1 = chi2;
           hyp.set_w1_v4(wmass1);
@@ -68,8 +78,9 @@ bool Chi2DiscriminatorHad::process(uhh2::Event& event){
     for(auto & wjet : wjets2)
     {
       wmass2 += wjet.v4();
+      n2 ++;
       float chi2 = pow((wmass2.M() - Mw_mean_) / Mw_sigma_, 2);
-      if(chi2 < chi2_w1)
+      if(chi2 < chi2_w2 && n2 > 1)
       {
           chi2_w2 = chi2;
           hyp.set_w2_v4(wmass2);
@@ -86,7 +97,7 @@ bool Chi2DiscriminatorHad::process(uhh2::Event& event){
     hyp.set_discriminator(config.discriminator_label+"_thad2", chi2_thad_2);
 
     hyp.set_discriminator(config.discriminator_label+"_whad2", chi2_w2);
-    hyp.set_discriminator(config.discriminator_label         , chi2_thad_1 + chi2_thad_2+chi2_w1+chi2_w2);
+    hyp.set_discriminator(config.discriminator_label         , (chi2_thad_1 + chi2_thad_2+chi2_w1+chi2_w2)/4);
 
   }
 
@@ -97,25 +108,85 @@ Chi2Discriminator4Jets::Chi2Discriminator4Jets(Context & ctx, const std::string 
 
   h_hyps = ctx.get_handle<vector<TTbarRecoHadHypothesis>>(rechyps_name);
 
-  Mthad_mean_  = 120.;
-  Mthad_sigma_ =  35.;
+  Mthad_mean_2jets_  = 120.;
+  Mthad_sigma_2jets_ =  35.;
+  Mthad_mean_3jets_  = 174.;
+  Mthad_sigma_3jets_ =  20.;
+  Mw_mean_3jets_ = 84.;
+  Mw_sigma_3jets_ = 13.;
 
 }
 
 bool Chi2Discriminator4Jets::process(uhh2::Event& event){
-
+  if(event.jets->size() != 4) return true;
   auto& hyps = event.get(h_hyps);
 
   for(auto& hyp : hyps){
+
+    auto NJets1 = hyp.tophad1_jets().size();
+    auto NJets2 = hyp.tophad2_jets().size();
+    if(NJets1+NJets2 != 4)
+    {
+      hyp.set_discriminator(config.discriminator_label,  infinity);
+      continue;
+    }
     const float Mthad_reco_1 = inv_mass(hyp.tophad1_v4());
     const float Mthad_reco_2 = inv_mass(hyp.tophad2_v4());
-    const double chi2_thad_1 = pow((Mthad_reco_1 - Mthad_mean_) / Mthad_sigma_, 2);
-    const double chi2_thad_2 = pow((Mthad_reco_2 - Mthad_mean_) / Mthad_sigma_, 2);
-    hyp.set_chi2_tt(chi2_thad_1 + chi2_thad_2);
-    hyp.set_discriminator(config.discriminator_label+"_thad1", chi2_thad_1);
-    hyp.set_discriminator(config.discriminator_label+"_thad2", chi2_thad_2);
-    hyp.set_discriminator(config.discriminator_label         , chi2_thad_1 + chi2_thad_2);
+    float chi2_w1 = numeric_limits<float>::infinity();
+    float chi2_w2 = numeric_limits<float>::infinity();
 
+    if(NJets1 == 2 && NJets2 ==2)
+    {
+
+      const double chi2_thad_1 = pow((Mthad_reco_1 - Mthad_mean_2jets_) / Mthad_sigma_2jets_, 2);
+      const double chi2_thad_2 = pow((Mthad_reco_2 - Mthad_mean_2jets_) / Mthad_sigma_2jets_, 2);
+      hyp.set_chi2_tt(chi2_thad_1 + chi2_thad_2);
+      hyp.set_discriminator(config.discriminator_label+"_thad1", chi2_thad_1);
+      hyp.set_discriminator(config.discriminator_label+"_thad2", chi2_thad_2);
+      hyp.set_discriminator(config.discriminator_label         , (chi2_thad_1 + chi2_thad_2)/2);
+    }
+    else if(NJets1 == 3)
+    {
+      auto& wjets1 = hyp.tophad1_wjets();
+      LorentzVector wmass1;
+      for(auto & wjet : wjets1)
+      {
+        wmass1 += wjet.v4();
+        float chi2 = pow((wmass1.M() - Mw_mean_3jets_) / Mw_sigma_3jets_, 2);
+        if(chi2 < chi2_w1)
+        {
+            chi2_w1 = chi2;
+            hyp.set_w1_v4(wmass1);
+        }
+      }
+      const float Mthad_reco_1 = inv_mass(hyp.tophad1_v4());
+      const double chi2_thad_1 = pow((Mthad_reco_1 - Mthad_mean_3jets_) / Mthad_sigma_3jets_, 2);
+      hyp.set_discriminator(config.discriminator_label+"_whad1", chi2_w1);
+      hyp.set_discriminator(config.discriminator_label+"_thad1", chi2_thad_1);
+      hyp.set_discriminator(config.discriminator_label         , (chi2_thad_1 + chi2_w1)/2);
+
+    }
+    else if(NJets2 == 3)
+    {
+      auto& wjets2 = hyp.tophad2_wjets();
+      LorentzVector wmass2;
+      for(auto & wjet : wjets2)
+      {
+        wmass2 += wjet.v4();
+        float chi2 = pow((wmass2.M() - Mw_mean_3jets_) / Mw_sigma_3jets_, 2);
+        if(chi2 < chi2_w2)
+        {
+            chi2_w2 = chi2;
+            hyp.set_w2_v4(wmass2);
+        }
+      }
+      const float Mthad_reco_2 = inv_mass(hyp.tophad2_v4());
+      const double chi2_thad_2 = pow((Mthad_reco_2 - Mthad_mean_3jets_) / Mthad_sigma_3jets_, 2);
+      hyp.set_discriminator(config.discriminator_label+"_whad2", chi2_w2);
+      hyp.set_discriminator(config.discriminator_label+"_thad2", chi2_thad_2);
+      hyp.set_discriminator(config.discriminator_label         , (chi2_thad_2 + chi2_w2)/2);
+
+    }
   }
 
   return true;
@@ -140,8 +211,11 @@ bool Chi2Discriminator5Jets::process(uhh2::Event& event){
   auto& hyps = event.get(h_hyps);
 
   for(auto& hyp : hyps){
-    auto NJets1 = hyp.tophad1_jets().size() + hyp.tophad1_bjet().size();
-    auto NJets2 = hyp.tophad2_jets().size() + hyp.tophad2_bjet().size();
+    auto NJets1 = hyp.tophad1_jets().size();
+    auto NJets2 = hyp.tophad2_jets().size();
+    float chi2_w1 = numeric_limits<float>::infinity();
+    float chi2_w2 = numeric_limits<float>::infinity();
+
     if(NJets1+NJets2 != 5)
     {
       hyp.set_discriminator(config.discriminator_label,  infinity);
@@ -158,8 +232,8 @@ bool Chi2Discriminator5Jets::process(uhh2::Event& event){
     }
     else if (NJets1 == 3)
     {
-        float chi2_w1 = numeric_limits<float>::infinity();
-        auto& wjets1 = hyp.tophad1_jets();
+
+        auto& wjets1 = hyp.tophad1_wjets();
         LorentzVector wmass1;
         for(auto & wjet : wjets1)
         {
@@ -184,8 +258,8 @@ bool Chi2Discriminator5Jets::process(uhh2::Event& event){
     }
     else if (NJets2 == 3)
     {
-        float chi2_w2 = numeric_limits<float>::infinity();
-        auto& wjets2 = hyp.tophad2_jets();
+
+        auto& wjets2 = hyp.tophad2_wjets();
         LorentzVector wmass2;
         for(auto & wjet : wjets2)
         {
@@ -205,7 +279,8 @@ bool Chi2Discriminator5Jets::process(uhh2::Event& event){
     hyp.set_chi2_tt(chi2_thad_1 + chi2_thad_2);
     hyp.set_discriminator(config.discriminator_label+"_thad1", chi2_thad_1);
     hyp.set_discriminator(config.discriminator_label+"_thad2", chi2_thad_2);
-    hyp.set_discriminator(config.discriminator_label         ,  chi2_thad_1 + chi2_thad_2);
+    if(NJets2 == 3) hyp.set_discriminator(config.discriminator_label         ,  (chi2_thad_1 + chi2_thad_2+chi2_w2)/3);
+    if(NJets1 == 3) hyp.set_discriminator(config.discriminator_label         ,  (chi2_thad_1 + chi2_thad_2+chi2_w1)/3);
 
   }
 
@@ -223,6 +298,13 @@ bool TopDRMCDiscriminatorHad::process(uhh2::Event & event){
     auto & hyps = event.get(h_hyps);
     const auto & ttbargen = event.get(h_ttbargen);
     for(auto & hyp: hyps){
+      auto NJets1 = hyp.tophad1_jets().size();
+      auto NJets2 = hyp.tophad2_jets().size();
+      if(NJets1 + NJets2 != 4)
+      {
+        hyp.set_discriminator(config.discriminator_label,  infinity);
+        continue;
+      }
         // auto& wjets1 = hyp.tophad1_wjets();
         // auto& wjets2 = hyp.tophad2_wjets();
         // if(wjets1.size() > 0 && wjets2.size() > 0)
@@ -267,7 +349,13 @@ bool TopDRMCDiscriminatorHad::process(uhh2::Event & event){
         auto deltar_sum1 = deltaR(ttbargen.Top().v4(), hyp.tophad1_v4()) + deltaR(ttbargen.Antitop().v4(), hyp.tophad2_v4());
         auto deltar_sum2 = deltaR(ttbargen.Top().v4(), hyp.tophad2_v4()) + deltaR(ttbargen.Antitop().v4(), hyp.tophad1_v4());
         double deltar_sum = deltar_sum1;
+        // std::cout << "/* message */" << '\n';
         if(deltar_sum2 < deltar_sum1) deltar_sum = deltar_sum2;
+        if(deltar_sum > 0.4)
+        {
+          hyp.set_discriminator(config.discriminator_label,  infinity);
+          continue;
+        }
         hyp.set_discriminator(config.discriminator_label, deltar_sum);
     }
     return true;
@@ -313,10 +401,10 @@ bool CorrectMatchDiscriminatorHad::process(uhh2::Event & event){
 
     // note that it is allowed that two partons from the hadronic ttbar decay match the same jet.
     for(auto & hyp: hyps){
-        auto had_jets1 = hyp.tophad1_jets();
-        auto had_jets2 = hyp.tophad2_jets();
-        auto had_bjets1 = hyp.tophad1_bjet();
-        auto had_bjets2 =  hyp.tophad2_bjet();
+        auto had_jets1 = hyp.tophad1_wjets();
+        auto had_jets2 = hyp.tophad2_wjets();
+        std::vector<Jet>  had_bjets1 = {hyp.tophad1_bjet()};
+        std::vector<Jet>  had_bjets2 =  {hyp.tophad2_bjet()};
         if(had_bjets1.size() != 1 || had_bjets2.size() != 1)
         {
             hyp.set_discriminator(config.discriminator_label, infinity);
@@ -425,10 +513,10 @@ bool CorrectMatchDiscriminator4Jets::process(uhh2::Event & event){
 
     // note that it is allowed that two partons from the hadronic ttbar decay match the same jet.
     for(auto & hyp: hyps){
-        auto had_jets1 = hyp.tophad1_jets();
-        auto had_jets2 = hyp.tophad2_jets();
-        auto had_bjets1 = hyp.tophad1_bjet();
-        auto had_bjets2 =  hyp.tophad2_bjet();
+        auto had_jets1 = hyp.tophad1_wjets();
+        auto had_jets2 = hyp.tophad2_wjets();
+        std::vector<Jet>  had_bjets1 = {hyp.tophad1_bjet()};
+        std::vector<Jet>  had_bjets2 =  {hyp.tophad2_bjet()};
 
         if(had_bjets1.size() != 1 || had_bjets2.size() != 1)
         {
@@ -548,10 +636,10 @@ bool CorrectMatchDiscriminator5Jets::process(uhh2::Event & event){
     }
     // note that it is allowed that two partons from the hadronic ttbar decay match the same jet.
     for(auto & hyp: hyps){
-        auto had_jets1 = hyp.tophad1_jets();
-        auto had_jets2 = hyp.tophad2_jets();
-        auto had_bjets1 = hyp.tophad1_bjet();
-        auto had_bjets2 =  hyp.tophad2_bjet();
+        auto had_jets1 = hyp.tophad1_wjets();
+        auto had_jets2 = hyp.tophad2_wjets();
+        std::vector<Jet>  had_bjets1 = {hyp.tophad1_bjet()};
+        std::vector<Jet>  had_bjets2 =  {hyp.tophad2_bjet()};
 
         if(had_bjets1.size() != 1 || had_bjets2.size() != 1)
         {

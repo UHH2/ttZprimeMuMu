@@ -27,8 +27,8 @@ public:
   const std::vector<Jet>& tophad2_jets() const{return m_tophad2_jets;}
   const std::vector<Jet>& tophad1_wjets() const{return m_tophad1_wjets;}
   const std::vector<Jet>& tophad2_wjets() const{return m_tophad2_wjets;}
-  const std::vector<Jet>& tophad1_bjet() const{return m_tophad1_bjet;}
-  const std::vector<Jet>& tophad2_bjet() const{return m_tophad2_bjet;}
+  const Jet & tophad1_bjet() const{return m_tophad1_bjet;}
+  const Jet & tophad2_bjet() const{return m_tophad2_bjet;}
 
 
 // get the discriminator value for this hypothesis; thows a runtime_error if it does not exist.
@@ -56,8 +56,8 @@ public:
   void add_tophad2_wjet(const Jet& j){m_tophad2_wjets.push_back(j);}
   void set_discriminator(const std::string & label, float discr){
       m_discriminators[label] = discr;}
-  void add_tophad1_bjet(const Jet& j){m_tophad1_bjet.push_back(j);}
-  void add_tophad2_bjet(const Jet& j){m_tophad2_bjet.push_back(j);}
+  void set_tophad1_bjet(const Jet& j){m_tophad1_bjet = j;}
+  void set_tophad2_bjet(const Jet& j){m_tophad2_bjet = j;}
 
 
 private:
@@ -69,8 +69,8 @@ private:
   std::vector<Jet> m_tophad2_jets;
   std::vector<Jet> m_tophad1_wjets;
   std::vector<Jet> m_tophad2_wjets;
-  std::vector<Jet> m_tophad1_bjet;
-  std::vector<Jet> m_tophad2_bjet;
+  Jet m_tophad1_bjet;
+  Jet m_tophad2_bjet;
   float m_ch2_tt;
 
   std::map<std::string, float> m_discriminators;
