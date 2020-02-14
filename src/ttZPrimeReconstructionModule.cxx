@@ -25,31 +25,41 @@ namespace uhh2examples {
     virtual bool process(Event & event) override;
 
   private:
-    unique_ptr<AnalysisModule> my_st, my_htlep, mc_lumi_weight, reco_tt_had, disc_tt_had_chi26jets, ttgenprod, disc_tt_had_chi24jets, disc_tt_had_chi25jets;
+    bool is_mc;
+    unique_ptr<AnalysisModule> my_st, my_htlep, mc_lumi_weight, mc_pu_reweight, reco_tt_had, disc_tt_had_chi26jets, ttgenprod, disc_tt_had_chi24jets, disc_tt_had_chi25jets;
     unique_ptr<Hists> h_2mu, h_2mu_4jets , h_2mu_chi2, h_3mu, h_4mu, h_2MuTopHadReco, h_2MuTopHadRecoChi26Jets,h_2MuTopHadRecoChi24Jets,h_2MuTopHadRecoChi25Jets, h_ttgenhists,h_DRMuJet;
+    unique_ptr<Hists> h_2MuTopHadRecoChi26Jets_chi,h_2MuTopHadRecoChi24Jets_chi,h_2MuTopHadRecoChi25Jets_chi,h_2mu_met;
     unique_ptr<Hists>  h_control, h_control_4jets , h_control_chi2,  h_control_TopHadReco, h_control_TopHadReco_chi2;
-    unique_ptr<Selection> m_top4jets_sel,m_top5jets_sel,m_top6jets_sel, deltaR_mu_jet_sel,njet_sel;
+    unique_ptr<Selection> m_top4jets_sel,m_top5jets_sel,m_top6jets_sel, deltaR_mu_jet_sel,njet_sel,met_2mu_sel;
     Event::Handle<TTbarGen> h_ttbargen;
   };
 
 
   ttZPrimeReconstructionModule::ttZPrimeReconstructionModule(Context & ctx){
         double m_dr_max = 10.;
-        double deltaR_min = 0.2;
-        mc_lumi_weight.reset(new MCLumiWeight(ctx));
+        double deltaR_min = 0.4;
+        is_mc = ctx.get("dataset_type") == "MC";
+        if (is_mc)
+        {
+          mc_lumi_weight.reset(new MCLumiWeight(ctx));
+          // std::string syst_pu = ctx.get("Systematic_PU");
+          mc_pu_reweight.reset(new MCPileupReweight(ctx));
+        }
+
         my_st.reset(new STCalculator(ctx));
         my_htlep.reset(new HTlepCalculator(ctx));
 
         deltaR_mu_jet_sel.reset(new DRMuJetSelection(deltaR_min));
         njet_sel.reset(new NJetSelection(4, -1));
-
+        met_2mu_sel.reset(new METSelection(100.));
+        h_2mu_met.reset(new AndHists(ctx,"2MuMET"));
         h_DRMuJet.reset(new AndHists(ctx,"DRMuJet"));
         h_2mu.reset(new AndHists(ctx, "2Mu"));
         h_2mu_chi2.reset(new AndHists(ctx, "2MuChi2"));
         h_2mu_4jets.reset(new AndHists(ctx, "2Mu4Jets"));
 
-//         h_3mu.reset(new AndHists(ctx, "3Mu"));
-//         h_4mu.reset(new AndHists(ctx, "4MuAndMore"));
+        h_3mu.reset(new AndHists(ctx, "3Mu"));
+        h_4mu.reset(new AndHists(ctx, "4MuAndMore"));
         // h_control.reset(new ttZPrimeControlHists(ctx, "Control"));
         // h_control_4jets.reset(new ttZPrimeControlHists(ctx, "Control4Jets"));
         // h_control_chi2.reset(new ttZPrimeControlHists(ctx, "ControlChi2"));
@@ -65,6 +75,10 @@ namespace uhh2examples {
         // h_2MuTopHadReco_chi2.reset(new TTbarRecoHadHypothesisHists(ctx,"2Mu_TopRecoHad_chi2","TTbarRecoHad","Chi2Had"));
         h_2MuTopHadRecoChi24Jets.reset(new TTbarRecoHadHypothesisHists(ctx,"2Mu_TopRecoHadChi24Jets","TTbarRecoHad","Chi24Jets"));
         h_2MuTopHadRecoChi25Jets.reset(new TTbarRecoHadHypothesisHists(ctx,"2Mu_TopRecoHadChi25Jets","TTbarRecoHad","Chi25Jets"));
+        h_2MuTopHadRecoChi26Jets_chi.reset(new TTbarRecoHadHypothesisHists(ctx,"2Mu_TopRecoHadChi26Jets_chi","TTbarRecoHad","Chi26Jets"));
+        // h_2MuTopHadReco_chi2.reset(new TTbarRecoHadHypothesisHists(ctx,"2Mu_TopRecoHad_chi2","TTbarRecoHad","Chi2Had"));
+        h_2MuTopHadRecoChi24Jets_chi.reset(new TTbarRecoHadHypothesisHists(ctx,"2Mu_TopRecoHadChi24Jets_chi","TTbarRecoHad","Chi24Jets"));
+        h_2MuTopHadRecoChi25Jets_chi.reset(new TTbarRecoHadHypothesisHists(ctx,"2Mu_TopRecoHadChi25Jets_chi","TTbarRecoHad","Chi25Jets"));
 
 
         // disc_tt_had.reset(new TopDRMCDiscriminatorHad(ctx, "TTbarRecoHad"));
@@ -73,7 +87,7 @@ namespace uhh2examples {
         m_top5jets_sel.reset(new TopDRMCHadSelection(ctx,10,"TTbarRecoHad","Chi25Jets"));
         m_top6jets_sel.reset(new TopDRMCHadSelection(ctx,20,"TTbarRecoHad","Chi26Jets"));
 
-        ttgenprod.reset(new TTbarGenProducer(ctx, "ttbargen", false));
+        // ttgenprod.reset(new TTbarGenProducer(ctx, "ttbargen", false));
         h_ttgenhists.reset(new TTbarGenHists(ctx, "ttgenhists"));
 
         h_ttbargen = ctx.get_handle<TTbarGen>("ttbargen");
@@ -82,7 +96,11 @@ namespace uhh2examples {
 
 
   bool ttZPrimeReconstructionModule::process(Event & event) {
+  if(is_mc)
+  {
     mc_lumi_weight->process(event);
+    mc_pu_reweight->process(event);
+  }
     if(!deltaR_mu_jet_sel->passes(event)) return false;
     h_DRMuJet->fill(event);
 
@@ -103,8 +121,11 @@ namespace uhh2examples {
     my_htlep->process(event);
     //
     int Nmuons = event.muons->size();
-    if(Nmuons == 2){
+    int Nelectrons = event.electrons->size();
+    if(Nmuons == 2 && Nelectrons == 0){
         h_2mu->fill(event);
+        if(!met_2mu_sel->passes(event)) return false;
+        h_2mu_met->fill(event);
         if(!njet_sel->passes(event)) return false;
         h_2mu_4jets->fill(event);
         reco_tt_had->process(event);
@@ -116,32 +137,34 @@ namespace uhh2examples {
           // ttgenprod->process(event);
           // h_ttgenhists->fill(event);
           if(!m_top6jets_sel->passes(event)) return false;
-
+          h_2MuTopHadRecoChi26Jets_chi->fill(event);
           // h_2MuTopHadReco_chi2->fill(event);
         }
         if(event.jets->size() == 5){
           disc_tt_had_chi25jets->process(event);
           h_2MuTopHadRecoChi25Jets->fill(event);
-          if(!m_top6jets_sel->passes(event)) return false;
+          if(!m_top5jets_sel->passes(event)) return false;
+          h_2MuTopHadRecoChi25Jets_chi->fill(event);
         }
         if(event.jets->size() == 4){
           disc_tt_had_chi24jets->process(event);
           h_2MuTopHadRecoChi24Jets->fill(event);
-          if(!m_top6jets_sel->passes(event)) return false;
+          if(!m_top4jets_sel->passes(event)) return false;
+          h_2MuTopHadRecoChi24Jets_chi->fill(event);
         }
         h_2mu_chi2->fill(event);
 
 
     }
 
-//     else if(Nmuons == 3)
-//     {
-//       h_3mu->fill(event);
-//     }
-//     else if(Nmuons >= 4)
-//     {
-//       h_4mu->fill(event);
-//     }
+    else if(Nmuons == 3 && Nelectrons == 0)
+    {
+      h_3mu->fill(event);
+    }
+    else if(Nmuons >= 4 && Nelectrons == 0)
+    {
+      h_4mu->fill(event);
+    }
 
     return true;
 
