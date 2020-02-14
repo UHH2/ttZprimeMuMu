@@ -12,6 +12,15 @@
 using namespace uhh2examples;
 using namespace uhh2;
 
+METSelection::METSelection(double met_max_) {
+  met_max = met_max_;
+}
+
+bool METSelection::passes(const Event &event) {
+  return (event.met->pt() < met_max);
+}
+
+
 
 DijetSelection::DijetSelection(float dphi_min_, float third_frac_max_): dphi_min(dphi_min_), third_frac_max(third_frac_max_){}
 
@@ -118,8 +127,8 @@ bool JetQuarkMatchingSelection::passes(const Event & event){
   if(!hyp) return false;
   jets.insert(jets.end(),hyp->tophad1_jets().begin(), hyp->tophad1_jets().end());
   jets.insert(jets.end(),hyp->tophad2_jets().begin(), hyp->tophad2_jets().end());
-  jets.insert(jets.end(),hyp->tophad1_bjet().begin(), hyp->tophad1_bjet().end());
-  jets.insert(jets.end(),hyp->tophad2_bjet().begin(), hyp->tophad2_bjet().end());
+  jets.insert(jets.end(),hyp->tophad1_bjet());
+  jets.insert(jets.end(),hyp->tophad2_bjet());
 
   // auto  jets = event.jets;
   const auto & ttbargen = event.get(h_ttbargen);

@@ -17,6 +17,16 @@ namespace uhh2examples {
  * maximum third jet pt fraction can be changed in the constructor.
  * The jets are assumed to be sorted in pt.
  */
+
+ class METSelection: public uhh2::Selection {
+ public:
+   METSelection(double met_max_);
+   virtual bool passes(const uhh2::Event &event) override;
+ private:
+   double met_max;
+ };
+
+
 class DijetSelection: public uhh2::Selection {
 public:
     DijetSelection(float dphi_min = 2.7f, float third_frac_max = 0.2f);
