@@ -58,7 +58,7 @@ namespace uhh2examples {
     unique_ptr<Selection> njet_sel, nmuon_sel, n_gen_muon_sel, nele_sel, n_gen_ele_sel, st_sel, lumi_sel, mu1_sel, trigger_sel, trigger_sel1, trigger_sel2, mttbargen_sel,nbjet_sel;
 
     // store the Hists collection as member variables.
-    unique_ptr<Hists> h_nocuts,h_trigger, h_lumi,h_cleaner,h_1mu, h_2jets,h_1bjet, h_st;
+    unique_ptr<Hists> h_nocuts,h_trigger, h_lumi,h_cleaner,h_1mu, h_2jets,h_2bjets, h_st;
 
 
 
@@ -103,14 +103,16 @@ namespace uhh2examples {
 
     common.reset(new CommonModules());
     // common->disable_metfilters();
-    common->switch_jetlepcleaner(true);
-    common->set_electron_id(EleId);
-    common->set_muon_id(MuId);
+    common->switch_jetlepcleaner(false);
+    // common->switch_jetPtSorter();
+    // common->switch_metcorrection();
+    // common->set_electron_id(EleId);
+    // common->set_muon_id(MuId);
     common->init(ctx);
     genjet_cleaner.reset(new GenJetCleaner(ctx, 30.0, 2.4));
     jetcleaner.reset(new JetCleaner(ctx,Jet_ID));
-    electroncleaner.reset(new ElectronCleaner(EleId));
-    muoncleaner.reset(new MuonCleaner(MuId));
+    // electroncleaner.reset(new ElectronCleaner(EleId));
+    // muoncleaner.reset(new MuonCleaner(MuId));
     syst_module.reset(new MCScaleVariation(ctx));
     my_st.reset(new STCalculator(ctx));
     my_htlep.reset(new HTlepCalculator(ctx));
@@ -121,7 +123,7 @@ namespace uhh2examples {
     trigger_sel1.reset(new TriggerSelection("HLT_IsoMu24_v*")); //original: IsoMu24
     trigger_sel2.reset(new TriggerSelection("HLT_IsoTkMu24_v*")); //original: IsoMu24
     njet_sel.reset(new NJetSelection(2, -1));
-    mu1_sel.reset(new NMuonSelection(1, -1));
+    mu1_sel.reset(new NMuonSelection(1, -1, MuId));
     nbjet_sel.reset(new NJetSelection(2,-1,Btag_loose ));
     st_sel.reset(new STSelection(st_min));
     //nmuon_sel.reset(new NMuonSelection(2, -1));
@@ -132,7 +134,7 @@ namespace uhh2examples {
     h_cleaner.reset(new AndHists(ctx, "Cleaner"));
     h_1mu.reset(new AndHists(ctx, "1Mu"));
     h_2jets.reset(new AndHists(ctx, "2Jets"));
-    h_1bjet.reset(new AndHists(ctx,"1BJet"));
+    h_2bjets.reset(new AndHists(ctx,"2BJets"));
     h_st.reset(new AndHists(ctx,"StSel"));
   }
    bool ttZPrimePreselectionModule::process(Event & event) {
@@ -153,9 +155,9 @@ namespace uhh2examples {
 
     jetcleaner->process(event);
 
-    muoncleaner->process(event);
+    // muoncleaner->process(event);
 
-    electroncleaner->process(event);
+    // electroncleaner->process(event);
 
     h_cleaner->fill(event);
 
@@ -169,7 +171,7 @@ namespace uhh2examples {
     my_htlep->process(event);
 
     if(!nbjet_sel->passes(event)) return false;
-    h_1bjet->fill(event);
+    h_2bjets->fill(event);
 
     if(!st_sel->passes(event)) return false;
     h_st->fill(event);
