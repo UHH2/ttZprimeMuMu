@@ -93,7 +93,7 @@
 			    <InputTree Name="AnalysisTree" />
 			    <OutputTree Name="AnalysisTree" />
 	</InputData>
-	<InputData Lumi="99872.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrime500_2016v3" Cacheable="&b_Cacheable;">
+	<InputData Lumi="99872.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM500_2016v3" Cacheable="&b_Cacheable;">
 			    &ZPrimeToMuMu500;
 			    <InputTree Name="AnalysisTree" />
 			    <OutputTree Name="AnalysisTree" />
@@ -431,11 +431,11 @@
             <!-- tell AnalysisModuleRunner NOT to use the MC event weight from SFrame; rather let
                  MCLumiWeight (called via CommonModules) calculate the MC event weight. The MC
                  event weight assigned by MCLumiWeight is InputData.Lumi / Cycle.TargetLumi. -->
-            <Item Name="use_sframe_weight" Value="true" />
+            <Item Name="use_sframe_weight" Value="false" />
 
             <!-- configuration for MCPileupReweight (run as part of CommonModules): -->
-            <Item Name="pileup_directory" Value="/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/data/2017/MyMCPileupHistogram.root" />
-	    <Item Name="pileup_directory_data" Value="/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/data/2017/MyDataPileupHistogram.root" />
+        <Item Name="pileup_directory" Value="/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/data/2016/MyMCPileupHistogram.root" />
+	    <Item Name="pileup_directory_data" Value="/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/data/2016/MyDataPileupHistogram.root" />
 
 	    <Item Name="ScaleVariationMuR"       Value="none" />
 	    <Item Name="ScaleVariationMuF"       Value="none" />

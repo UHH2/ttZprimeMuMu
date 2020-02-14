@@ -11,10 +11,23 @@
 
 
  <!-- <!ENTITY TTToSemiLeptonic SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_TTToSemiLeptonicTest.xml"> -->
-	<!ENTITY ZPrimeToMuMu300 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/MC_TTZPrimeToMuMu_M300_2016.xml">
-	<!ENTITY ZPrimeToMuMu700 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/MC_TTZPrimeToMuMu_M700_2016.xml">
-	<!ENTITY ZPrimeToMuMu1000 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/MC_TTZPrimeToMuMu_M1000_2016.xml">
-	<!ENTITY ZPrimeToMuMu1400 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/MC_TTZPrimeToMuMu_M1400_2016.xml">
+ <!ENTITY ZPrimeToMuMu300 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/MC_TTZPrimeToMuMu_M300_2016.xml">
+ <!ENTITY ZPrimeToMuMu400 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/TTZPrimeToMuMu_M-400_TuneCP5_13TeV-madgraph-pythia8_Summer16_v1.xml">
+ <!ENTITY ZPrimeToMuMu500 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/TTZPrimeToMuMu_M-500_TuneCP5_13TeV-madgraph-pythia8_Summer16_v1.xml">
+ <!ENTITY ZPrimeToMuMu600 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/TTZPrimeToMuMu_M-600_TuneCP5_13TeV-madgraph-pythia8_Summer16_v1.xml">
+ <!ENTITY ZPrimeToMuMu700 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/MC_TTZPrimeToMuMu_M700_2016.xml">
+ <!ENTITY ZPrimeToMuMu800 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/TTZPrimeToMuMu_M-800_TuneCP5_13TeV-madgraph-pythia8_Summer16_v1.xml">
+ <!ENTITY ZPrimeToMuMu900 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/TTZPrimeToMuMu_M-900_TuneCP5_13TeV-madgraph-pythia8_Summer16_v1.xml">
+ <!ENTITY ZPrimeToMuMu1000 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/MC_TTZPrimeToMuMu_M1000_2016.xml">
+ <!ENTITY ZPrimeToMuMu1200 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/TTZPrimeToMuMu_M-1200_TuneCP5_13TeV-madgraph-pythia8_Summer16_v1.xml">
+ <!ENTITY ZPrimeToMuMu1300 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/TTZPrimeToMuMu_M-1300_TuneCP5_13TeV-madgraph-pythia8_Summer16_v1.xml">
+ <!ENTITY ZPrimeToMuMu1400 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/MC_TTZPrimeToMuMu_M1400_2016.xml">
+ <!ENTITY ZPrimeToMuMu1500 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/TTZPrimeToMuMu_M-1500_TuneCP5_13TeV-madgraph-pythia8_Summer16_v1.xml">
+ <!ENTITY ZPrimeToMuMu1600 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/TTZPrimeToMuMu_M-1600_TuneCP5_13TeV-madgraph-pythia8_Summer16_v1.xml">
+ <!ENTITY ZPrimeToMuMu1700 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/TTZPrimeToMuMu_M-1700_TuneCP5_13TeV-madgraph-pythia8_Summer16_v1.xml">
+ <!ENTITY ZPrimeToMuMu1800 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/TTZPrimeToMuMu_M-1800_TuneCP5_13TeV-madgraph-pythia8_Summer16_v1.xml">
+ <!ENTITY ZPrimeToMuMu1900 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/TTZPrimeToMuMu_M-1900_TuneCP5_13TeV-madgraph-pythia8_Summer16_v1.xml">
+ <!ENTITY ZPrimeToMuMu2000 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/TTZPrimeToMuMu_M-2000_TuneCP5_13TeV-madgraph-pythia8_Summer16_v1.xml">
 
 	<!ENTITY WW SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_WW.xml">
 	<!ENTITY WZ SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_WZ.xml">
@@ -74,6 +87,74 @@
   <Package Name="SUHH2ttZPrime.par" />
 
 <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&PRESELdir;/" PostFix="" TargetLumi="&TargetLumi;" >
+	<InputData Lumi="99486.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM400_2016v3" Cacheable="&b_Cacheable;">
+					&ZPrimeToMuMu400;
+					<InputTree Name="AnalysisTree" />
+					<OutputTree Name="AnalysisTree" />
+	</InputData>
+	<InputData Lumi="99872.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM500_2016v3" Cacheable="&b_Cacheable;">
+					&ZPrimeToMuMu500;
+					<InputTree Name="AnalysisTree" />
+					<OutputTree Name="AnalysisTree" />
+	</InputData>
+	<InputData Lumi="99858.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM600_2016v3" Cacheable="&b_Cacheable;">
+					&ZPrimeToMuMu600;
+					<InputTree Name="AnalysisTree" />
+					<OutputTree Name="AnalysisTree" />
+	</InputData>
+
+	<InputData Lumi="99806.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM800_2016v3" Cacheable="&b_Cacheable;">
+					&ZPrimeToMuMu800;
+					<InputTree Name="AnalysisTree" />
+					<OutputTree Name="AnalysisTree" />
+	</InputData>
+	<InputData Lumi="98004.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM900_2016v3" Cacheable="&b_Cacheable;">
+					&ZPrimeToMuMu900;
+					<InputTree Name="AnalysisTree" />
+					<OutputTree Name="AnalysisTree" />
+	</InputData>
+	<InputData Lumi="98802.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM1200_2016v3" Cacheable="&b_Cacheable;">
+					&ZPrimeToMuMu1200;
+					<InputTree Name="AnalysisTree" />
+					<OutputTree Name="AnalysisTree" />
+	</InputData>
+	<InputData Lumi="99344.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM1300_2016v3" Cacheable="&b_Cacheable;">
+					&ZPrimeToMuMu1300;
+					<InputTree Name="AnalysisTree" />
+					<OutputTree Name="AnalysisTree" />
+	</InputData>
+
+	<InputData Lumi="99508.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM1500_2016v3" Cacheable="&b_Cacheable;">
+					&ZPrimeToMuMu1500;
+					<InputTree Name="AnalysisTree" />
+					<OutputTree Name="AnalysisTree" />
+	</InputData>
+	<InputData Lumi="99560.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM1600_2016v3" Cacheable="&b_Cacheable;">
+					&ZPrimeToMuMu1600;
+					<InputTree Name="AnalysisTree" />
+					<OutputTree Name="AnalysisTree" />
+	</InputData>
+	<InputData Lumi="98086.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM1700_2016v3" Cacheable="&b_Cacheable;">
+					&ZPrimeToMuMu1700;
+					<InputTree Name="AnalysisTree" />
+					<OutputTree Name="AnalysisTree" />
+	</InputData>
+
+	<InputData Lumi="98834.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM1800_2016v3" Cacheable="&b_Cacheable;">
+					&ZPrimeToMuMu1800;
+					<InputTree Name="AnalysisTree" />
+					<OutputTree Name="AnalysisTree" />
+	</InputData>
+	<InputData Lumi="99088.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM1900_2016v3" Cacheable="&b_Cacheable;">
+					&ZPrimeToMuMu1900;
+					<InputTree Name="AnalysisTree" />
+					<OutputTree Name="AnalysisTree" />
+	</InputData>
+	<InputData Lumi="98958.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM2000_2016v3" Cacheable="&b_Cacheable;">
+					&ZPrimeToMuMu2000;
+					<InputTree Name="AnalysisTree" />
+					<OutputTree Name="AnalysisTree" />
+	</InputData> -->
 
 <InputData Lumi="99898.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM300_2016v3" Cacheable="&b_Cacheable;">
 		    &ZPrimeToMuMu300;
@@ -353,11 +434,11 @@
             <!-- tell AnalysisModuleRunner NOT to use the MC event weight from SFrame; rather let
                  MCLumiWeight (called via CommonModules) calculate the MC event weight. The MC
                  event weight assigned by MCLumiWeight is InputData.Lumi / Cycle.TargetLumi. -->
-            <Item Name="use_sframe_weight" Value="true" />
+            <Item Name="use_sframe_weight" Value="false" />
 
             <!-- configuration for MCPileupReweight (run as part of CommonModules): -->
-            <Item Name="pileup_directory" Value="/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/data/2017/MyMCPileupHistogram.root" />
-	    <Item Name="pileup_directory_data" Value="/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/data/2017/MyDataPileupHistogram.root" />
+      <Item Name="pileup_directory" Value="/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/data/2016/MyMCPileupHistogram.root" />
+	    <Item Name="pileup_directory_data" Value="/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/data/2016/MyDataPileupHistogram.root" />
 
 	    <Item Name="ScaleVariationMuR"       Value="none" />
 	    <Item Name="ScaleVariationMuF"       Value="none" />

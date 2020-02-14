@@ -6,8 +6,8 @@
 	  <!ENTITY RECOdir         "/nfs/dust/cms/user/tiedemab/ttZPrime/Run2_10x/Reconstruction/NOMINAL/test/">
 	  <!ENTITY b_Cacheable     "False">
 	  <!ENTITY NEVT            "-1">
-          <!ENTITY PRESELdir       "/nfs/dust/cms/user/tiedemab/ttZPrime/Run2_10x/Preselection/NOMINAL/">
-          <!ENTITY PRESELfilename  "uhh2.AnalysisModuleRunner.">
+    <!ENTITY PRESELdir       "/nfs/dust/cms/user/tiedemab/ttZPrime/Run2_10x/Preselection/NOMINAL/">
+    <!ENTITY PRESELfilename  "uhh2.AnalysisModuleRunner.">
 	  <!ENTITY PROOFdir        "/nfs/dust/cms/user/tiedemab/.proof2">
 	  <!ENTITY IS_FOR_EFF      "false">
 
@@ -196,11 +196,11 @@
 		    <OutputTree Name="AnalysisTree" />
 </InputData> -->
 
-<!-- <InputData Lumi="92260.16399" NEventsMax="&NEVT;" Type="MC" Version="TTBar_2016v3" Cacheable="&b_Cacheable;">
+<InputData Lumi="92260.16399" NEventsMax="&NEVT;" Type="MC" Version="TTBar_2016v3" Cacheable="&b_Cacheable;">
 		    <In FileName="&TTBar;" Lumi="0.0"/>
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
-</InputData> -->
+</InputData>
 
 
 
@@ -361,8 +361,8 @@
             <Item Name="use_sframe_weight" Value="false" />
 
             <!-- configuration for MCPileupReweight (run as part of CommonModules): -->
-            <Item Name="pileup_directory" Value="/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/data/2017/MyMCPileupHistogram.root" />
-	    <Item Name="pileup_directory_data" Value="/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/data/2017/MyDataPileupHistogram.root" />
+            <Item Name="pileup_directory" Value="/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/data/2016/MyMCPileupHistogram.root" />
+	    <Item Name="pileup_directory_data" Value="/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/data/2016/MyDataPileupHistogram.root" />
 
 	    <Item Name="ScaleVariationMuR"       Value="none" />
 	    <Item Name="ScaleVariationMuF"       Value="none" />
