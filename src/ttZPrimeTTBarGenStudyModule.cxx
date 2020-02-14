@@ -23,12 +23,14 @@ namespace uhh2examples {
     private:
       unique_ptr<AnalysisModule> ttgenprod, mc_lumi_weight, reco_tt_had, disc_tt_had_cm, disc_tt_had_chi2,disc_tt_had_cm4jets,disc_tt_had_chi24jets,disc_tt_had_cm5jets,disc_tt_had_chi25jets, disc_tt_had_dr;
       Event::Handle<TTbarGen> h_ttbargen;
-      unique_ptr<Selection> m_topdrmc_sel,m_topdrmc4jets_sel, m_topdrmc5jets_sel, njet_sel,nmuon_sel, jetQ_sel;
+      unique_ptr<Selection> m_topdrmc_sel,m_topdrmc4jets_sel, m_topdrmc5jets_sel, njet_sel,nmuon_sel, jetQ_sel,met_2mu_sel;
       unique_ptr<Hists> h_ttbargen_study, h_2MuTopHadRecoCM, h_2MuTopHadRecoChi2,h_2MuTopHadRecoCM4Jets,h_2MuTopHadRecoChi24Jets,h_ttbargen_study4jets,h_2MuTopHadRecoCM5Jets,h_2MuTopHadRecoChi25Jets,h_ttbargen_study5jets, h_2MuTopHadRecoDR;
       MuonId MuId;
   };
 
   ttZPrimeTTBarGenStudyModule::ttZPrimeTTBarGenStudyModule(Context & ctx){
+    ctx.undeclare_all_event_output();
+
     double deltaR_max = 1.0;
     // int nmatchs = 1;
     MuId = AndId<Muon>(MuonID(Muon::CutBasedIdTight), PtEtaCut(30.0, 2.4), MuonIso(0.15));
@@ -38,7 +40,7 @@ namespace uhh2examples {
     ttgenprod.reset(new TTbarGenProducer(ctx, "ttbargen", false));
     njet_sel.reset(new NJetSelection(4, -1));
     nmuon_sel.reset(new NMuonSelection(2, 2));
-
+    met_2mu_sel.reset(new METSelection(100.));
     h_ttbargen = ctx.get_handle<TTbarGen>("ttbargen");
     h_ttbargen_study.reset(new ttZPrimeTTBarGenStudyHists(ctx, "TTbarGenStudy","TTbarRecoHad","Chi2Had","CorrectMatchHad"));
 
@@ -77,6 +79,7 @@ namespace uhh2examples {
 
   bool ttZPrimeTTBarGenStudyModule::process(Event & event){
     if(!nmuon_sel->passes(event)) return false;
+    if(!met_2mu_sel->passes(event)) return false;
     if(!njet_sel->passes(event)) return false;
     ttgenprod->process(event);
     if(!event.is_valid(h_ttbargen)) return false;
