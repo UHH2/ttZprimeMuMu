@@ -11,7 +11,7 @@ TTbarRecoHadHypothesisHists::TTbarRecoHadHypothesisHists(uhh2::Context & ctx, co
     double min=0;
     double max = 100;
     int nbins = 50;
-    if(discriminator_name=="Chi2*"){
+    if(discriminator_name=="Chi26Jets" ||discriminator_name=="Chi25Jets" || discriminator_name=="Chi24Jets"){
       name = "#Chi^{2}";
     }
     else{
