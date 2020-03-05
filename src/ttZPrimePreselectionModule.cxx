@@ -24,7 +24,7 @@
 #include "UHH2/common/include/AdditionalSelections.h"
 
 #include "UHH2/ttZPrime/include/AndHists.h"
-#include "UHH2/ttZPrime/include/MyEventVariables.h"
+// #include "UHH2/ttZPrime/include/MyEventVariables.h"
 #include "UHH2/ttZPrime/include/ttZPrimeSelections.h"
 
 
@@ -63,7 +63,7 @@ namespace uhh2examples {
 
 
 
-    MuonId MuId;
+    MuonId MuId, MuIdLoose;
     ElectronId EleId;
     JetId Btag_loose, Jet_ID;
     JetId Btag_medium, Btag_tight;
@@ -85,13 +85,14 @@ namespace uhh2examples {
         cout << " " << kv.first << " = " << kv.second << endl;
         }
 
-
-    double st_min = 600.;
+    // is_mc = ctx.get("dataset_type") == "MC";
+    // double st_min = 600.;
 
 
     // mc_lumi_weight.reset(new MCLumiWeight(ctx));
 
-    EleId = AndId<Electron>(ElectronID_Summer16_tight, PtEtaCut(30.0, 2.4));
+    EleId = AndId<Electron>(ElectronID_Summer16_loose, PtEtaCut(30.0, 2.4));
+    MuIdLoose = AndId<Muon>(MuonID(Muon::CutBasedIdLoose), PtEtaCut(30.0, 2.4), MuonIso(0.25));
     MuId = AndId<Muon>(MuonID(Muon::CutBasedIdTight), PtEtaCut(30.0, 2.4), MuonIso(0.15));
 
     Jet_ID = AndId<Jet>(JetPFID(JetPFID::WP_TIGHT_CHS), PtEtaCut(30.0, 2.4));
@@ -102,40 +103,39 @@ namespace uhh2examples {
 
 
     common.reset(new CommonModules());
-    // common->disable_metfilters();
-    common->switch_jetlepcleaner(false);
-    // common->switch_jetPtSorter();
-    // common->switch_metcorrection();
-    // common->set_electron_id(EleId);
-    // common->set_muon_id(MuId);
+    common->switch_jetlepcleaner(true);
+    common->set_jet_id(Jet_ID);
+    common->set_electron_id(EleId);
+    common->set_muon_id(MuIdLoose);
+    common->switch_jetPtSorter();
     common->init(ctx);
-    genjet_cleaner.reset(new GenJetCleaner(ctx, 30.0, 2.4));
-    jetcleaner.reset(new JetCleaner(ctx,Jet_ID));
+    // genjet_cleaner.reset(new GenJetCleaner(ctx, 30.0, 2.4));
+    // jetcleaner.reset(new JetCleaner(ctx,Jet_ID));
     // electroncleaner.reset(new ElectronCleaner(EleId));
     // muoncleaner.reset(new MuonCleaner(MuId));
-    syst_module.reset(new MCScaleVariation(ctx));
-    my_st.reset(new STCalculator(ctx));
-    my_htlep.reset(new HTlepCalculator(ctx));
+    // syst_module.reset(new MCScaleVariation(ctx));
+    // my_st.reset(new STCalculator(ctx));
+    // my_htlep.reset(new HTlepCalculator(ctx));
 
     // 2. set up selections
 
     //Preselection
-    trigger_sel1.reset(new TriggerSelection("HLT_IsoMu24_v*")); //original: IsoMu24
-    trigger_sel2.reset(new TriggerSelection("HLT_IsoTkMu24_v*")); //original: IsoMu24
+    // trigger_sel1.reset(new TriggerSelection("HLT_IsoMu24_v*")); //original: IsoMu24
+    // trigger_sel2.reset(new TriggerSelection("HLT_IsoTkMu24_v*")); //original: IsoMu24
     njet_sel.reset(new NJetSelection(2, -1));
     mu1_sel.reset(new NMuonSelection(1, -1, MuId));
     nbjet_sel.reset(new NJetSelection(2,-1,Btag_loose ));
-    st_sel.reset(new STSelection(st_min));
+    // st_sel.reset(new STSelection(st_min));
     //nmuon_sel.reset(new NMuonSelection(2, -1));
 
     // 3. Set up Hists classes:
     h_nocuts.reset(new AndHists(ctx, "NoCuts"));
-    h_trigger.reset(new AndHists(ctx, "Trigger"));
+    // h_trigger.reset(new AndHists(ctx, "Trigger"));
     h_cleaner.reset(new AndHists(ctx, "Cleaner"));
     h_1mu.reset(new AndHists(ctx, "1Mu"));
     h_2jets.reset(new AndHists(ctx, "2Jets"));
     h_2bjets.reset(new AndHists(ctx,"2BJets"));
-    h_st.reset(new AndHists(ctx,"StSel"));
+    // h_st.reset(new AndHists(ctx,"StSel"));
   }
    bool ttZPrimePreselectionModule::process(Event & event) {
    // mc_lumi_weight->process(event);
@@ -143,17 +143,17 @@ namespace uhh2examples {
    h_nocuts->fill(event);
 
     // trigger
-    if(!(trigger_sel1->passes(event) || trigger_sel2->passes(event))) return false;
-
-    h_trigger->fill(event);
+    // if(!(trigger_sel1->passes(event) || trigger_sel2->passes(event))) return false;
+    //
+    // h_trigger->fill(event);
 
 
     bool pass_common = common->process(event);
     if(!pass_common) return false;
 
-    genjet_cleaner->process(event);
+    // if(is_mc) genjet_cleaner->process(event);
 
-    jetcleaner->process(event);
+    // jetcleaner->process(event);
 
     // muoncleaner->process(event);
 
@@ -167,14 +167,14 @@ namespace uhh2examples {
 
     if(!njet_sel->passes(event)) return false;
     h_2jets->fill(event);
-    my_st->process(event);
-    my_htlep->process(event);
+    // my_st->process(event);
+    // my_htlep->process(event);
 
     if(!nbjet_sel->passes(event)) return false;
     h_2bjets->fill(event);
 
-    if(!st_sel->passes(event)) return false;
-    h_st->fill(event);
+    // if(!st_sel->passes(event)) return false;
+    // h_st->fill(event);
 
 
     return true;
