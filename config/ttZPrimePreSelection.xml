@@ -9,6 +9,18 @@
 	  <!ENTITY PROOFdir        "/nfs/dust/cms/user/tiedemab/.proof2">
 	  <!ENTITY IS_FOR_EFF      "false">
 
+	<!ENTITY DATA_B SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunB.xml">
+	<!ENTITY DATA_C SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunC.xml">
+  <!ENTITY DATA_D SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunD.xml">
+  <!ENTITY DATA_E SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunE.xml">
+  <!ENTITY DATA_F SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunF.xml">
+  <!ENTITY DATA_G SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunG.xml">
+  <!ENTITY DATA_H SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/DATA_SingleMuon2016_RunH.xml">
+
+
+
+
+
 
  <!-- <!ENTITY TTToSemiLeptonic SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2018/MC_TTToSemiLeptonicTest.xml"> -->
  <!ENTITY ZPrimeToMuMu300 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/datasets/2016v3/MC_TTZPrimeToMuMu_M300_2016.xml">
@@ -87,11 +99,61 @@
   <Package Name="SUHH2ttZPrime.par" />
 
 <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&PRESELdir;/" PostFix="" TargetLumi="&TargetLumi;" >
-	<InputData Lumi="99486.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM400_2016v3" Cacheable="&b_Cacheable;">
+
+	  <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_B_2016v3" Cacheable="&b_Cacheable;">
+	    &DATA_B;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+
+	  <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_C_2016v3" Cacheable="&b_Cacheable;">
+	    &DATA_C;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+
+	  <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_D_2016v3" Cacheable="&b_Cacheable;">
+	    &DATA_D;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+
+	  <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_E_2016v3" Cacheable="&b_Cacheable;">
+	    &DATA_E;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+
+	  <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_F_2016v3" Cacheable="&b_Cacheable;">
+	    &DATA_F;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+
+	  <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_G_2016v3" Cacheable="&b_Cacheable;">
+	    &DATA_G;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+
+	  <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_H_2016v3" Cacheable="&b_Cacheable;">
+	    &DATA_H;
+	    <InputTree Name="AnalysisTree" />
+	    <OutputTree Name="AnalysisTree" />
+	  </InputData>
+
+
+
+
+
+
+	<!-- <InputData Lumi="99486.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM400_2016v3" Cacheable="&b_Cacheable;">
 					&ZPrimeToMuMu400;
 					<InputTree Name="AnalysisTree" />
 					<OutputTree Name="AnalysisTree" />
 	</InputData>
+
+
 	<InputData Lumi="99872.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM500_2016v3" Cacheable="&b_Cacheable;">
 					&ZPrimeToMuMu500;
 					<InputTree Name="AnalysisTree" />
@@ -154,7 +216,7 @@
 					&ZPrimeToMuMu2000;
 					<InputTree Name="AnalysisTree" />
 					<OutputTree Name="AnalysisTree" />
-	</InputData> -->
+	</InputData>
 
 <InputData Lumi="99898.0" NEventsMax="&NEVT;" Type="MC" Version="ZPrimeM300_2016v3" Cacheable="&b_Cacheable;">
 		    &ZPrimeToMuMu300;
@@ -194,7 +256,7 @@
 		    <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<!-- QCD -->
+
 
 <InputData Lumi="0.02142397451" NEventsMax="&NEVT;" Type="MC" Version="QCDPt15to30_2016v3" Cacheable="&b_Cacheable;">
 		    &QCDPt15to30;
@@ -278,7 +340,7 @@
 		    <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<!-- WJets -->
+
 
 <InputData Lumi="258541518.6" NEventsMax="&NEVT;" Type="MC" Version="WJetsToLNuPt100To250_2016v3" Cacheable="&b_Cacheable;">
 		    &WJetsToLNuPt100To250;
@@ -301,7 +363,7 @@
 		    <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<!-- DYJets -->
+
 
 <InputData Lumi="46376.6826" NEventsMax="&NEVT;" Type="MC" Version="DYJetsToLLM50HT70to100_2016v3" Cacheable="&b_Cacheable;">
 		    &DYJetsToLLM50HT70to100;
@@ -344,7 +406,7 @@
 		    <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<!-- Single Top -->
+
 <InputData Lumi="3447373.715" NEventsMax="&NEVT;" Type="MC" Version="STtChannelAntiTop_2016v3" Cacheable="&b_Cacheable;">
 		    &STtChannelAntiTop;
 		    <InputTree Name="AnalysisTree" />
@@ -361,7 +423,7 @@
 		    <OutputTree Name="AnalysisTree" />
 </InputData>
 
-<!-- TT_V -->
+
 
 <InputData Lumi="5827337.386" NEventsMax="&NEVT;" Type="MC" Version="TTZ_1_2016v3" Cacheable="&b_Cacheable;">
 		    &TTZ_1;
@@ -372,7 +434,7 @@
 		    &TTZ_2;
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
-</InputData>
+</InputData> -->
 
 <!--
 <InputData Lumi="336939.1825" NEventsMax="&NEVT;" Type="MC" Version="TTToSemiLeptonic_2018" Cacheable="&b_Cacheable;">
@@ -389,15 +451,15 @@
             <Item Name="PrimaryVertexCollection" Value="offlineSlimmedPrimaryVertices" />
             <Item Name="ElectronCollection" Value="slimmedElectronsUSER" />
             <Item Name="MuonCollection" Value="slimmedMuonsUSER" />
- 	    <!-- <Item Name="TauCollection" Value="slimmedTaus" /> -->
+ 	          <!-- <Item Name="TauCollection" Value="slimmedTaus" /> -->
             <Item Name="JetCollection" Value="jetsAk4CHS" />
             <Item Name="METName" Value="slimmedMETs" />
             <Item Name="GenJetCollection" Value="slimmedGenJets" />
-	    <Item Name="TopJetCollection" Value="hotvrPuppi" />
-	    <Item Name="GenParticleCollection" Value="GenParticles" />
-	    <Item Name="GenInfoName" Value="genInfo" />
+	       		<!-- <Item Name="TopJetCollection" Value="hotvrPuppi" /> -->
+	          <Item Name="GenParticleCollection" Value="GenParticles" />
+	          <Item Name="GenInfoName" Value="genInfo" />
 
-            <Item Name="lumi_file" Value="/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/data/2017/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_v1.root" />
+            <Item Name="lumi_file" Value="/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/data/2016/Cert_271036-284044_13TeV_ReReco_07Aug2017_Collisions16_JSON.root" />
             <Item Name="lumihists_lumi_per_bin" Value="1000."/>
 
 
