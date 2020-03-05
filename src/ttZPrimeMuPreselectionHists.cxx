@@ -2,6 +2,7 @@
 #include "UHH2/core/include/Event.h"
 #include "UHH2/common/include/Utils.h"
 #include "UHH2/core/include/LorentzVector.h"
+#include "UHH2/common/include/MuonIds.h"
 #include <math.h>
 
 #include "TH1F.h"
@@ -12,7 +13,7 @@
 using namespace std;
 using namespace uhh2;
 
-ttZPrimeMuPreselectionHists::ttZPrimeMuPreselectionHists(Context & ctx, const string & dirname): Hists(ctx, dirname){
+ttZPrimeMuPreselectionHists::ttZPrimeMuPreselectionHists(Context & ctx, const string & dirname, const boost::optional<MuonID> & muonid_): Hists(ctx, dirname), muonid(muonid_){
 
    book<TH1F>("M_mumu", "M_{#mu#mu} [GeV]",50 , 0, 2500);
    book<TH1F>("delta_phi_mumu","#Delta#phi_{#mu#mu}",50,0,TMath::Pi());
@@ -32,11 +33,13 @@ ttZPrimeMuPreselectionHists::ttZPrimeMuPreselectionHists(Context & ctx, const st
    // use histogram pointers as members as in 'UHH2/common/include/ElectronHists.h'
   double weight = event.weight;
   assert(event.muons);
-  int Nmuons = event.muons->size();
+
   vector<Muon> muons;
   for(const auto & muon : *event.muons){
+    if(muonid && !(*muonid)(muon, event)) continue;
     muons.push_back(muon);
   }
+  int Nmuons = muons.size();
   if(Nmuons > 1){
     if((muons[0].charge()+muons[1].charge())== 0) hist("M_mu1mu2")->Fill((muons[0].v4()+muons[1].v4()).M(),weight);
   }
