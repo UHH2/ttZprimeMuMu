@@ -3,6 +3,7 @@
 #include "UHH2/common/include/EventHists.h"
 #include "UHH2/common/include/ElectronHists.h"
 #include "UHH2/common/include/MuonHists.h"
+#include "UHH2/common/include/MuonIds.h"
 #include "UHH2/common/include/JetHists.h"
 #include "UHH2/common/include/GenJetsHists.h"
 #include "UHH2/ttZPrime/include/MyEventHists.h"
@@ -15,9 +16,13 @@ using namespace uhh2;
 AndHists::AndHists(Context &ctx, const string & dirname):
   Hists(ctx, dirname+"_Counter")
 {
+  // bool is_mc = ctx.get("dataset_type") == "MC";
   // Counting Hist
   nevt = book<TH1F>("NEvt", "", 1,0,1);
 
+  // 
+  // MuonID MuIdTight = MuonID(Muon::CutBasedIdTight);
+  // MuonID MuIdLoose = MuonID(Muon::CutBasedIdLoose);
   // Add common hists to vector
 
   hists_vector.push_back(new LuminosityHists(ctx, dirname + "_Lumi"));
@@ -25,9 +30,13 @@ AndHists::AndHists(Context &ctx, const string & dirname):
   hists_vector.push_back(new MuonHists(ctx, dirname + "_Muon"));
   hists_vector.push_back(new ElectronHists(ctx, dirname + "_Electron"));
   hists_vector.push_back(new JetHists(ctx, dirname + "_Jet"));
-  hists_vector.push_back(new TopJetHists(ctx, dirname + "_Topjets"));
+  // hists_vector.push_back(new TopJetHists(ctx, dirname + "_Topjets"));
   hists_vector.push_back(new MyEventHists(ctx, dirname + "_MyEvent"));
-  hists_vector.push_back(new ttZPrimeMuPreselectionHists(ctx, dirname+"_ZPrimeMuMu"));
+  // if(is_mc)
+  // {
+  //   hists_vector.push_back(new ttZPrimeMuPreselectionHists(ctx, dirname+"_ZPrimeMuMu_Tight",MuIdTight));
+  //   hists_vector.push_back(new ttZPrimeMuPreselectionHists(ctx, dirname+"_ZPrimeMuMu_Loose",MuIdLoose));
+  // }
   hists_vector.push_back(new GenJetsHists(ctx, dirname+"_GenJets"));
 
   JetHists* bJetLooseHists = new JetHists(ctx, dirname + "_bJet_loose", 2);
