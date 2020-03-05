@@ -99,6 +99,16 @@ bool MMuMUSelection::passes(const Event & event){
   }
 }
 
+
+Mu1Mu2Selection::Mu1Mu2Selection(const boost::optional<MuonId> & muid_): muid(muid_){}
+
+bool Mu1Mu2Selection::passes(const uhh2::Event & event){
+if(event.muons->size() > 1) return ((*muid)(event.muons->at(0), event) && (*muid)(event.muons->at(1), event));
+else return false;
+}
+
+
+
 TopDRMCHadSelection::TopDRMCHadSelection(uhh2::Context &ctx, double dr_max, const std::string & hyps_name, const std::string & discriminator_name):
   m_dr_max(dr_max),
   h_hyps(ctx.get_handle<std::vector<TTbarRecoHadHypothesis>>(hyps_name)),
