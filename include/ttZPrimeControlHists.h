@@ -6,7 +6,6 @@
 
 
 
-
 /**  \brief Example class for booking and filling histograms
  *
  * NOTE: This class uses the 'hist' method to retrieve histograms.
@@ -20,6 +19,8 @@
     // use the same constructor arguments as Hists for forwarding:
     ttZPrimeControlHists(uhh2::Context & ctx, const std::string & dirname);
     virtual void fill(const uhh2::Event & ev) override;
+
+
 
 
 

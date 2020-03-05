@@ -19,8 +19,14 @@ ttZPrimeControl3LHists::ttZPrimeControl3LHists(Context & ctx, const string & dir
   drminmugenreco = book<TH1F> ("drminmugenreco","#DeltaR(#mu)_{gen,reco}",10,0.,1.);
   mmumureal = book<TH1F>("M_mu1mu2_Real", "M_{#mu_{1}#mu_{2}} Real [GeV]",50 , 0, 2500);
   mmumufake = book<TH1F>("M_mu1mu2_Fake", "M_{#mu_{1}#mu_{2}} Fake [GeV]",50 , 0, 2500);
-  mmumumix = book<TH1F>("M_mu1mu2_Mix", "M_{#mu_{1}#mu_{2}} Mix [GeV]",50 , 0, 2500);
-
+  MuFakePhi = book<TH1F>("phi_fakemu","#phi fake #mu",100,-M_PI,M_PI);
+  MuFakePt =  book<TH1F>("pt_fakemu","p_{T} fake #mu",100,0,500);
+  MuFakeEta = book<TH1F>("eta_fakemu","#eta fake #mu",100,-3,3);
+  // mmumumix = book<TH1F>("M_mu1mu2_Mix", "M_{#mu_{1}#mu_{2}} Mix [GeV]",50 , 0, 2500);
+  nevtFake = book<TH1F>("NEvtFake", "", 1,0,1);
+  // nevtMix = book<TH1F>("NEvtMix", "", 1,0,1);
+  nevtReal = book<TH1F>("NEvtReal", "", 1,0,1);
+  NFakeMuons = book <TH1F> ("NFakeMuons", "N_{#mu} Fake",10,0,10);
 
 
 
@@ -55,24 +61,41 @@ void ttZPrimeControl3LHists::fill(const uhh2::Event & e){
     //   }
     //     drminmugenreco->Fill(drmin,weight);
     // }
-    if((muonsR.at(0).charge()+muonsR.at(1).charge()) == 0){
-      double drmin1=deltaR(muonsR.at(0).v4(),muonsG.at(0).v4()), drmin2=deltaR(muonsR.at(1).v4(),muonsG.at(0).v4());
-      for(const auto & muon : muonsG){
-        double dr1 = deltaR(muonsR.at(0).v4(),muon.v4());
-        double dr2 = deltaR(muonsR.at(1).v4(),muon.v4());
-        if(dr1 < drmin1) drmin1 = dr1;
-        if(dr2 < drmin2) drmin2 = dr2;
+    vector<Muon> fakeMuons;
+    if(((muonsR.at(0).charge()+muonsR.at(1).charge()) == 0)){
+      unsigned int n_rmuon = 0, nfakes =0;
+      for(const auto & rmuon : muonsR){
+        double drmin=deltaR(rmuon.v4(),muonsG.at(0).v4());
+        for(const auto & muon : muonsG){
+          double dr = deltaR(rmuon.v4(),muon.v4());
+          if(dr < drmin) drmin = dr;
+        }
+        drminmugenreco->Fill(drmin,weight);
+        if(drmin < 0.2) n_rmuon++;
+        else{
+          nfakes ++;
+          MuFakePt->Fill(rmuon.pt(),weight);
+          MuFakeEta->Fill(rmuon.eta(), weight);
+          MuFakePhi->Fill(rmuon.phi(),weight);
+        }
       }
+      NFakeMuons->Fill(nfakes ++, weight);
       double m_mumu = (muonsR.at(0).v4()+muonsR.at(1).v4()).M();
-      if(drmin1 > 0.2 && drmin2 > 0.2)
+      if(n_rmuon == muonsR.size())
+      {
+        mmumureal->Fill(m_mumu,weight);
+        nevtReal->Fill(0.,weight);
+      }
+      // else if (drmin1 > 0.2 || drmin2 > 0.2)
+      // {
+      //   mmumumix->Fill(m_mumu,weight);
+      //   nevtMix->Fill(0.,weight);
+      // }
+      else
       {
         mmumufake->Fill(m_mumu,weight);
+        nevtFake->Fill(0.,weight);
       }
-      else if (drmin1 > 0.2 || drmin2 > 0.2)
-      {
-        mmumumix->Fill(m_mumu,weight);
-      }
-      else mmumureal->Fill(m_mumu,weight);
     }
   // }
 
