@@ -2,7 +2,7 @@
 
 #include "UHH2/core/include/fwd.h"
 #include "UHH2/core/include/Selection.h"
-
+#include "UHH2/common/include/ObjectIdUtils.h"
 #include "UHH2/ttZPrime/include/TTbarRecoHadHypothesis.h"
 #include "UHH2/ttZPrime/include/TTbarRecoHadHypothesisDiscriminators.h"
 #include "UHH2/common/include/TTbarGen.h"
@@ -50,6 +50,19 @@ private:
   double m_mmumu_min;
 
 };
+
+class Mu1Mu2Selection: public uhh2::Selection {
+public:
+  Mu1Mu2Selection(const boost::optional<MuonId> & muid = boost::none);
+  virtual bool passes(const uhh2::Event & event) override;
+private:
+   boost::optional<MuonId> muid;
+
+};
+
+
+
+
 
 class TopDRMCHadSelection: public uhh2::Selection{
 public:
