@@ -16,9 +16,10 @@ using namespace uhh2;
 
 
 ttZPrimeControl3LHists::ttZPrimeControl3LHists(Context & ctx, const string & dirname): Hists(ctx, dirname){
-  drminmugenreco = book<TH1F> ("drminmugenreco","#DeltaR(#mu)_{gen,reco}",10,0.,1.);
+  drminmugenreco = book<TH1F> ("drminmugenreco","#DeltaR(#mu)_{gen,reco}",50,0.,5.);
   mmumureal = book<TH1F>("M_mu1mu2_Real", "M_{#mu_{1}#mu_{2}} Real [GeV]",50 , 0, 2500);
   mmumufake = book<TH1F>("M_mu1mu2_Fake", "M_{#mu_{1}#mu_{2}} Fake [GeV]",50 , 0, 2500);
+  NMuonsGen = book<TH1F>("NMuonsGen","N_{#mu} Gen",10, 0, 10);
   MuFakePhi = book<TH1F>("phi_fakemu","#phi fake #mu",100,-M_PI,M_PI);
   MuFakePt =  book<TH1F>("pt_fakemu","p_{T} fake #mu",100,0,500);
   MuFakeEta = book<TH1F>("eta_fakemu","#eta fake #mu",100,-3,3);
@@ -34,7 +35,7 @@ ttZPrimeControl3LHists::ttZPrimeControl3LHists(Context & ctx, const string & dir
 
 }
 void ttZPrimeControl3LHists::fill(const uhh2::Event & e){
-
+  bool debug = false;
   if(e.isRealData) return;
   double weight = e.weight;
   // assert(e.muons);
@@ -45,8 +46,15 @@ void ttZPrimeControl3LHists::fill(const uhh2::Event & e){
     muonsR.push_back(muon);
   }
   for(const auto & muon : *e.genparticles){
-    if(abs(muon.pdgId()) != 13) muonsG.push_back(muon);
+    if(debug && abs(muon.pdgId()) == 13) std::cout << "GenParticleStatus:" << muon.status() << '\n';
+    if(abs(muon.pdgId()) == 13 && muon.status() == 23 && muon.v4().pt() > 30. && abs(muon.v4().eta()) < 2.4) muonsG.push_back(muon);
   }
+  if(debug)
+  {
+    std::cout << "N Gen Muons: " << muonsG.size() <<'\n';
+    std::cout << "N Reco Muons: " << muonsR.size() <<'\n';
+  }
+  NMuonsGen->Fill(muonsG.size(), weight);
 
   // int NMuR = muonsR.size(), NMuG = muonsG.size();
   // if(NMuR > 1 && NMuR == NMuG ){
@@ -61,11 +69,9 @@ void ttZPrimeControl3LHists::fill(const uhh2::Event & e){
     //   }
     //     drminmugenreco->Fill(drmin,weight);
     // }
-    vector<Muon> fakeMuons;
-    if(((muonsR.at(0).charge()+muonsR.at(1).charge()) == 0)){
       unsigned int n_rmuon = 0, nfakes =0;
       for(const auto & rmuon : muonsR){
-        double drmin=deltaR(rmuon.v4(),muonsG.at(0).v4());
+        double drmin=10;
         for(const auto & muon : muonsG){
           double dr = deltaR(rmuon.v4(),muon.v4());
           if(dr < drmin) drmin = dr;
@@ -79,8 +85,9 @@ void ttZPrimeControl3LHists::fill(const uhh2::Event & e){
           MuFakePhi->Fill(rmuon.phi(),weight);
         }
       }
-      NFakeMuons->Fill(nfakes ++, weight);
+      NFakeMuons->Fill(nfakes, weight);
       double m_mumu = (muonsR.at(0).v4()+muonsR.at(1).v4()).M();
+      if(debug) std::cout << "N Real Muons:"<< n_rmuon << '\n';
       if(n_rmuon == muonsR.size())
       {
         mmumureal->Fill(m_mumu,weight);
@@ -96,7 +103,8 @@ void ttZPrimeControl3LHists::fill(const uhh2::Event & e){
         mmumufake->Fill(m_mumu,weight);
         nevtFake->Fill(0.,weight);
       }
-    }
+
+
   // }
 
 }
