@@ -16,11 +16,11 @@ using namespace uhh2;
 AndHists::AndHists(Context &ctx, const string & dirname):
   Hists(ctx, dirname+"_Counter")
 {
-  // bool is_mc = ctx.get("dataset_type") == "MC";
+  bool is_mc = ctx.get("dataset_type") == "MC", is_blind =true;
   // Counting Hist
   nevt = book<TH1F>("NEvt", "", 1,0,1);
 
-  // 
+  //
   // MuonID MuIdTight = MuonID(Muon::CutBasedIdTight);
   // MuonID MuIdLoose = MuonID(Muon::CutBasedIdLoose);
   // Add common hists to vector
@@ -32,11 +32,10 @@ AndHists::AndHists(Context &ctx, const string & dirname):
   hists_vector.push_back(new JetHists(ctx, dirname + "_Jet"));
   // hists_vector.push_back(new TopJetHists(ctx, dirname + "_Topjets"));
   hists_vector.push_back(new MyEventHists(ctx, dirname + "_MyEvent"));
-  // if(is_mc)
-  // {
-  //   hists_vector.push_back(new ttZPrimeMuPreselectionHists(ctx, dirname+"_ZPrimeMuMu_Tight",MuIdTight));
-  //   hists_vector.push_back(new ttZPrimeMuPreselectionHists(ctx, dirname+"_ZPrimeMuMu_Loose",MuIdLoose));
-  // }
+  if(is_mc || !is_blind)
+  {
+    hists_vector.push_back(new ttZPrimeMuPreselectionHists(ctx, dirname+"_ZPrimeMuMu"));
+  }
   hists_vector.push_back(new GenJetsHists(ctx, dirname+"_GenJets"));
 
   JetHists* bJetLooseHists = new JetHists(ctx, dirname + "_bJet_loose", 2);

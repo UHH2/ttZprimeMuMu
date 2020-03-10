@@ -11,6 +11,7 @@
 #include "UHH2/common/include/ElectronIds.h"
 #include "UHH2/common/include/NSelections.h"
 #include "UHH2/common/include/TriggerSelection.h"
+#include "UHH2/common/include/CleaningModules.h"
 
 #include "UHH2/ttZPrime/include/AndHists.h"
 #include "UHH2/ttZPrime/include/ttZPrimeSelections.h"
@@ -34,8 +35,6 @@ namespace uhh2examples {
   private:
     bool is_mc, is_blind;
     unique_ptr<CommonModules> common;
-
-
 
 
     // declare the Selections to use.
@@ -122,7 +121,7 @@ namespace uhh2examples {
 
     if(!m_mumu_sel->passes(event)) return false;
     h_m_mumu_120->fill(event);
-    if(is_mc || !is_blind) h_mumu->fill(event);
+
 
 
     return true;
