@@ -64,8 +64,6 @@ namespace uhh2examples {
           mc_pu_reweight.reset(new MCPileupReweight(ctx));
         }
 
-        // my_st.reset(new STCalculator(ctx));
-        // my_htlep.reset(new HTlepCalculator(ctx));
 
         MuIdTight = AndId<Muon>(MuonID(Muon::CutBasedIdTight), PtEtaCut(30.0, 2.4), MuonIso(0.15));
         MuIdLoose = AndId<Muon>(MuonID(Muon::CutBasedIdLoose), PtEtaCut(30.0, 2.4), MuonIso(0.25));
