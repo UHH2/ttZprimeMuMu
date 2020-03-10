@@ -4,7 +4,7 @@
 #include "UHH2/ttZPrime/include/MyEventVariables.h"
 #include "UHH2/common/include/MCWeight.h"
 #include "UHH2/ttZPrime/include/ttZPrimeSelections.h"
-#include "UHH2/ttZPrime/include/ttZPrimeControlHists.h"
+// #include "UHH2/ttZPrime/include/ttZPrimeControlHists.h"
 #include "UHH2/common/include/TTbarGen.h"
 #include "UHH2/common/include/TTbarGenHists.h"
 #include "UHH2/common/include/NSelections.h"
@@ -36,7 +36,9 @@ namespace uhh2examples {
 
 
   ttZPrimeReconstructionModule::ttZPrimeReconstructionModule(Context & ctx){
-        double m_dr_max = 10.;
+        ctx.undeclare_all_event_output();
+
+        // double m_dr_max = 10.;
         double deltaR_min = 0.4;
         is_mc = ctx.get("dataset_type") == "MC";
         if (is_mc)
