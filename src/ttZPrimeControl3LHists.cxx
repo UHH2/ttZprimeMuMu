@@ -16,7 +16,8 @@ using namespace uhh2;
 
 
 ttZPrimeControl3LHists::ttZPrimeControl3LHists(Context & ctx, const string & dirname): Hists(ctx, dirname){
-  drminmugenreco = book<TH1F> ("drminmugenreco","#DeltaR(#mu)_{gen,reco}",50,0.,5.);
+  drminmugenreco = book<TH1F> ("drminmugenreco","#DeltaR(#mu)_{gen,reco}",100,0.,5.);
+  drminmurecogenb =  book<TH1F> ("drminmurecogenb","#DeltaR(#mu,b)_{reco,gen}",100,0.,5.);
   mmumureal = book<TH1F>("M_mu1mu2_Real", "M_{#mu_{1}#mu_{2}} Real [GeV]",50 , 0, 2500);
   mmumufake = book<TH1F>("M_mu1mu2_Fake", "M_{#mu_{1}#mu_{2}} Fake [GeV]",50 , 0, 2500);
   NMuonsGen = book<TH1F>("NMuonsGen","N_{#mu} Gen",10, 0, 10);
@@ -35,19 +36,21 @@ ttZPrimeControl3LHists::ttZPrimeControl3LHists(Context & ctx, const string & dir
 
 }
 void ttZPrimeControl3LHists::fill(const uhh2::Event & e){
-  bool debug = false;
+  bool debug = true;
+  if(debug) std::cout << "New Event" << '\n';
   if(e.isRealData) return;
   double weight = e.weight;
   // assert(e.muons);
   // assert(e.electrons);
   vector<Muon> muonsR;
-  vector<GenParticle> muonsG;
+  vector<GenParticle> muonsG, bQuarks;
   for(const auto & muon : *e.muons){
     muonsR.push_back(muon);
   }
   for(const auto & muon : *e.genparticles){
     if(debug && abs(muon.pdgId()) == 13) std::cout << "GenParticleStatus:" << muon.status() << '\n';
-    if(abs(muon.pdgId()) == 13 && muon.status() == 23 && muon.v4().pt() > 30. && abs(muon.v4().eta()) < 2.4) muonsG.push_back(muon);
+    if(abs(muon.pdgId()) == 13 && muon.status() == 23) muonsG.push_back(muon);
+    if(abs(muon.pdgId()) == 5 && muon.status() == 23) bQuarks.push_back(muon);
   }
   if(debug)
   {
@@ -61,28 +64,55 @@ void ttZPrimeControl3LHists::fill(const uhh2::Event & e){
     // std::cout << "test2" << '\n';
     // for(int i = 0; i < NMuR; i++)
     // {
-    //   double drmin=deltaR(muonsR.at(i).v4(),muonsG.at(0).v4());
+    //   double drmin_muons=deltaR(muonsR.at(i).v4(),muonsG.at(0).v4());
     //   for(int k = 0; k < i; k++)
     //   {
     //     double dr = deltaR(muonsR.at(i).v4(),muonsG.at(k).v4());
-    //     if(dr < drmin) drmin = dr;
+    //     if(dr < drmin_muons) drmin_muons = dr;
     //   }
-    //     drminmugenreco->Fill(drmin,weight);
+    //     drmin_muonsmugenreco->Fill(drmin_muons,weight);
     // }
+      bool muons_used_already[muonsG.size()] = {false};
+      bool bquarks_used_already[bQuarks.size()] = {false};
       unsigned int n_rmuon = 0, nfakes =0;
       for(const auto & rmuon : muonsR){
-        double drmin=10;
-        for(const auto & muon : muonsG){
-          double dr = deltaR(rmuon.v4(),muon.v4());
-          if(dr < drmin) drmin = dr;
+        if(debug)std::cout << "New Reco Muon !!!!!!!!!!!!!!!!!!" << '\n';
+        double drmin_muons=10 , drmin_bquarks = 10;
+        for(unsigned int i = 0; i < muonsG.size(); i++){
+          double dr = deltaR(rmuon.v4(),muonsG.at(i).v4());
+          if(dr < drmin_muons && !muons_used_already [i])
+          {
+           drmin_muons = dr;
+          }
+          if(debug)
+          {
+            std::cout << "MotherId:" << (muonsG.at(i).mother(e.genparticles))->pdgId() << '\n';
+            std::cout << "GenMuPt:" << muonsG.at(i).pt() << '\n';
+            std::cout << "GenMuEta:" << muonsG.at(i).eta() << '\n';
+            std::cout << "GenMuPhi:" << muonsG.at(i).phi() << '\n';
+          }
+          if(debug) std::cout <<"DeltaRMin: "<< dr << '\n';
+          if(dr < 0.2) muons_used_already [i] = true;
+          if(debug) std::cout <<"Used muons_used_already:"<< muons_used_already [i]  << '\n';
         }
-        drminmugenreco->Fill(drmin,weight);
-        if(drmin < 0.2) n_rmuon++;
+
+        drminmugenreco->Fill(drmin_muons,weight);
+        if(drmin_muons < 0.2) n_rmuon++;
         else{
-          nfakes ++;
-          MuFakePt->Fill(rmuon.pt(),weight);
-          MuFakeEta->Fill(rmuon.eta(), weight);
-          MuFakePhi->Fill(rmuon.phi(),weight);
+          for (unsigned int i = 0; i < bQuarks.size(); i++)
+          {
+            double dr = deltaR(rmuon.v4(),bQuarks.at(i).v4());
+            if(dr < drmin_bquarks && !bquarks_used_already[i]) drmin_bquarks = dr;
+            if(dr <0.2) bquarks_used_already[i] = true;
+          }
+          drminmurecogenb->Fill(drmin_bquarks, weight);
+          if(drmin_bquarks < 0.2) n_rmuon++;
+          else{
+            nfakes ++;
+            MuFakePt->Fill(rmuon.pt(),weight);
+            MuFakeEta->Fill(rmuon.eta(), weight);
+            MuFakePhi->Fill(rmuon.phi(),weight);
+          }
         }
       }
       NFakeMuons->Fill(nfakes, weight);
@@ -93,7 +123,7 @@ void ttZPrimeControl3LHists::fill(const uhh2::Event & e){
         mmumureal->Fill(m_mumu,weight);
         nevtReal->Fill(0.,weight);
       }
-      // else if (drmin1 > 0.2 || drmin2 > 0.2)
+      // else if (drmin_muons1 > 0.2 || drmin_muons2 > 0.2)
       // {
       //   mmumumix->Fill(m_mumu,weight);
       //   nevtMix->Fill(0.,weight);
