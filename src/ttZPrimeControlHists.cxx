@@ -46,18 +46,18 @@ ttZPrimeControlHists::ttZPrimeControlHists(Context & ctx, const string & dirname
     // cout << "Nmu=" << Nmuons << endl;
 
           // cout << "i=" << i << " ,j=" << j << endl;
-  if(electrons.size() > 1)
-  {
-    if((electrons[0].charge()+electrons[1].charge()) == 0)
-    {
-      LorentzVector ee = (electrons[0].v4() + electrons[1].v4());
-      hist("M_ee")->Fill(ee.M(), weight);
-      hist("delta_phi_ee")->Fill(abs(deltaPhi(electrons[0].v4(),electrons[1].v4())),weight);
-      hist("phi_ee")->Fill(ee.phi(),weight);
-      hist("eta_ee")->Fill(ee.eta(),weight);
-      hist("Pt_ee")->Fill(ee.pt(),weight);
-    }
-  }
+  // if(electrons.size() > 1)
+  // {
+  //   if((electrons[0].charge()+electrons[1].charge()) == 0)
+  //   {
+  //     LorentzVector ee = (electrons[0].v4() + electrons[1].v4());
+  //     hist("M_ee")->Fill(ee.M(), weight);
+  //     hist("delta_phi_ee")->Fill(abs(deltaPhi(electrons[0].v4(),electrons[1].v4())),weight);
+  //     hist("phi_ee")->Fill(ee.phi(),weight);
+  //     hist("eta_ee")->Fill(ee.eta(),weight);
+  //     hist("Pt_ee")->Fill(ee.pt(),weight);
+  //   }
+  // }
   if(electrons.size() > 0 && muons.size() > 0)
   {
     if((electrons[0].charge()+muons[0].charge()) == 0)

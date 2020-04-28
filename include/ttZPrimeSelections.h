@@ -47,16 +47,27 @@ public:
   MMuMUSelection(double mmumu_min);
   virtual bool passes(const uhh2::Event & event) override;
 private:
-  double m_mmumu_min;
+  const double m_mmumu_min;
 
 };
 
-class Mu1Mu2Selection: public uhh2::Selection {
+class MEleMuSelection: public uhh2::Selection {
 public:
-  Mu1Mu2Selection(const boost::optional<MuonId> & muid = boost::none);
+  MEleMuSelection( double melemu_min);
+  virtual bool passes(const uhh2::Event & event) override;
+private:
+  const double m_melemu_min;
+
+};
+
+class NMuIDSelection: public uhh2::Selection {
+public:
+  NMuIDSelection(const boost::optional<MuonId> & muid = boost::none, unsigned int NMu = 2);
   virtual bool passes(const uhh2::Event & event) override;
 private:
    boost::optional<MuonId> muid;
+   const unsigned int NMu;
+
 
 };
 

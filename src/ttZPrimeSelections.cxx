@@ -90,7 +90,7 @@ MMuMUSelection::MMuMUSelection(double mmumu_min):
 bool MMuMUSelection::passes(const Event & event){
   assert(event.muons);
   std::vector<Muon> muons = *event.muons;
-  if((event.muons->size() > 1) && ((muons[0].charge()+muons[1].charge())== 0)){
+  if((muons[0].charge()+muons[1].charge())== 0){
     double m = (muons[0].v4() + muons[1].v4()).M();
     return m > m_mmumu_min;
   }
@@ -99,12 +99,35 @@ bool MMuMUSelection::passes(const Event & event){
   }
 }
 
+MEleMuSelection::MEleMuSelection(double melemu_min):
+  m_melemu_min(melemu_min) {}
 
-Mu1Mu2Selection::Mu1Mu2Selection(const boost::optional<MuonId> & muid_): muid(muid_){}
+bool MEleMuSelection::passes(const Event & event){
+  assert(event.muons);
+  assert(event.electrons);
+  std::vector<Muon> muons = *event.muons;
+  std::vector<Electron> electrons = *event.electrons;
+  if((muons.at(0).charge()+electrons.at(0).charge())== 0){
+    double m = (muons.at(0).v4() + electrons.at(0).v4()).M();
+    return m > m_melemu_min;
+  }
+  else{
+    return false;
+  }
+}
 
-bool Mu1Mu2Selection::passes(const uhh2::Event & event){
-if(event.muons->size() > 1) return ((*muid)(event.muons->at(0), event) && (*muid)(event.muons->at(1), event));
-else return false;
+
+NMuIDSelection::NMuIDSelection(const boost::optional<MuonId> & muid_, unsigned int NMu_):
+muid(muid_),
+NMu(NMu_){}
+
+bool NMuIDSelection::passes(const uhh2::Event & event){
+  bool rightID = true;
+  if (NMu > event.muons->size()) throw std::runtime_error("Insufficient muons: "+std::to_string(NMu)+" muons are required but "+std::to_string(event.muons->size())+" are available" );
+    for (unsigned int k = 0; k < NMu; k++){
+    rightID &= (*muid)(event.muons->at(k), event);
+  }
+  return (rightID);
 }
 
 

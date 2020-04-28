@@ -11,6 +11,9 @@ public:
   ttZPrimeControl3LHists(uhh2::Context & ctx, const std::string & dirname);
   virtual void fill(const uhh2::Event & e) override;
 protected:
-  TH1F *drminmugenreco, *mmumureal, *mmumufake, *mmumumix, *nevtFake ,*nevtMix ,*nevtReal, *NFakeMuons;
-  TH1F *MuFakePhi, *MuFakePt, *MuFakeEta;
+  TH1F *drminmugenreco, *mmumureal, *mmumufake, *mmumumix, *nevtFake ,*nevtMix ,*nevtReal, *NFakeMuons, *NMuonsGen, *NPromtMuons;
+  TH1F *MuFakePhi, *MuFakePt, *MuFakeEta, *MuFakeIso, *MuPromtIso;
+  TH1F *drminmufakegenb, *drminmufakejet, *drminmufakegenp, *drminmufakebjet, *drminmugenrecomugenb;
+  TH1F *NBQuarksGen;
+  TH1F *memufake, *memureal;
 };
