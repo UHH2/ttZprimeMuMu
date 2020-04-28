@@ -11,23 +11,23 @@
 	  <!ENTITY PROOFdir        "/nfs/dust/cms/user/tiedemab/.proof2">
 	  <!ENTITY IS_FOR_EFF      "false">
 
-		<!-- <!ENTITY DATA_B "&PRESELdir;/&PRESELfilename;DATA.DATA_B_2016v3.root">
+		<!ENTITY DATA_B "&PRESELdir;/&PRESELfilename;DATA.DATA_B_2016v3.root">
 		<!ENTITY DATA_C "&PRESELdir;/&PRESELfilename;DATA.DATA_C_2016v3.root">
 	  <!ENTITY DATA_D "&PRESELdir;/&PRESELfilename;DATA.DATA_D_2016v3.root">
 	  <!ENTITY DATA_E "&PRESELdir;/&PRESELfilename;DATA.DATA_E_2016v3.root">
 	  <!ENTITY DATA_F "&PRESELdir;/&PRESELfilename;DATA.DATA_F_2016v3.root">
 	  <!ENTITY DATA_G "&PRESELdir;/&PRESELfilename;DATA.DATA_G_2016v3.root">
-	  <!ENTITY DATA_H "&PRESELdir;/&PRESELfilename;DATA.DATA_H_2016v3.root"> -->
+	  <!ENTITY DATA_H "&PRESELdir;/&PRESELfilename;DATA.DATA_H_2016v3.root">
 
 
 
 
-		<!-- <!ENTITY ZPrimeToMuMu300 "&PRESELdir;/&PRESELfilename;MC.ZPrimeM300_2016v3.root"> -->
-	<!--	<!ENTITY ZPrimeToMuMu700 "&PRESELdir;/&PRESELfilename;MC.ZPrimeM700_2016v3.root">
-		<!ENTITY ZPrimeToMuMu1000 "&PRESELdir;/&PRESELfilename;MC.ZPrimeM1000_2016v3.root"> -->
-		<!-- <!ENTITY ZPrimeToMuMu1400 "&PRESELdir;/&PRESELfilename;MC.ZPrimeM1400_2016v3.root"> -->
+		<!ENTITY ZPrimeToMuMu300 "&PRESELdir;/&PRESELfilename;MC.ZPrimeM300_2016v3.root">
+		<!ENTITY ZPrimeToMuMu700 "&PRESELdir;/&PRESELfilename;MC.ZPrimeM700_2016v3.root">
+		<!ENTITY ZPrimeToMuMu1000 "&PRESELdir;/&PRESELfilename;MC.ZPrimeM1000_2016v3.root">
+		<!ENTITY ZPrimeToMuMu1400 "&PRESELdir;/&PRESELfilename;MC.ZPrimeM1400_2016v3.root">
 
-		<!-- <!ENTITY WW "&PRESELdir;/&PRESELfilename;MC.WW_2016v3.root">
+		<!ENTITY WW "&PRESELdir;/&PRESELfilename;MC.WW_2016v3.root">
 		<!ENTITY WZ "&PRESELdir;/&PRESELfilename;MC.WZ_2016v3.root">
 		<!ENTITY ZZ "&PRESELdir;/&PRESELfilename;MC.ZZ_2016v3.root">
 
@@ -45,7 +45,7 @@
 		<!ENTITY QCDPt1400to1800 "&PRESELdir;/&PRESELfilename;MC.QCDPt1400to1800_2016v3.root">
 		<!ENTITY QCDPt1800to2400 "&PRESELdir;/&PRESELfilename;MC.QCDPt1800to2400_2016v3.root">
 		<!ENTITY QCDPt2400to3200 "&PRESELdir;/&PRESELfilename;MC.QCDPt2400to3200_2016v3.root">
-		<!ENTITY QCDPt3200toInf "&PRESELdir;/&PRESELfilename;MC.QCDPt3200toInf_2016v3.root">  -->
+		<!ENTITY QCDPt3200toInf "&PRESELdir;/&PRESELfilename;MC.QCDPt3200toInf_2016v3.root">
 
 		<!ENTITY TTBar "&PRESELdir;/&PRESELfilename;MC.TTBar_2016v3.root">
 
@@ -68,8 +68,9 @@
 		<!-- <!ENTITY STsChannel "&PRESELdir;/&PRESELfilename;MC.STsChannel_2016v3.root"> -->
 
 		<!ENTITY TTZ_1 "&PRESELdir;/&PRESELfilename;MC.TTZ_1_2016v3.root">
-		<!ENTITY TTZ_2 "&PRESELdir;/&PRESELfilename;MC.TTZ_1_2016v3.root">
+		<!ENTITY TTZ_2 "&PRESELdir;/&PRESELfilename;MC.TTZ_2_2016v3.root">
 
+		<!ENTITY TT_2L2Nu "&PRESELdir;/&PRESELfilename;MC.TT_2L2Nu_2016v3.root">
 
 
 
@@ -151,7 +152,7 @@
 		    <OutputTree Name="AnalysisTree" />
 </InputData> -->
 
-<!--
+
 <InputData Lumi="69352.89646" NEventsMax="&NEVT;" Type="MC" Version="WW_2016v3" Cacheable="&b_Cacheable;">
 		    <In FileName="&WW;" Lumi="0.0"/>
 		    <InputTree Name="AnalysisTree" />
@@ -168,7 +169,7 @@
 		    <OutputTree Name="AnalysisTree" />
 </InputData>
 
-
+<!--
 <InputData Lumi="0.02142397451" NEventsMax="&NEVT;" Type="MC" Version="QCDPt15to30_2016v3" Cacheable="&b_Cacheable;">
 		    <In FileName="&QCDPt15to30;" Lumi="0.0"/>
 		    <InputTree Name="AnalysisTree" />
@@ -245,11 +246,11 @@
 		    <OutputTree Name="AnalysisTree" />
 </InputData> -->
 
-<InputData Lumi="92260.16399" NEventsMax="&NEVT;" Type="MC" Version="TTBar_2016v3" Cacheable="&b_Cacheable;">
+<!-- <InputData Lumi="92260.16399" NEventsMax="&NEVT;" Type="MC" Version="TTBar_2016v3" Cacheable="&b_Cacheable;">
 		    <In FileName="&TTBar;" Lumi="0.0"/>
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
-</InputData>
+</InputData> -->
 
 
 
@@ -276,7 +277,7 @@
 
 
 
-<InputData Lumi="46376.6826" NEventsMax="&NEVT;" Type="MC" Version="DYJetsToLLM50HT70to100_2016v3" Cacheable="&b_Cacheable;">
+ <InputData Lumi="46376.6826" NEventsMax="&NEVT;" Type="MC" Version="DYJetsToLLM50HT70to100_2016v3" Cacheable="&b_Cacheable;">
 		    <In FileName="&DYJetsToLLM50HT70to100;" Lumi="0.0"/>
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
@@ -339,12 +340,17 @@
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
 </InputData>
-<InputData Lumi="1985760.606" NEventsMax="&NEVT;" Type="MC" Version="TTZ_2_2016v3" Cacheable="&b_Cacheable;">
+ <InputData Lumi="1985760.606" NEventsMax="&NEVT;" Type="MC" Version="TTZ_2_2016v3" Cacheable="&b_Cacheable;">
 		    <In FileName="&TTZ_2;" Lumi="0.0"/>
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
 </InputData>
 
+<InputData Lumi="834637.6907" NEventsMax="&NEVT;" Type="MC" Version="TT_2L2Nu_2016v3" Cacheable="&b_Cacheable;">
+		    <In FileName="&TT_2L2Nu;" Lumi="0.0"/>
+		    <InputTree Name="AnalysisTree" />
+		    <OutputTree Name="AnalysisTree" />
+</InputData>
 
 
 <!-- <InputData Lumi="1" NEventsMax="&NEVT;" Type="MC" Version="WJets" Cacheable="&b_Cacheable;">

@@ -84,6 +84,8 @@
 	<!ENTITY TTZ_1 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_TTZToLLNuNu_ext2_v1.xml">
 	<!ENTITY TTZ_2 SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/datasets/RunII_102X_v1/2016v3/MC_TTZToLLNuNu_ext1_v2.xml">
 
+	<!ENTITY TT_2L2Nu SYSTEM "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/common/UHH2-datasets/RunII_102X_v1/2016v3/MC_TTTo2L2Nu.xml">
+
 ]>
 
 
@@ -100,7 +102,7 @@
 
 <Cycle Name="uhh2::AnalysisModuleRunner" OutputDirectory="&PRESELdir;/" PostFix="" TargetLumi="&TargetLumi;" >
 
-	  <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_B_2016v3" Cacheable="&b_Cacheable;">
+	  <!-- <InputData Lumi="1" NEventsMax="&NEVT;" Type="DATA" Version="DATA_B_2016v3" Cacheable="&b_Cacheable;">
 	    &DATA_B;
 	    <InputTree Name="AnalysisTree" />
 	    <OutputTree Name="AnalysisTree" />
@@ -140,7 +142,7 @@
 	    &DATA_H;
 	    <InputTree Name="AnalysisTree" />
 	    <OutputTree Name="AnalysisTree" />
-	  </InputData>
+	  </InputData> -->
 
 
 
@@ -435,6 +437,12 @@
 		    <InputTree Name="AnalysisTree" />
 		    <OutputTree Name="AnalysisTree" />
 </InputData> -->
+
+<InputData Lumi="834637.6907" NEventsMax="&NEVT;" Type="MC" Version="TT_2L2Nu_2016v3" Cacheable="&b_Cacheable;">
+		    &TT_2L2Nu;
+		    <InputTree Name="AnalysisTree" />
+		    <OutputTree Name="AnalysisTree" />
+</InputData>
 
 <!--
 <InputData Lumi="336939.1825" NEventsMax="&NEVT;" Type="MC" Version="TTToSemiLeptonic_2018" Cacheable="&b_Cacheable;">
