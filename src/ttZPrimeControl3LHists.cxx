@@ -80,7 +80,7 @@ void ttZPrimeControl3LHists::fill(const uhh2::Event & e){
   for(auto & muon : *e.genparticles){
     // if(debug && abs(muon.pdgId()) == 13) std::cout << "GenParticleStatus:" << muon.status() << '\n';
     if(abs(muon.pdgId()) != 13 && abs(muon.pdgId()) != 5 && muon.status() ==1) genParticles.push_back(muon);
-    if(abs(muon.pdgId()) == 13 && muon.status() ==1) muonsG.push_back(muon);
+    if(abs(muon.pdgId()) == 13 && (muon.status() ==1 || || muon.status() == 23)) muonsG.push_back(muon);
     if(abs(muon.pdgId()) == 5 ) bQuarks.push_back(muon);
   }
   if(debug)
