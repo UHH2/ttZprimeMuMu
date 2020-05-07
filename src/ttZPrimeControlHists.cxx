@@ -25,7 +25,7 @@ ttZPrimeControlHists::ttZPrimeControlHists(Context & ctx, const string & dirname
    book<TH1F>("phi_mue","#phi_{#mue}",50,-TMath::Pi(),TMath::Pi());
    book<TH1F>("eta_mue","#eta_{#mue}",50,-3,3);
    book<TH1F>("Pt_mue", "P_{T,#mue} [GeV]",50 , 0, 1000);
-   SecoendMuIsoVsEta = book<TH2F>("SecoendMuIsoVsEta",";Iso muon 2; #eta muon 2",40,0.,0.5,40,-3,3);
+   SecoendMuIsoVsEta = book<TH2F>("SecoendMuIsoVsEta",";Iso muon 2; #eta muon 2",20,0.,0.5,20,-3,3);
  }
 
  void ttZPrimeControlHists::fill(const Event & event){
