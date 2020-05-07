@@ -10,6 +10,7 @@
 #include "UHH2/ttZPrime/include/ttZPrimeControlHists.h"
 #include "UHH2/ttZPrime/include/ttZPrimeSelections.h"
 #include "UHH2/ttZPrime/include/ttZPrimeControl3LHists.h"
+#include "UHH2/ttZPrime/include/ttZPrimeWeights.h"
 
 using namespace std;
 using namespace uhh2;
@@ -21,7 +22,7 @@ namespace uhh2examples {
     virtual bool process(Event & event) override;
   private:
     bool is_mc;
-    unique_ptr<AnalysisModule> mc_lumi_weight, mc_pu_reweight;
+    unique_ptr<AnalysisModule> mc_lumi_weight, mc_pu_reweight, mu_fake_rate_weight;
     unique_ptr<Selection>  nele_sel, oneTightMuSel, m_muele_sel, nmu_loose_sel, nmu_tight_sel;
     unique_ptr<Hists> h_e_control, h_emu, h_emu_control, h_emumu_tight,  h_emumu_tight_control, h_emumu_loose,  h_emumu_loose_control;
     unique_ptr<Hists> h_emumu_loose_control_gen, h_emumu_tight_control_gen;
@@ -40,9 +41,10 @@ namespace uhh2examples {
       mc_pu_reweight.reset(new MCPileupReweight(ctx));
     }
     MuIdTight = AndId<Muon>(MuonID(Muon::CutBasedIdTight), PtEtaCut(30.0, 2.4), MuonIso(0.15));
-    MuIdLoose = AndId<Muon>(MuonID(Muon::CutBasedIdLoose), PtEtaCut(30.0, 2.4), MuonIso(0.25));
+    MuIdLoose = AndId<Muon>(MuonID(Muon::CutBasedIdLoose), PtEtaCut(30.0, 2.4), MuonIso(0.15));
     EleId = AndId<Electron>(ElectronID_Summer16_tight, PtEtaCut(30.0, 2.4));
-
+    
+    mu_fake_rate_weight.reset(new MuFakeRateWeight("/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/scripts/MC.TT_2L2Nu_2016v3_FakeRateMap.txt",1));
     // electroncleaner.reset(new ElectronCleaner(EleId));
     // mouncleaner_tight.reset(new MuonCleaner(MuIdTight));
 
@@ -71,7 +73,7 @@ namespace uhh2examples {
       mc_lumi_weight->process(event);
       mc_pu_reweight->process(event);
     }
-
+    
     if(!nele_sel->passes(event)) return false;
     // electroncleaner->process(event);
 
@@ -83,10 +85,12 @@ namespace uhh2examples {
     h_emu->fill(event);
 
     if(!nmu_loose_sel->passes(event)) return false; //Möglicherweise muss der Cut geändert werden
+    auto old_weight = event.weight;
+    mu_fake_rate_weight->process(event);
     h_emumu_loose_control->fill(event);
     h_emumu_loose->fill(event);
     if(is_mc)h_emumu_loose_control_gen->fill(event);
-
+    event.weight = old_weight;
     // mouncleaner_tight->process(event);
     if(!nmu_tight_sel->passes(event)) return false;
     h_emumu_tight_control->fill(event);
