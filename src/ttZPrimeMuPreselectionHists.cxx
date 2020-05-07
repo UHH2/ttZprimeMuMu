@@ -41,7 +41,11 @@ ttZPrimeMuPreselectionHists::ttZPrimeMuPreselectionHists(Context & ctx, const st
   }
   int Nmuons = muons.size();
   if(Nmuons > 1){
-    if((muons[0].charge()+muons[1].charge())== 0) hist("M_mu1mu2")->Fill((muons[0].v4()+muons[1].v4()).M(),weight);
+    if((muons[0].charge()+muons[1].charge())== 0){
+      double m = (muons[0].v4()+muons[1].v4()).M();
+      hist("M_mu1mu2")->Fill(m,weight);
+      // std::cout << "DiMuonMass: " << m << '\n';
+    }
   }
   if(Nmuons > 1){
     // cout << "Nmu=" << Nmuons << endl;
