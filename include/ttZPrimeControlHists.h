@@ -19,7 +19,9 @@
     // use the same constructor arguments as Hists for forwarding:
     ttZPrimeControlHists(uhh2::Context & ctx, const std::string & dirname);
     virtual void fill(const uhh2::Event & ev) override;
-
+    
+    protected:
+        TH2F *SecoendMuIsoVsEta;
 
 
 

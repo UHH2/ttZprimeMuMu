@@ -5,6 +5,7 @@
 #include <math.h>
 
 #include "TH1F.h"
+#include "TH2F.h"
 #include <iostream>
 #include <vector>
 
@@ -24,6 +25,7 @@ ttZPrimeControlHists::ttZPrimeControlHists(Context & ctx, const string & dirname
    book<TH1F>("phi_mue","#phi_{#mue}",50,-TMath::Pi(),TMath::Pi());
    book<TH1F>("eta_mue","#eta_{#mue}",50,-3,3);
    book<TH1F>("Pt_mue", "P_{T,#mue} [GeV]",50 , 0, 1000);
+   SecoendMuIsoVsEta = book<TH2F>("SecoendMuIsoVsEta",";Iso muon 2; #eta muon 2",40,0.,0.5,40,-3,3);
  }
 
  void ttZPrimeControlHists::fill(const Event & event){
@@ -58,6 +60,7 @@ ttZPrimeControlHists::ttZPrimeControlHists(Context & ctx, const string & dirname
   //     hist("Pt_ee")->Fill(ee.pt(),weight);
   //   }
   // }
+  if(muons.size() > 1)SecoendMuIsoVsEta->Fill(muons.at(1).relIso(),muons.at(1).eta(), weight);
   if(electrons.size() > 0 && muons.size() > 0)
   {
     if((electrons[0].charge()+muons[0].charge()) == 0)
@@ -68,6 +71,7 @@ ttZPrimeControlHists::ttZPrimeControlHists(Context & ctx, const string & dirname
       hist("phi_mue")->Fill(mue.phi(),weight);
       hist("eta_mue")->Fill(mue.eta(),weight);
       hist("Pt_mue")->Fill(mue.pt(),weight);
+
     }
   }
-}
+ }
