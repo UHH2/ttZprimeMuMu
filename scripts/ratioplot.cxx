@@ -1,16 +1,23 @@
 void ratioplot() {
    // Define two gaussian histograms. Note the X and Y title are defined
    // at booking time using the convention "Hist_title ; X_title ; Y_title"
-   TString pathCon = "/nfs/dust/cms/user/tiedemab/ttZPrime/Run2_10x/Fake/NOMINAL/";
-   TString pathOut = "/nfs/dust/cms/user/tiedemab/ttZPrime/Run2_10x/Control/NOMINAL/";
-   TString filePerfix = "uhh2.AnalysisModuleRunner.MC.";
-
-   TFile* input = new TFile(pathOut+filePerfix+"TTBar.root","READ");
-   TH1F* h1 =(TH1F*) input->Get("3MuTight_ZPrimeMuMu/M_mu1mu2");
 
 
-   TFile* output = new TFile(pathOut+filePerfix+"TTBar_Fake.root","READ");
-   TH1F* h2 =(TH1F*) output->Get("M_mu1mu2");
+   TString filePerfix = "uhh2.AnalysisModuleRunner.";
+   
+//    TString pathOut = "/nfs/dust/cms/user/tiedemab/ttZPrime/Run2_10x/Control/NOMINAL/";
+//    TFile* input = new TFile(pathOut+filePerfix+"MC.TT_2L2Nu_2016v3.root","READ");
+//    TH1F* h1 =(TH1F*) input->Get("3MuTight_ZPrimeMuMu/M_mu1mu2");
+//    TH1F* h2 =(TH1F*) input->Get("3MuLoose_ZPrimeMuMu/M_mu1mu2");
+// 
+// 
+//    TFile* output = new TFile(pathOut+filePerfix+"MC.TT_2L2Nu_2016v3.root","READ");
+
+  TString pathCon = "/nfs/dust/cms/user/tiedemab/ttZPrime/Run2_10x/Fake/NOMINAL/";
+  TFile* input = new TFile(pathCon+filePerfix+"MC.TT_2L2Nu_2016v3.root","READ");   
+  TH1F* h1 =(TH1F*) input->Get("ElectronPlusMuMuTight/M_mue");
+  TH1F* h2 =(TH1F*) input->Get("ElectronPlusMuMuLoose/M_mue");
+
 
 
 
