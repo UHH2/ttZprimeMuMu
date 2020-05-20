@@ -63,15 +63,11 @@ ttZPrimeControlHists::ttZPrimeControlHists(Context & ctx, const string & dirname
   if(muons.size() > 1)SecoendMuIsoVsEta->Fill(muons.at(1).relIso(),muons.at(1).eta(), weight);
   if(electrons.size() > 0 && muons.size() > 0)
   {
-    if((electrons[0].charge()+muons[0].charge()) == 0)
-    {
       LorentzVector mue = (electrons[0].v4() + muons[0].v4());
       hist("M_mue")->Fill(mue.M(), weight);
       hist("delta_phi_mue")->Fill(abs(deltaPhi(muons[0].v4(),electrons[0].v4())),weight);
       hist("phi_mue")->Fill(mue.phi(),weight);
       hist("eta_mue")->Fill(mue.eta(),weight);
       hist("Pt_mue")->Fill(mue.pt(),weight);
-
     }
-  }
  }

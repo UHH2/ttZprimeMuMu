@@ -18,7 +18,8 @@ using namespace std;
 void Map ()
 {
   bool debug = true;
-  TString pathCon = "/nfs/dust/cms/user/tiedemab/ttZPrime/Run2_10x/Fake/NOMINAL/";
+//   TString pathCon = "/nfs/dust/cms/user/tiedemab/ttZPrime/Run2_10x/Fake/NOMINAL/";
+  TString pathCon = "/nfs/dust/cms/user/tiedemab/ttZPrime/Run2_10x/Control/NOMINAL/";
   TString filePerfix = "uhh2.AnalysisModuleRunner.";
 
   std::vector<TString> filenamesCon;
@@ -29,11 +30,15 @@ void Map ()
 
 
   std::vector<TString> histNamesCR;
-  histNamesCR.push_back("ElectronPlusMuMuLoose/SecoendMuIsoVsEta");
+//   histNamesCR.push_back("ElectronPlusMuMuLoose/SecoendMuIsoVsEta");
+  histNamesCR.push_back("3MuThirdMuonLoose/ThirdMuIsoVsEta");
+
 
 
   std::vector<TString> histNamesSR;
-  histNamesSR.push_back("ElectronPlusMuMuTight/SecoendMuIsoVsEta");
+//   histNamesSR.push_back("ElectronPlusMuMuTight/SecoendMuIsoVsEta");
+  histNamesSR.push_back("3MuThirdMuonTight/ThirdMuIsoVsEta");
+
 
 
 
@@ -57,10 +62,12 @@ void Map ()
   for(Int_t k = 0; k < files.size(); k++)//Loop over files
   {
     ofstream myfile;
-    myfile.open (filenamesCon.at(k)+"_FakeRateMap.txt");
+    myfile.open (filenamesCon.at(k)+"_FakeRateMapCheck.txt");
+//     myfile.open (filenamesCon.at(k)+"_FakeRateMap.txt");
     TH2F* histCR = (TH2F*) files.at(k)->Get(histNamesCR.at(0));
     TH2F* histSR = (TH2F*) files.at(k)->Get(histNamesSR.at(0));
-    TH2F* hist = (TH2F*)histSR->Clone(filenamesCon.at(k)+"_SecoendMuIsoVsEta");
+//     TH2F* hist = (TH2F*)histSR->Clone(filenamesCon.at(k)+"_SecoendMuIsoVsEta");
+    TH2F* hist = (TH2F*)histSR->Clone(filenamesCon.at(k)+"_ThirdMuIsoVsEta");
     hist->Divide(histCR);
     Int_t ybins = hist->GetNbinsY(), xbins = hist->GetNbinsX();
     for(Int_t x = 1; x <= xbins; x++)
@@ -71,17 +78,18 @@ void Map ()
         auto error = hist->GetBinError(x,y);
         double xmin = hist->GetXaxis()->GetBinLowEdge(x), xmax = hist->GetXaxis()->GetBinLowEdge(x)+hist->GetXaxis()->GetBinWidth(x);
         double ymin = hist->GetYaxis()->GetBinLowEdge(y), ymax = hist->GetYaxis()->GetBinLowEdge(y)+hist->GetYaxis()->GetBinWidth(y); 
-        if(value > 0.) myfile << xmin <<" " << xmax<<" " << ymin << " " << ymax << " " << value << " " << error <<"\n";
+        myfile << xmin <<" " << xmax<<" " << ymin << " " << ymax << " " << value << " " << error <<"\n";
       }
     }
     hist->Draw("COLZ");
     c1->Update();
-    c1->SaveAs("plots/"+filenamesCon.at(k)+"_SecoendMuIsoVsEtaRatioTest.png");
+//     c1->SaveAs("plots/"+filenamesCon.at(k)+"_SecoendMuIsoVsEtaRatio.png");
+    c1->SaveAs("plots/"+filenamesCon.at(k)+"_ThirdMuIsoVsEta.png");
     hist->Reset();
     histCR->Reset();
     histSR->Reset();
     files.at(k)->Close();
-    myfile.close();
+//     myfile.close();
 
   }
 }

@@ -11,8 +11,9 @@
 #include "UHH2/ttZPrime/include/ttZPrimeGenBHists.h"
 #include "UHH2/ttZPrime/include/ttZPrimeSelections.h"
 #include "UHH2/ttZPrime/include/ttZPrimeWeights.h"
+#include "UHH2/ttZPrime/include/ttZPrimeMuonHists.h"
 
-
+// #include "UHH2/common/include/PrintingModules.h"
 
 using namespace std;
 using namespace uhh2;
@@ -25,13 +26,13 @@ namespace uhh2examples {
 
   private:
     bool is_mc;
-    unique_ptr<AnalysisModule> mc_lumi_weight, mc_pu_reweight, mu_fake_rate_weight;
+    unique_ptr<AnalysisModule> mc_lumi_weight, mc_pu_reweight, mu_fake_rate_weight, mu_fake_rate_weight_1d, gen_p_printer;
     unique_ptr<Selection> nmu_tight_sel, mu1mu2_sel, m_mumu_sel, mu3_loose_sel, mu3_tight_sel;
 
     unique_ptr<Hists> h_2mu;
     unique_ptr<Hists> h_3mu, h_3mu_loose, h_3mu_tight,  h_3mu_control, h_3mu_control_loose, h_3mu_control_tight;
-    unique_ptr<Hists> h_bgen, h_3mu_loose_bgen, h_3mu_tight_bgen;
-    unique_ptr<Hists> h_emu, hemu_control, h_emumu_tight,  h_emumu_tight_control;
+    unique_ptr<Hists> h_bgen, h_3mu_loose_bgen, h_3mu_tight_bgen, h_3mu_loose_scaled, h_3mu_loose_scaled_iso;
+    unique_ptr<Hists> h_3mu_loose_tmu, h_3mu_tight_tmu, h_3mu_loose_tmu_scaled;
     unique_ptr<MuonCleaner> mouncleaner_tight;
     MuonId MuIdTight, MuIdLoose;
     ElectronId EleId;
@@ -47,8 +48,11 @@ namespace uhh2examples {
           mc_lumi_weight.reset(new MCLumiWeight(ctx));
           mc_pu_reweight.reset(new MCPileupReweight(ctx));
         }
-        mu_fake_rate_weight.reset(new MuFakeRateWeight("/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/scripts/TTBar_FakeRateMap.txt",2));
-
+//         mu_fake_rate_weight.reset(new MuFakeRateWeight("/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/scripts/MC.TT_2L2Nu_2016v3_FakeRateMap.txt",2));
+        mu_fake_rate_weight.reset(new MuFakeRateWeight("/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/scripts/MC.TT_2L2Nu_2016v3_FakeRateMapCheck.txt",2));
+        mu_fake_rate_weight_1d.reset(new MuFakeRateWeight1D("/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/scripts/TTBar_Mu_Iso_2_1DMap.txt",2));
+        
+        
         MuIdTight = AndId<Muon>(MuonID(Muon::CutBasedIdTight), PtEtaCut(30.0, 2.4), MuonIso(0.15));
         MuIdLoose = AndId<Muon>(MuonID(Muon::CutBasedIdLoose), PtEtaCut(30.0, 2.4), MuonIso(0.15));
         mouncleaner_tight.reset(new MuonCleaner(MuIdTight));
@@ -69,16 +73,19 @@ namespace uhh2examples {
         h_2mu.reset(new AndHists(ctx, "2Mu"));
 
 
-
-
+        h_3mu_loose_scaled_iso.reset(new AndHists(ctx, "3MuLooseScaledIso"));
+        h_3mu_loose_scaled.reset(new AndHists(ctx, "3MuLooseScaled"));
         h_3mu_loose.reset(new AndHists(ctx, "3MuLoose"));
         h_3mu_tight.reset(new AndHists(ctx, "3MuTight"));
 
 
         h_3mu_control_tight.reset(new ttZPrimeControl3LHists(ctx,"3MuControlTight"));
         h_3mu_control_loose.reset(new ttZPrimeControl3LHists(ctx,"3MuControlLoose"));
-
-
+        
+        h_3mu_tight_tmu.reset(new ThirdMuonHists(ctx,"3MuThirdMuonTight"));
+        h_3mu_loose_tmu.reset(new ThirdMuonHists(ctx,"3MuThirdMuonLoose"));
+        h_3mu_loose_tmu_scaled.reset(new ThirdMuonHists(ctx,"3MuThirdMuonLooseScaled"));
+//         gen_p_printer.reset(new GenParticlesPrinter(ctx));
 
 
 
@@ -97,7 +104,7 @@ namespace uhh2examples {
 
    if(!nmu_tight_sel->passes(event)) return false;
    if(!mu1mu2_sel->passes(event)) return false;
-   if(!m_mumu_sel->passes(event)) return false;
+//    if(!m_mumu_sel->passes(event)) return false;
 
    h_2mu->fill(event);
    h_bgen->fill(event);
@@ -105,24 +112,32 @@ namespace uhh2examples {
   
    if(!mu3_loose_sel->passes(event)) return false;
    auto old_weight = event.weight;  
-   std::cout << "Original event weight: " << event.weight << "\n";
+//    std::cout << "Original event weight: " << event.weight << "\n";
    mu_fake_rate_weight->process(event);
-   std::cout << "Scaled event weight: " << event.weight << "\n";
-  
+   h_3mu_loose_tmu_scaled->fill(event);
+   h_3mu_loose_scaled->fill(event);
+//    std::cout << "Scaled event weight: " << event.weight << "\n";
+   event.weight = old_weight;
+//    mu_fake_rate_weight_1d->process(event);
+//    h_3mu_loose_scaled_iso->fill(event);
+//    event.weight = old_weight;
+//    std::cout << "Back scaled event weight: " << event.weight << "\n";
    h_3mu_control_loose->fill(event);
    h_3mu_loose->fill(event);
+   h_3mu_loose_tmu->fill(event);
    h_3mu_loose_bgen->fill(event);
   
 
-   event.weight = old_weight;
-   std::cout << "Back scaled event weight: " << event.weight << "\n";
+   
+
 
    if(!mu3_tight_sel->passes(event)) return false;  
 
    h_3mu_control_tight->fill(event);
    h_3mu_tight->fill(event);
    h_3mu_tight_bgen->fill(event);
-  
+   h_3mu_tight_tmu->fill(event);
+//    gen_p_printer->process(event);
 
 
 

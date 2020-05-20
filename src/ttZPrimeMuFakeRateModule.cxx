@@ -12,6 +12,8 @@
 #include "UHH2/ttZPrime/include/ttZPrimeControl3LHists.h"
 #include "UHH2/ttZPrime/include/ttZPrimeWeights.h"
 
+#include "UHH2/common/include/PrintingModules.h"
+
 using namespace std;
 using namespace uhh2;
 
@@ -22,9 +24,9 @@ namespace uhh2examples {
     virtual bool process(Event & event) override;
   private:
     bool is_mc;
-    unique_ptr<AnalysisModule> mc_lumi_weight, mc_pu_reweight, mu_fake_rate_weight;
+    unique_ptr<AnalysisModule> mc_lumi_weight, mc_pu_reweight, mu_fake_rate_weight, mu_fake_rate_weight_1d, gen_p_printer;
     unique_ptr<Selection>  nele_sel, oneTightMuSel, m_muele_sel, nmu_loose_sel, nmu_tight_sel;
-    unique_ptr<Hists> h_e_control, h_emu, h_emu_control, h_emumu_tight,  h_emumu_tight_control, h_emumu_loose,  h_emumu_loose_control;
+    unique_ptr<Hists> h_e_control, h_emu, h_emu_control, h_emumu_tight,  h_emumu_tight_control, h_emumu_loose,  h_emumu_loose_control, h_emumu_loose_control_scaled, h_emumu_loose_scaled;
     unique_ptr<Hists> h_emumu_loose_control_gen, h_emumu_tight_control_gen;
     // unique_ptr<ElectronCleaner> electroncleaner;
     // unique_ptr<MuonCleaner> mouncleaner_tight;
@@ -47,7 +49,8 @@ namespace uhh2examples {
     mu_fake_rate_weight.reset(new MuFakeRateWeight("/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/scripts/MC.TT_2L2Nu_2016v3_FakeRateMap.txt",1));
     // electroncleaner.reset(new ElectronCleaner(EleId));
     // mouncleaner_tight.reset(new MuonCleaner(MuIdTight));
-
+    mu_fake_rate_weight_1d.reset(new MuFakeRateWeight1D("/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/scripts/TTBar_Mu_Iso_2_1DMap.txt",1));
+    
     nele_sel.reset(new NElectronSelection(1, 1, EleId));
     oneTightMuSel.reset(new NMuIDSelection(MuIdTight,1));
     // m_muele_sel.reset(new MEleMuSelection(120.));
@@ -63,7 +66,11 @@ namespace uhh2examples {
     h_emumu_tight_control.reset(new AndHists(ctx, "ElectronPlusMuMuTightControl"));
     h_emumu_tight_control_gen.reset(new ttZPrimeControl3LHists(ctx, "ElectronPlusMuMuTightControlGen"));
     h_emumu_tight.reset(new ttZPrimeControlHists(ctx,"ElectronPlusMuMuTight"));
-
+    
+    h_emumu_loose_control_scaled.reset(new AndHists(ctx, "ElectronPlusMuMuLooseControlScaled"));
+    h_emumu_loose_scaled.reset(new ttZPrimeControlHists(ctx,"ElectronPlusMuMuLooseScaled"));
+    
+    gen_p_printer.reset(new GenParticlesPrinter(ctx));
   }
 
 
@@ -87,15 +94,19 @@ namespace uhh2examples {
     if(!nmu_loose_sel->passes(event)) return false; //Möglicherweise muss der Cut geändert werden
     auto old_weight = event.weight;
     mu_fake_rate_weight->process(event);
+    h_emumu_loose_control_scaled->fill(event);
+    h_emumu_loose_scaled->fill(event);
+    event.weight = old_weight;
     h_emumu_loose_control->fill(event);
     h_emumu_loose->fill(event);
     if(is_mc)h_emumu_loose_control_gen->fill(event);
-    event.weight = old_weight;
+    
     // mouncleaner_tight->process(event);
     if(!nmu_tight_sel->passes(event)) return false;
     h_emumu_tight_control->fill(event);
     h_emumu_tight->fill(event);
     if(is_mc)h_emumu_tight_control_gen->fill(event);
+//     gen_p_printer->process(event);
 
     return true;
 

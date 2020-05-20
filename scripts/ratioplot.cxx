@@ -1,31 +1,72 @@
+#include "TFile.h"
+#include "TGraph.h"
+#include "TStyle.h"
+#include "TPaveText.h"
+#include "TH1.h"
+#include "TPad.h"
+#include "TLegend.h"
+#include "TVirtualPad.h"
+#include <iostream>
+#include <fstream>
+#include "TCanvas.h"
+#include <vector>
+#include "TString.h"
+#include <array>
+
+using namespace std;
+
 void ratioplot() {
-   // Define two gaussian histograms. Note the X and Y title are defined
-   // at booking time using the convention "Hist_title ; X_title ; Y_title"
 
 
    TString filePerfix = "uhh2.AnalysisModuleRunner.";
    
-//    TString pathOut = "/nfs/dust/cms/user/tiedemab/ttZPrime/Run2_10x/Control/NOMINAL/";
-//    TFile* input = new TFile(pathOut+filePerfix+"MC.TT_2L2Nu_2016v3.root","READ");
+   TString pathOut = "/nfs/dust/cms/user/tiedemab/ttZPrime/Run2_10x/Control/NOMINAL/";
+   TFile* input = new TFile(pathOut+filePerfix+"MC.TT_2L2Nu_2016v3.root","READ");
+   
+  std::vector<TString> histNamesCR;
+  histNamesCR.push_back("3MuThirdMuonLooseScaled/pt_3");
+  histNamesCR.push_back("3MuThirdMuonLooseScaled/isolation_3");
+  histNamesCR.push_back("3MuThirdMuonLooseScaled/eta_3");
+  histNamesCR.push_back("3MuLooseScaled_ZPrimeMuMu/M_mu1mu2");
+//    TH1F* h1 =(TH1F*) input->Get("3MuThirdMuonTight/isolation_3");
+//    TH1F* h2 =(TH1F*) input->Get("3MuThirdMuonLooseScaled/isolation_3");
+//    TH1F* h2 =(TH1F*) input->Get("3MuLooseScaled_ZPrimeMuMu/M_mu1mu2");
 //    TH1F* h1 =(TH1F*) input->Get("3MuTight_ZPrimeMuMu/M_mu1mu2");
-//    TH1F* h2 =(TH1F*) input->Get("3MuLoose_ZPrimeMuMu/M_mu1mu2");
-// 
-// 
+//    h1->Rebin(5);
+//    h2->Rebin(5);
+  std::vector<TString> histNamesSR;
+  histNamesSR.push_back("3MuThirdMuonTight/pt_3");
+  histNamesSR.push_back("3MuThirdMuonTight/isolation_3");
+  histNamesSR.push_back("3MuThirdMuonTight/eta_3");
+  histNamesSR.push_back("3MuTight_ZPrimeMuMu/M_mu1mu2");
+  
+  std::vector<TString> histLabel;
+  histLabel.push_back("Mu_Pt_3");
+  histLabel.push_back("Mu_Iso_3");
+  histLabel.push_back("Mu_Eta_3");
+  histLabel.push_back("M_mu1mu2");
+
 //    TFile* output = new TFile(pathOut+filePerfix+"MC.TT_2L2Nu_2016v3.root","READ");
 
-  TString pathCon = "/nfs/dust/cms/user/tiedemab/ttZPrime/Run2_10x/Fake/NOMINAL/";
-  TFile* input = new TFile(pathCon+filePerfix+"MC.TT_2L2Nu_2016v3.root","READ");   
-  TH1F* h1 =(TH1F*) input->Get("ElectronPlusMuMuTight/M_mue");
-  TH1F* h2 =(TH1F*) input->Get("ElectronPlusMuMuLoose/M_mue");
+/*  TString pathCon = "/nfs/dust/cms/user/tiedemab/ttZPrime/Run2_10x/Fake/NOMINAL/";
+  TFile* input = new TFile(pathCon+filePerfix+"MC.TT_2L2Nu_2016v3.root","READ");  */ 
+//   TH1F* h1 =(TH1F*) input->Get("ElectronPlusMuMuTightControl_Muon/pt_2");
+//   TH1F* h2 =(TH1F*) input->Get("ElectronPlusMuMuLooseControlScaled_Muon/pt_2");
 
-
-
-
-
-   // TH1F *h1 = new TH1F("h1", "Two gaussian plots and their ratio;x title; h1 and h2 gaussian histograms", 100, -5, 5);
-   // TH1F *h2 = new TH1F("h2", "h2", 100, -5, 5);
-   // h1->FillRandom("gaus");
-   // h2->FillRandom("gaus");
+//   TH1F* h1 =(TH1F*) input->Get("ElectronPlusMuMuTight/M_mue");
+//   TH1F* h2 =(TH1F*) input->Get("ElectronPlusMuMuLooseScaled/M_mue");
+//   
+for(Int_t i = 0; i < histNamesCR.size() ;i++){
+  TH1F* h1 =(TH1F*) input->Get(histNamesSR.at(i));
+  TH1F* h2 =(TH1F*) input->Get(histNamesCR.at(i));
+  
+  std::cout << h1->Integral() << "\n";
+  std::cout << h2->Integral() << "\n";
+  if(histLabel.at(i) != "M_mu1mu2")
+  {
+    h1->Rebin(5);
+    h2->Rebin(5);
+  }
 
    // Define the Canvas
    TCanvas *c = new TCanvas("c", "canvas", 800, 800);
@@ -90,7 +131,7 @@ void ratioplot() {
    h3->SetTitle(""); // Remove the ratio title
 
    // Y axis ratio plot settings
-   h3->GetYaxis()->SetTitle("ratio h1/h2 ");
+   h3->GetYaxis()->SetTitle("ratio");
    h3->GetYaxis()->SetNdivisions(505);
    h3->GetYaxis()->SetTitleSize(20);
    h3->GetYaxis()->SetTitleFont(43);
@@ -118,9 +159,13 @@ void ratioplot() {
    legend->AddEntry(h2,"FakeRateScaled","l");
    legend->Draw();
 
-
+    
 
    c->Update();
-   c->SaveAs("test.png");
-
+   c->SaveAs("plots/"+histLabel.at(i)+"_testCheck.png");
+   h3->Reset();
+   h2->Reset();
+   h1->Reset();
+ }
+input->Close();
 }
