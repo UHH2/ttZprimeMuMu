@@ -12,6 +12,7 @@
 #include <vector>
 #include "TString.h"
 #include <array>
+#include <math.h> 
 
 using namespace std;
 
@@ -28,12 +29,16 @@ void ratioplot() {
   histNamesCR.push_back("3MuThirdMuonLooseScaled/isolation_3");
   histNamesCR.push_back("3MuThirdMuonLooseScaled/eta_3");
   histNamesCR.push_back("3MuLooseScaled_ZPrimeMuMu/M_mu1mu2");
-//    TH1F* h1 =(TH1F*) input->Get("3MuThirdMuonTight/isolation_3");
-//    TH1F* h2 =(TH1F*) input->Get("3MuThirdMuonLooseScaled/isolation_3");
-//    TH1F* h2 =(TH1F*) input->Get("3MuLooseScaled_ZPrimeMuMu/M_mu1mu2");
-//    TH1F* h1 =(TH1F*) input->Get("3MuTight_ZPrimeMuMu/M_mu1mu2");
-//    h1->Rebin(5);
-//    h2->Rebin(5);
+  
+
+  
+  std::vector<TString> histNamesCR_Up;
+  histNamesCR_Up.push_back("3MuThirdMuonLooseScaled_Up/pt_3");
+  histNamesCR_Up.push_back("3MuThirdMuonLooseScaled_Up/isolation_3");
+  histNamesCR_Up.push_back("3MuThirdMuonLooseScaled_Up/eta_3");
+  histNamesCR_Up.push_back("3MuLooseScaled_Up_ZPrimeMuMu/M_mu1mu2");
+//   
+
   std::vector<TString> histNamesSR;
   histNamesSR.push_back("3MuThirdMuonTight/pt_3");
   histNamesSR.push_back("3MuThirdMuonTight/isolation_3");
@@ -59,9 +64,22 @@ void ratioplot() {
 for(Int_t i = 0; i < histNamesCR.size() ;i++){
   TH1F* h1 =(TH1F*) input->Get(histNamesSR.at(i));
   TH1F* h2 =(TH1F*) input->Get(histNamesCR.at(i));
+  TH1F* h2_up =(TH1F*) input->Get(histNamesCR_Up.at(i));
+
   
   std::cout << h1->Integral() << "\n";
   std::cout << h2->Integral() << "\n";
+  
+  Int_t nbins = h2->GetNbinsX();
+  for(Int_t k = 1; k <= nbins; k++)
+      
+  {   
+      if(h2->GetBinContent(k) <= 0.) continue;
+      auto error = h2_up->GetBinContent(k)-h2->GetBinContent(k);
+      h2->SetBinError(k,error);     
+      
+  }
+  
   if(histLabel.at(i) != "M_mu1mu2")
   {
     h1->Rebin(5);
@@ -77,7 +95,7 @@ for(Int_t i = 0; i < histNamesCR.size() ;i++){
    TPad *pad1 = new TPad("pad1", "pad1", 0, 0.3, 1, 1.0);
    pad1->SetBottomMargin(0); // Upper and lower plot are joined
    pad1->SetGridx();         // Vertical grid
-   pad1->SetLogy();
+//    pad1->SetLogy();
    pad1->Draw();             // Draw the upper pad: pad1
    pad1->cd();               // pad1 becomes the current pad
 
@@ -126,7 +144,6 @@ for(Int_t i = 0; i < histNamesCR.size() ;i++){
    // h2 settings
    h2->SetLineColor(kRed);
    h2->SetLineWidth(2);
-
    // Ratio plot (h3) settings
    h3->SetTitle(""); // Remove the ratio title
 
@@ -162,9 +179,10 @@ for(Int_t i = 0; i < histNamesCR.size() ;i++){
     
 
    c->Update();
-   c->SaveAs("plots/"+histLabel.at(i)+"_testCheck.png");
+   c->SaveAs("plots/"+histLabel.at(i)+"_test.png");
    h3->Reset();
    h2->Reset();
+   h2_up->Reset();
    h1->Reset();
  }
 input->Close();

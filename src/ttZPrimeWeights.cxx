@@ -36,7 +36,8 @@ using namespace std;
 
 MuFakeRateWeight1D::MuFakeRateWeight1D(std::string dirname_, unsigned int MuonAt_):
 dirname(dirname_),
-MuonAt(MuonAt_){}
+MuonAt(MuonAt_)
+{}
 
 bool MuFakeRateWeight1D::process(uhh2::Event & event){
     if (event.muons->size() < (MuonAt+1)) throw std::runtime_error("Insufficient muons:"+std::to_string(MuonAt+1)+" muons are required but "+std::to_string(event.muons->size())+" are available" );
@@ -73,9 +74,20 @@ bool MuFakeRateWeight1D::process(uhh2::Event & event){
     return true;
 }
 
-MuFakeRateWeight::MuFakeRateWeight(std::string dirname_, unsigned int MuonAt_):
+MuFakeRateWeight::MuFakeRateWeight(uhh2::Context & ctx, std::string dirname_, unsigned int MuonAt_, const std::string & sys_uncert):
 dirname(dirname_),
-MuonAt(MuonAt_){}
+MuonAt(MuonAt_),
+  h_muon_weight_      (ctx.declare_event_output<float>("weight_mufake")),
+  h_muon_weight_up_   (ctx.declare_event_output<float>("weight_mufake_up")),
+  h_muon_weight_down_ (ctx.declare_event_output<float>("weight_mufake_down"))
+{
+  sys_direction_ = 0;
+  if (sys_uncert == "up") {
+    sys_direction_ = 1;
+  } else if (sys_uncert == "down") {
+    sys_direction_ = -1;
+  }
+}
 
 bool MuFakeRateWeight::process(uhh2::Event & event){
     if (event.muons->size() < (MuonAt+1)) throw std::runtime_error("Insufficient muons:"+std::to_string(MuonAt+1)+" muons are required but "+std::to_string(event.muons->size())+" are available" );
@@ -102,13 +114,29 @@ bool MuFakeRateWeight::process(uhh2::Event & event){
         if(inIso && inEta) 
         {
             factor = values.at(4);
+            factor_up = values.at(4) + values.at(5);
+            factor_down = values.at(4) - values.at(5);
 //             cout << "New Weight" << "\n"; 
             break;
         }
     }
     
 //     std::cout<< "Scale factor: " << factor << "\n";
-    event.weight *= factor; 
+    
+    event.set(h_muon_weight_,       event.weight*factor);
+    event.set(h_muon_weight_up_,    event.weight*factor_up);
+    event.set(h_muon_weight_down_,  event.weight*factor_down);
+    
+    if (sys_direction_ == 1) {
+        event.weight *= factor_up;
+    }
+    else if (sys_direction_ == -1) {
+        event.weight *= factor_down;
+    } 
+    else {
+        event.weight *= factor;
+    }
+    
     mapfile.close();
     return true;
 }

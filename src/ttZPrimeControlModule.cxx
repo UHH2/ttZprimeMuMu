@@ -26,13 +26,15 @@ namespace uhh2examples {
 
   private:
     bool is_mc;
-    unique_ptr<AnalysisModule> mc_lumi_weight, mc_pu_reweight, mu_fake_rate_weight, mu_fake_rate_weight_1d, gen_p_printer;
+    unique_ptr<AnalysisModule> mc_lumi_weight, mc_pu_reweight, mu_fake_rate_weight_1d, gen_p_printer;
+    unique_ptr<AnalysisModule> mu_fake_rate_weight, mu_fake_rate_weight_up, mu_fake_rate_weight_down;
     unique_ptr<Selection> nmu_tight_sel, mu1mu2_sel, m_mumu_sel, mu3_loose_sel, mu3_tight_sel;
 
     unique_ptr<Hists> h_2mu;
     unique_ptr<Hists> h_3mu, h_3mu_loose, h_3mu_tight,  h_3mu_control, h_3mu_control_loose, h_3mu_control_tight;
-    unique_ptr<Hists> h_bgen, h_3mu_loose_bgen, h_3mu_tight_bgen, h_3mu_loose_scaled, h_3mu_loose_scaled_iso;
-    unique_ptr<Hists> h_3mu_loose_tmu, h_3mu_tight_tmu, h_3mu_loose_tmu_scaled;
+    unique_ptr<Hists> h_bgen, h_3mu_loose_bgen, h_3mu_tight_bgen, h_3mu_loose_scaled, h_3mu_loose_scaled_up, h_3mu_loose_scaled_down, h_3mu_loose_scaled_iso;
+    unique_ptr<Hists> h_3mu_loose_tmu, h_3mu_tight_tmu, h_3mu_loose_tmu_scaled, h_3mu_loose_tmu_scaled_up, h_3mu_loose_tmu_scaled_down;
+    
     unique_ptr<MuonCleaner> mouncleaner_tight;
     MuonId MuIdTight, MuIdLoose;
     ElectronId EleId;
@@ -49,7 +51,9 @@ namespace uhh2examples {
           mc_pu_reweight.reset(new MCPileupReweight(ctx));
         }
 //         mu_fake_rate_weight.reset(new MuFakeRateWeight("/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/scripts/MC.TT_2L2Nu_2016v3_FakeRateMap.txt",2));
-        mu_fake_rate_weight.reset(new MuFakeRateWeight("/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/scripts/MC.TT_2L2Nu_2016v3_FakeRateMapCheck.txt",2));
+        mu_fake_rate_weight.reset(new MuFakeRateWeight(ctx ,"/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/scripts/MC.TT_2L2Nu_2016v3_FakeRateMap.txt",2));
+        mu_fake_rate_weight_up.reset(new MuFakeRateWeight(ctx ,"/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/scripts/MC.TT_2L2Nu_2016v3_FakeRateMap.txt",2,"up"));
+        mu_fake_rate_weight_down.reset(new MuFakeRateWeight(ctx ,"/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/scripts/MC.TT_2L2Nu_2016v3_FakeRateMap.txt",2,"down"));
         mu_fake_rate_weight_1d.reset(new MuFakeRateWeight1D("/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/scripts/TTBar_Mu_Iso_2_1DMap.txt",2));
         
         
@@ -75,6 +79,8 @@ namespace uhh2examples {
 
         h_3mu_loose_scaled_iso.reset(new AndHists(ctx, "3MuLooseScaledIso"));
         h_3mu_loose_scaled.reset(new AndHists(ctx, "3MuLooseScaled"));
+        h_3mu_loose_scaled_up.reset(new AndHists(ctx, "3MuLooseScaled_Up"));
+        h_3mu_loose_scaled_down.reset(new AndHists(ctx, "3MuLooseScaled_Down"));
         h_3mu_loose.reset(new AndHists(ctx, "3MuLoose"));
         h_3mu_tight.reset(new AndHists(ctx, "3MuTight"));
 
@@ -85,6 +91,8 @@ namespace uhh2examples {
         h_3mu_tight_tmu.reset(new ThirdMuonHists(ctx,"3MuThirdMuonTight"));
         h_3mu_loose_tmu.reset(new ThirdMuonHists(ctx,"3MuThirdMuonLoose"));
         h_3mu_loose_tmu_scaled.reset(new ThirdMuonHists(ctx,"3MuThirdMuonLooseScaled"));
+        h_3mu_loose_tmu_scaled_up.reset(new ThirdMuonHists(ctx,"3MuThirdMuonLooseScaled_Up"));
+        h_3mu_loose_tmu_scaled_down.reset(new ThirdMuonHists(ctx,"3MuThirdMuonLooseScaled_Down"));
 //         gen_p_printer.reset(new GenParticlesPrinter(ctx));
 
 
@@ -117,6 +125,16 @@ namespace uhh2examples {
    h_3mu_loose_tmu_scaled->fill(event);
    h_3mu_loose_scaled->fill(event);
 //    std::cout << "Scaled event weight: " << event.weight << "\n";
+   event.weight = old_weight;
+   
+   mu_fake_rate_weight_up->process(event);
+   h_3mu_loose_tmu_scaled_up->fill(event);
+   h_3mu_loose_scaled_up->fill(event);   
+   event.weight = old_weight;
+   
+   mu_fake_rate_weight_down->process(event);
+   h_3mu_loose_tmu_scaled_down->fill(event);
+   h_3mu_loose_scaled_down->fill(event);
    event.weight = old_weight;
 //    mu_fake_rate_weight_1d->process(event);
 //    h_3mu_loose_scaled_iso->fill(event);
