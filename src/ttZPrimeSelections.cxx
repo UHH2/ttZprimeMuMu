@@ -89,15 +89,23 @@ MMuMUSelection::MMuMUSelection(double mmumu_min):
 
 bool MMuMUSelection::passes(const Event & event){
   assert(event.muons);
+  if (2 > event.muons->size()) throw std::runtime_error("Insufficient muons: Two muons are required but "+std::to_string(event.muons->size())+" are available" );
   std::vector<Muon> muons = *event.muons;
-  if((muons[0].charge()+muons[1].charge())== 0){
-    double m = (muons[0].v4() + muons[1].v4()).M();
-    return m > m_mmumu_min;
-  }
-  else{
-    return false;
-  }
+  double m = (muons[0].v4() + muons[1].v4()).M();
+  return m > m_mmumu_min;
 }
+
+MMuMuMaxSelection::MMuMuMaxSelection(double mmumu_max):
+  m_mmumu_max(mmumu_max) {}
+
+bool MMuMuMaxSelection::passes(const Event & event){
+  assert(event.muons);
+  if (2 > event.muons->size()) throw std::runtime_error("Insufficient muons: Two muons are required but "+std::to_string(event.muons->size())+" are available" );
+  std::vector<Muon> muons = *event.muons;
+  double m = (muons[0].v4() + muons[1].v4()).M();
+  return m < m_mmumu_max;
+}
+
 
 MEleMuSelection::MEleMuSelection(double melemu_min):
   m_melemu_min(melemu_min) {}
@@ -107,13 +115,8 @@ bool MEleMuSelection::passes(const Event & event){
   assert(event.electrons);
   std::vector<Muon> muons = *event.muons;
   std::vector<Electron> electrons = *event.electrons;
-  if((muons.at(0).charge()+electrons.at(0).charge())== 0){
-    double m = (muons.at(0).v4() + electrons.at(0).v4()).M();
-    return m > m_melemu_min;
-  }
-  else{
-    return false;
-  }
+  double m = (muons.at(0).v4() + electrons.at(0).v4()).M();
+  return m > m_melemu_min;
 }
 
 

@@ -25,7 +25,7 @@ namespace uhh2examples {
   private:
     bool is_mc;
     unique_ptr<AnalysisModule> mc_lumi_weight, mc_pu_reweight, mu_fake_rate_weight, mu_fake_rate_weight_1d, gen_p_printer;
-    unique_ptr<Selection>  nele_sel, oneTightMuSel, m_muele_sel, nmu_loose_sel, nmu_tight_sel;
+    unique_ptr<Selection>  nele_sel, oneTightMuSel, m_muele_sel, nmu_loose_sel, nmu_tight_sel, m_mumumax_sel;
     unique_ptr<Hists> h_e_control, h_emu, h_emu_control, h_emumu_tight,  h_emumu_tight_control, h_emumu_loose,  h_emumu_loose_control, h_emumu_loose_control_scaled, h_emumu_loose_scaled;
     unique_ptr<Hists> h_emumu_loose_control_gen, h_emumu_tight_control_gen;
     // unique_ptr<ElectronCleaner> electroncleaner;
@@ -46,7 +46,7 @@ namespace uhh2examples {
     MuIdLoose = AndId<Muon>(MuonID(Muon::CutBasedIdLoose), PtEtaCut(30.0, 2.4), MuonIso(0.15));
     EleId = AndId<Electron>(ElectronID_Summer16_tight, PtEtaCut(30.0, 2.4));
     
-    mu_fake_rate_weight.reset(new MuFakeRateWeight("/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/scripts/MC.TT_2L2Nu_2016v3_FakeRateMap.txt",1));
+    mu_fake_rate_weight.reset(new MuFakeRateWeight(ctx, "/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/scripts/MC.TT_2L2Nu_2016v3_FakeRateMap.txt",1));
     // electroncleaner.reset(new ElectronCleaner(EleId));
     // mouncleaner_tight.reset(new MuonCleaner(MuIdTight));
     mu_fake_rate_weight_1d.reset(new MuFakeRateWeight1D("/nfs/dust/cms/user/tiedemab/CMSSW_10_2_X/CMSSW_10_2_10/src/UHH2/ttZPrime/scripts/TTBar_Mu_Iso_2_1DMap.txt",1));
@@ -54,6 +54,7 @@ namespace uhh2examples {
     nele_sel.reset(new NElectronSelection(1, 1, EleId));
     oneTightMuSel.reset(new NMuIDSelection(MuIdTight,1));
     // m_muele_sel.reset(new MEleMuSelection(120.));
+    m_mumumax_sel.reset(new MMuMuMaxSelection(150.));
     nmu_loose_sel.reset(new NMuonSelection(2, 2, MuIdLoose));
     nmu_tight_sel.reset(new NMuonSelection(2, 2, MuIdTight));
 
@@ -92,6 +93,7 @@ namespace uhh2examples {
     h_emu->fill(event);
 
     if(!nmu_loose_sel->passes(event)) return false; //Möglicherweise muss der Cut geändert werden
+    if(!m_mumumax_sel->passes(event)) return false;
     auto old_weight = event.weight;
     mu_fake_rate_weight->process(event);
     h_emumu_loose_control_scaled->fill(event);
@@ -99,13 +101,13 @@ namespace uhh2examples {
     event.weight = old_weight;
     h_emumu_loose_control->fill(event);
     h_emumu_loose->fill(event);
-    if(is_mc)h_emumu_loose_control_gen->fill(event);
+//     if(is_mc)h_emumu_loose_control_gen->fill(event);
     
     // mouncleaner_tight->process(event);
     if(!nmu_tight_sel->passes(event)) return false;
     h_emumu_tight_control->fill(event);
     h_emumu_tight->fill(event);
-    if(is_mc)h_emumu_tight_control_gen->fill(event);
+//     if(is_mc)h_emumu_tight_control_gen->fill(event);
 //     gen_p_printer->process(event);
 
     return true;

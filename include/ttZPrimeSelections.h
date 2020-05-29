@@ -50,6 +50,14 @@ private:
   const double m_mmumu_min;
 
 };
+class MMuMuMaxSelection: public uhh2::Selection {
+public:
+  MMuMuMaxSelection(double mmumu_max);
+  virtual bool passes(const uhh2::Event & event) override;
+private:
+  const double m_mmumu_max;
+
+};
 
 class MEleMuSelection: public uhh2::Selection {
 public:
