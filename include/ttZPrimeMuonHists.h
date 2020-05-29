@@ -12,6 +12,6 @@ public:
   virtual void fill(const uhh2::Event & ev) override;
 
 protected:
-     TH1F *pt_3, *eta_3, *phi_3, *isolation_3, *charge_3;
+     TH1F *pt_3, *eta_3, *phi_3, *isolation_3, *charge_3, *M_mu2mu3;
      TH2F *ThirdMuIsoVsEta;
 };
